@@ -4,11 +4,12 @@ public class Food {
     private long id;
     private Client client;
     private String name;
+    //Use BigDecimal
     private double calories;
     private double protein;
     private double carbohydrate;
     private double fat;
-
+    
     public void setId(long id) { this.id = id; }
     public void setClient(Client client) { this.client = client; }
     public void setName(String name) { this.name = name; }

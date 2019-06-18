@@ -5,6 +5,8 @@ import java.util.List;
 import com.belenot.eatfood.domain.Client;
 
 public interface ClientDao {
+    void init() throws Exception;
+    
     Client getClient(long id);
     List<Client> getClientByLogin(String login);
     Client addClient(String login);

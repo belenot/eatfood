@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
-@Controller
+@Controller( "/index" )
 public class FoodListController {
-    @GetMapping( "/index" )
+    @GetMapping
     public String getHome() {
 	return "index";
     }
