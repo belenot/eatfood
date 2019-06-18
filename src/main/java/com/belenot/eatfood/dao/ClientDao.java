@@ -1,19 +1,19 @@
 package com.belenot.eatfood.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.belenot.eatfood.domain.Client;
+import com.belenot.eatfood.exception.ApplicationException;
 
 public interface ClientDao {
-    void init() throws Exception;
-    void destroy() throws Exception;
+    void init() throws ApplicationException;
+    void destroy() throws ApplicationException;
     
-    Client getClient(int id);
-    List<Client> getClientByLogin(String login);
-    Client addClient(String login);
-    Client updateClient(Client client);
-    boolean deleteClient(Client client);
+    Client getClient(int id) throws ApplicationException;
+    List<Client> getClientByLogin(String login) throws ApplicationException;
+    Client addClient(String login) throws ApplicationException;
+    Client updateClient(Client client) throws ApplicationException;
+    boolean deleteClient(Client client) throws ApplicationException;
     
     
 }

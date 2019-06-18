@@ -1,19 +1,19 @@
 package com.belenot.eatfood.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
+import com.belenot.eatfood.exception.ApplicationException;
 
 public interface FoodDao {
-    void init() throws Exception;
-    void destroy() throws Exception;
+    void init() throws ApplicationException;
+    void destroy() throws ApplicationException;
     
-    Food getFood(int id);
-    List<Food> getFoodByName(String name);
-    List<Food> getFoodByClient(Client client);
-    Food addFood(String login);
-    Food updateFood(Food food);
-    boolean deleteFood(Food food);
+    Food getFood(int id) throws ApplicationException;
+    List<Food> getFoodByName(String name) throws ApplicationException;
+    List<Food> getFoodByClient(Client client) throws ApplicationException;
+    Food addFood(String name, Client client) throws ApplicationException;
+    Food updateFood(Food food) throws ApplicationException;
+    boolean deleteFood(Food food) throws ApplicationException;
 }

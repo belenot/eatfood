@@ -9,6 +9,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.belenot.eatfood.dao.ClientDao;
 import com.belenot.eatfood.dao.ClientDaoSql;
+import com.belenot.eatfood.dao.FoodDao;
+import com.belenot.eatfood.dao.FoodDaoSql;
 
 @Configuration
 @EnableWebMvc
@@ -28,5 +30,14 @@ public class WebAppContext {
 	clientDao.setUsername("eatfood");
 	clientDao.setPassword("eatfood");
 	return clientDao;
+    }
+
+    @Bean( initMethod = "init", destroyMethod = "destroy" )
+    FoodDao foodDao() {
+	FoodDaoSql foodDao = new FoodDaoSql();
+	foodDao.setConnectionAddress("jdbc:postgresql://localhost:8832/eatfood");
+	foodDao.setUsername("eatfood");
+	foodDao.setPassword("eatfood");
+	return foodDao;
     }
 }
