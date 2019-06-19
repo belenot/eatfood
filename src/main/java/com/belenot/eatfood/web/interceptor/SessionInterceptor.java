@@ -25,6 +25,10 @@ public class SessionInterceptor implements HandlerInterceptor {
 	    response.sendRedirect("foodlist");
 	    return false;
 	}
+	if (uri.equals("logout") && !accessed) {
+	    response.sendRedirect("authorization");
+	    return false;
+	}
 	return true;
     }
 }
