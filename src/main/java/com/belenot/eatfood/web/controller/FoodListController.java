@@ -28,7 +28,6 @@ public class FoodListController {
     private FoodDao foodDao;
     
     @GetMapping
-
     public String getHome(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws ApplicationException{
 	String responseString = "";
 	for (Food food : foodDao.getFoodByClient(client, 0, 10)) {
