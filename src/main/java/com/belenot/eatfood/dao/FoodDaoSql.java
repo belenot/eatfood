@@ -1,5 +1,6 @@
 package com.belenot.eatfood.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -68,11 +70,13 @@ public class FoodDaoSql implements FoodDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
-    public List<Food> getFoodByClient(Client client) throws ApplicationException {
+    public List<Food> getFoodByClient(Client client, int start, int count) throws ApplicationException {
 	try {
 	    List<Food> foodList = new ArrayList<>();
-	    PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE client = ?");
+	    PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE client = ? AND id > ? ORDER BY id LIMIT ?");
 	    ps.setInt(1, client.getId());
+	    ps.setInt(2, start);
+	    ps.setInt(3, count);
 	    ResultSet rs = ps.executeQuery();
 	    while (rs.next()) {
 		Food food = new Food();
@@ -91,11 +95,15 @@ public class FoodDaoSql implements FoodDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
-    public Food addFood(String name, Client client) throws ApplicationException {
+    public Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap) throws ApplicationException {
 	try {
-	    PreparedStatement ps = connection.prepareStatement("INSERT INTO food (name, client) VALUES (?, ?)");
+	    PreparedStatement ps = connection.prepareStatement("INSERT INTO food (name, client, calories, protein, carbohydrate, fat) VALUES (?, ?, ?, ?, ?, ?)");
 	    ps.setString(1, name);
 	    ps.setInt(2, client.getId());
+	    ps.setBigDecimal(3, nutrientMap.get("calories") != null ? nutrientMap.get("calories") : new BigDecimal(0));
+	    ps.setBigDecimal(4, nutrientMap.get("protein") != null ? nutrientMap.get("protein") : new BigDecimal(0));
+	    ps.setBigDecimal(5, nutrientMap.get("carbohydrate") != null ? nutrientMap.get("carbohydrate") : new BigDecimal(0));
+	    ps.setBigDecimal(6, nutrientMap.get("fat") != null ? nutrientMap.get("fat") : new BigDecimal(0));
 	    ps.execute();
 	    ps = connection.prepareStatement("SELECT * FROM food ORDER BY id DESC LIMIT 1");
 	    ResultSet rs = ps.executeQuery();
@@ -103,6 +111,10 @@ public class FoodDaoSql implements FoodDao {
 		Food food = new Food();
 		food.setId(rs.getInt("id"));
 		food.setName(rs.getString("name").trim());
+		food.setCalories(nutrientMap.get("calories") != null ? nutrientMap.get("calories") : new BigDecimal(0));
+		food.setProtein(nutrientMap.get("protein") != null ? nutrientMap.get("protein") : new BigDecimal(0));
+		food.setCarbohydrate(nutrientMap.get("carbohydrate") != null ? nutrientMap.get("carbohydrate") : new BigDecimal(0));
+		food.setFat(nutrientMap.get("fat") != null ? nutrientMap.get("fat") : new BigDecimal(0));
 		if (!food.getName().equals(name)) {
 		    String msg = String.format("Can't fetch added food with name = \"" + name + "\" to FoodDao(last added food's name and parameter name are not equal(%s!=%s))", name, food.getName().trim());
 		    throw new ApplicationException(msg);
