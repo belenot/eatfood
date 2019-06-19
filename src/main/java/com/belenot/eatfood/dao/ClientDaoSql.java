@@ -63,7 +63,7 @@ public class ClientDaoSql implements ClientDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
-    public List<Client> getClientByLogin(String login) throws ApplicationException {
+    public List<Client> getClientByLogin(String login, String password) throws ApplicationException {
 	try { 
 	    List<Client> clientList = new ArrayList<>();
 	    PreparedStatement ps = connection.prepareStatement("SELECT * FROM client WHERE login = ? ");
@@ -82,7 +82,7 @@ public class ClientDaoSql implements ClientDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
-    public Client addClient(String login) throws ApplicationException {
+    public Client addClient(String login, String password) throws ApplicationException {
 	try {
 	    PreparedStatement ps = connection.prepareStatement("INSERT INTO client (login) VALUES (?)");
 	    ps.setString(1, login);
