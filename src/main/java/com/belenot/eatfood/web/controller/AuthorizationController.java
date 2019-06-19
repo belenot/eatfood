@@ -32,7 +32,7 @@ public class AuthorizationController {
     public String authorization(HttpServletRequest request) throws ApplicationException {
 	String login = request.getParameter("login");
 	String password = request.getParameter("password");
-	Client client = clientDao.getClientByLogin(login, password).get(0);
+	Client client = clientDao.getClientByLogin(login, password);
 	if (client != null) {
 	    HttpSession session = request.getSession();
 	    session.setAttribute("client", client);

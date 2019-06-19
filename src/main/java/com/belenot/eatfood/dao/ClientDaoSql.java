@@ -63,29 +63,32 @@ public class ClientDaoSql implements ClientDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
-    public List<Client> getClientByLogin(String login, String password) throws ApplicationException {
+    public Client getClientByLogin(String login, String password) throws ApplicationException {
 	try { 
-	    List<Client> clientList = new ArrayList<>();
-	    PreparedStatement ps = connection.prepareStatement("SELECT * FROM client WHERE login = ? ");
+	    Client client = null;
+	    PreparedStatement ps = connection.prepareStatement("SELECT * FROM client WHERE login = ? AND password = ?");
 	    ps.setString(1, login);
+	    ps.setString(2, password);
 	    ResultSet rs = ps.executeQuery();
-	    while (rs.next()) {
-		Client client = new Client();
+	    if (rs.next()) {
+	        client = new Client();
 		int id = rs.getInt("id");
 		client.setId(id);
 		client.setLogin(login);
-		clientList.add(client);
+		
 	    }
-	    return clientList;
+	    return client;
 	} catch (SQLException exc) {
-	    String msg = String.format("Can't get client by login = \"%s\"", login);
+	    int errorCode = exc.getErrorCode();
+	    String msg = String.format("(SQL %d)Can't get client by login = \"%s\"", errorCode, login);
 	    throw new ApplicationException(msg, exc);
 	}
     }
     public Client addClient(String login, String password) throws ApplicationException {
 	try {
-	    PreparedStatement ps = connection.prepareStatement("INSERT INTO client (login) VALUES (?)");
+	    PreparedStatement ps = connection.prepareStatement("INSERT INTO client (login, password) VALUES (?, ?)");
 	    ps.setString(1, login);
+	    ps.setString(2, password);
 	    ps.execute();
 	    ps = connection.prepareStatement("SELECT * FROM client ORDER BY id DESC LIMIT 1");
 	    ResultSet rs = ps.executeQuery();
@@ -106,7 +109,11 @@ public class ClientDaoSql implements ClientDao {
 	    client.setLogin(login);
 	    return client;
 	} catch (SQLException exc) {
-	    String msg = String.format("Can't add client with login = \"%s\" to ClientDao", login);
+	    String errorCode = exc.getSQLState();
+	    String msg = String.format("(SQL %s)Can't add client with login = \"%s\" to ClientDao", errorCode, login);
+	    if (errorCode.equals("23505")) {//psql error unique_violation
+		msg = String.format("Client with such name exists already");
+	    }
 	    throw new ApplicationException(msg, exc);
 	}
     }

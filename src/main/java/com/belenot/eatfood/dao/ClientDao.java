@@ -10,7 +10,7 @@ public interface ClientDao {
     void destroy() throws ApplicationException;
     
     Client getClient(int id) throws ApplicationException;
-    List<Client> getClientByLogin(String login, String password) throws ApplicationException;
+    Client getClientByLogin(String login, String password) throws ApplicationException;
     Client addClient(String login, String password) throws ApplicationException;
     Client updateClient(Client client) throws ApplicationException;
     boolean deleteClient(Client client) throws ApplicationException;
