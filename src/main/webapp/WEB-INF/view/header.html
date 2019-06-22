@@ -1,15 +1,22 @@
-<div class="header">
-  <div class="header-item">
-    <a href="/eatfood/registration">Registration</a>
-  </div>
-  <div class="header-item">
-    <a href="/eatfood/authorization">Authorization</a>
-  </div>
-  <div class="header-item">
-    <a href="/eatfood/foodlist">Food List</a>
-  </div>
-  <div class="header-item">
-    <a href="/eatfood/logout">Logout</a>
-  </div>
-</div>
+<html>
+  <head>
+    <link href="/eatfood/header/header.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="header">
+      <form action="/eatfood/registration">
+	<input type="submit" class="header-item" value="Registration">
+      </form>
+      <form action="/eatfood/authorization">
+	<input type="submit" class="header-item" value="Authorization">
+      </form>
+      <form action="/eatfood/foodlist">
+	<input type="submit" class="header-item" value="Food List">
+      </form>
+      <form action="/eatfood/logout">
+	<input type="submit" class="header-item" value="Logout">
+      </form>
+    </div>
+  </body>
+</html>
 

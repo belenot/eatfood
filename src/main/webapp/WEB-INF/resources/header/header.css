@@ -1,0 +1,29 @@
+.header {
+    background-color: hsl(340, 50%, 97%);
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    border: 2px solid hsl(340,20%, 95%);
+}
+
+form {
+    width: 20%;
+}
+.header-item {
+    background-color: rgba(0,0,0,0);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: 2px dashed black;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16pt;
+    font-family: Sans;
+    color: hsl(340, 50%, 50%);
+    width: 100%;
+}
+
+.header-item:hover {
+    background-color: hsl(0, 50%, 95%);
+    color: blue;
+    border-style: solid;
+}

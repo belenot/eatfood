@@ -41,9 +41,6 @@
 	  <input type="text" name="fat">
 	  <input type="submit" value="add">
 	</form>
-	<form action="logout">
-	  <input type="submit" value="logout">
-	</form>
       </div>
     </div>
   </body>

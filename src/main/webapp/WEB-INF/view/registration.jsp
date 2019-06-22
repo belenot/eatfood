@@ -1,8 +1,9 @@
 <!doctype html>
 <html>
   <head>
+    
     <title>Registration</title>
-    <link rel="stylesheet" type="text/css" href="/eatfood/authorization/authorization.css">  
+    <link rel="stylesheet" type="text/css" href="/eatfood/authorization/authorization.css"> 
   </head>
   <body>
     <%@ include file="header.html" %>    
