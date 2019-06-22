@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 
@@ -52,5 +53,23 @@ public class FoodListController {
 	response.sendRedirect("./");
     }
 
+    @PostMapping ( "/updatefood" )
+    public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws ApplicationException, IOException {
+	Food food = foodDao.getFood(Integer.parseInt(request.getParameter("id")));
+	food.setClient(client);
+	food.setName(request.getParameter("name"));
+	food.setCalories(new BigDecimal(request.getParameter("calories")));
+	food.setProtein(new BigDecimal(request.getParameter("protein")));
+	food.setCarbohydrate(new BigDecimal(request.getParameter("carbohydrate")));
+	food.setFat(new BigDecimal(request.getParameter("fat")));
+	foodDao.updateFood(food);
+    }
+
+    @PostMapping ( "/deletefood" )
+    public void deleteFood(@RequestParam( "id" ) int id, @SessionAttribute ( "client" ) Client client) throws ApplicationException {
+	Food food = foodDao.getFood(id);
+	foodDao.deleteFood(food);
+    }
+	
     
 }
