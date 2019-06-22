@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="/eatfood/authorization/authorization.css">  
   </head>
   <body>
-    
+    <%@ include file="header.html" %>    
     <div id="body">
       <h1>Registration</h1>
       <form action="registration" method="post" id="auth-form">

@@ -73,7 +73,7 @@ public class FoodDaoSql implements FoodDao {
     public List<Food> getFoodByClient(Client client, int start, int count) throws ApplicationException {
 	try {
 	    List<Food> foodList = new ArrayList<>();
-	    PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE client = ? AND id > ? ORDER BY id LIMIT ?");
+	    PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE client = ?ORDER BY id OFFSET ? LIMIT ?");
 	    ps.setInt(1, client.getId());
 	    ps.setInt(2, start);
 	    ps.setInt(3, count);
@@ -95,12 +95,13 @@ public class FoodDaoSql implements FoodDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
-    public List<Food> getFoodByClientLast(Client client, int count) throws ApplicationException {
+    public List<Food> getFoodByClientLast(Client client, int start, int count) throws ApplicationException {
 	try {
 	List<Food> foodList = new ArrayList<>(count);
-	PreparedStatement st = connection.prepareStatement("SELECT * FROM food WHERE client = ? ORDER BY id DESC LIMIT ?");
+	PreparedStatement st = connection.prepareStatement("SELECT * FROM food WHERE client = ? ORDER BY id DESC OFFSET ? LIMIT ?");
 	st.setInt(1, client.getId());
-	st.setInt(2, count);
+	st.setInt(2, start);
+	st.setInt(3, count);
 	ResultSet rs = st.executeQuery();
 	while (rs.next()) {
 	    Food food = new Food();

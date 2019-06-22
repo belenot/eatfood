@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/eatfood/foodlist/foodlist.css">
   </head>
   <body>
+    <%@ include file="header.html" %>
     <div id="body">
       <p> here will be list</p>
 
@@ -26,7 +27,7 @@
 	
       
       <div class="row">
-	<form id="addfood" action="foodlist/addfood" method="post">
+	<form id="addfood" action="/eatfood/foodlist/addfood" method="post">
 	  <label for"name">Naming</label>
 	  <label for"name">Calories</label>
 	  <label for"name">Protein</label>

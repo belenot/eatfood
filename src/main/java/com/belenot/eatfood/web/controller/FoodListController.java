@@ -33,7 +33,7 @@ public class FoodListController {
     @GetMapping
     public String getHome(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws ApplicationException{
 	String responseString = "";
-	List<Food> foodList = new ArrayList<>(foodDao.getFoodByClientLast(client, 10));
+	List<Food> foodList = new ArrayList<>(foodDao.getFoodByClientLast(client, 0, 10));
 	model.addAttribute("foodList", foodList);
 
 	

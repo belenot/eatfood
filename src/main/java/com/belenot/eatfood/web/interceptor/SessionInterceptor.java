@@ -18,15 +18,15 @@ public class SessionInterceptor implements HandlerInterceptor {
 	    accessed = session == null ? false : session.getAttribute("client") != null;
 	} catch (Exception exc) { accessed = false; }
 	if (uri.equals("foodlist") && !accessed) {
-	    response.sendRedirect("registration");
+	    response.sendRedirect("/eatfood/registration");
 	    return false;
 	}
 	if ((uri.equals("registration") || uri.equals("authorization")) && accessed) {
-	    response.sendRedirect("foodlist");
+	    response.sendRedirect("/eatfood/foodlist");
 	    return false;
 	}
 	if (uri.equals("logout") && !accessed) {
-	    response.sendRedirect("authorization");
+	    response.sendRedirect("/eatfood/authorization");
 	    return false;
 	}
 	return true;
