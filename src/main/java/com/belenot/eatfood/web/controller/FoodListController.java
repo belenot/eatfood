@@ -2,23 +2,26 @@ package com.belenot.eatfood.web.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
-
 import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.exception.ApplicationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 
 @Controller
@@ -28,11 +31,12 @@ public class FoodListController {
     private FoodDao foodDao;
     
     @GetMapping
-    public String getHome(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws ApplicationException{
+    public String getHome(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws ApplicationException{
 	String responseString = "";
-	for (Food food : foodDao.getFoodByClient(client, 0, 10)) {
-	    responseString += String.format("%s|%.2f|%.2f|%.2f|%.2f\n<br>", food.getName(), food.getCalories(), food.getProtein(), food.getCarbohydrate(), food.getFat());
-	}
+	List<Food> foodList = new ArrayList<>(foodDao.getFoodByClientLast(client, 10));
+	model.addAttribute("foodList", foodList);
+
+	
 	return "foodlist";
     }
 

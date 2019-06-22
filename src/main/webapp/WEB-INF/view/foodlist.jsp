@@ -1,3 +1,6 @@
+<%@ page import="com.belenot.eatfood.domain.Food" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <html>
   <head>
     <title>foodlist</title>
@@ -6,6 +9,22 @@
   <body>
     <div id="body">
       <p> here will be list</p>
+
+      <%
+	for (Food food : (List<Food>) request.getAttribute("foodList")) {
+	%>
+      <div class="row">
+	<label><%= food.getName() %></label>
+	<label><%= food.getCalories() %></label>
+	<label><%= food.getProtein() %></label>
+	<label><%= food.getCarbohydrate() %></label>
+	<label><%= food.getFat() %></label>
+      </div>
+      <%
+	}
+	%>
+	
+      
       <div class="row">
 	<form id="addfood" action="foodlist/addfood" method="post">
 	  <label for"name">Naming</label>

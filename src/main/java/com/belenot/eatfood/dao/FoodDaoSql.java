@@ -95,6 +95,29 @@ public class FoodDaoSql implements FoodDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
+    public List<Food> getFoodByClientLast(Client client, int count) throws ApplicationException {
+	try {
+	List<Food> foodList = new ArrayList<>(count);
+	PreparedStatement st = connection.prepareStatement("SELECT * FROM food WHERE client = ? ORDER BY id DESC LIMIT ?");
+	st.setInt(1, client.getId());
+	st.setInt(2, count);
+	ResultSet rs = st.executeQuery();
+	while (rs.next()) {
+	    Food food = new Food();
+	    food.setId(rs.getInt("id"));
+	    food.setName(rs.getString("name"));
+	    food.setCalories(rs.getBigDecimal("calories"));
+	    food.setProtein(rs.getBigDecimal("protein"));
+	    food.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
+	    food.setFat(rs.getBigDecimal("fat"));
+	    foodList.add(food);
+	}
+	return foodList;
+	} catch (SQLException exc) {
+	    String msg = String.format("Can't get last %d food rows for client { id = %d, login = %s}");
+	    throw new ApplicationException(msg, exc);
+	}
+    }
     public Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap) throws ApplicationException {
 	try {
 	    PreparedStatement ps = connection.prepareStatement("INSERT INTO food (name, client, calories, protein, carbohydrate, fat) VALUES (?, ?, ?, ?, ?, ?)");
