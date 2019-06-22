@@ -1,22 +1,39 @@
-.row {
-    border: 2px solid;
-    padding:10px;
-    background-color: hsl(70, 90%, 90%);
+.spinner {
+    max-height: 300px;
+    overflow-y: scroll;
+    
 }
+.spinner>* {
+    margin-bottom: 1em;
+}
+
+
+
+.row {
+    border-left: 2px solid magenta;
+    padding: 10px;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    align-content: space-around;
+}
+.row>.item {
+    color: black;
+    background-color: hsl(0, 20%, 97%);
+    border-radius: 30px 30px 0 0;
+    border-bottom: 2px outset aqua;
+    padding: 0 1em 0 1em;
+    width: 10%;
+    text-align: center;
+    font-size: 14pt;
+    font-style: oblique;
+}
+
 #addfood {
     display: grid;
     grid-column-gap: 1em;
     font-size: 1.2em;
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-}
-#addfood>input[type="submit"] {
-    color:red;
-    margin-top: 1em;
-    justify-self: baseline;
-    padding-right: 1em;
-    border-radius: 10px;
-    border-style: dashed;
-    background-color: rgba(0,0,0,0);
 }
 #addfood>input[type="text"]  {
     border-radius: 10px 0px 0px 10px;
@@ -24,12 +41,24 @@
 
 }
 #addfood>label {
-    color: silver;
-    border: none;
-    padding-left: 1em;
-}
+    colorilver;
+    bordeione;
+    paddiieft: 1em;
+}	 i
 #addfood>input:hover {
     background-color: hsl(140, 50%, 97%);
+}
+
+#addfood>input[type="submit"] {
+    color:red;
+    margin-top: 1em;
+    justify-self: baseline;
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-left: 2em;
+    border-radius: 10px;
+    border-style: dashed;
+    background-color: rgba(0,0,0,0);
 }
 #addfood>input[type="submit"]:hover {
     background-color: red;
@@ -37,7 +66,3 @@
     border-color:black;
     border-style:solid;
 }
-
-
-
-
