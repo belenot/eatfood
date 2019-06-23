@@ -2,4 +2,6 @@
 !src
 !pom.xml
 !.gitignore
+!clean.sh
+!link.sh
 workbench.xmi
