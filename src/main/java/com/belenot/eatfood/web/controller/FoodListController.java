@@ -33,11 +33,7 @@ public class FoodListController {
     
     @GetMapping
     public String getHome(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws ApplicationException{
-	String responseString = "";
-	List<Food> foodList = new ArrayList<>(foodDao.getFoodByClientLast(client, 0, 10));
-	model.addAttribute("foodList", foodList);
-
-	
+	model.addAttribute("foodRows", foodDao.getFoodByClientLast(client, 0, 10));
 	return "foodlist";
     }
 
@@ -66,10 +62,14 @@ public class FoodListController {
     }
 
     @PostMapping ( "/deletefood" )
-    public void deleteFood(@RequestParam( "id" ) int id, @SessionAttribute ( "client" ) Client client) throws ApplicationException {
+    public void deleteFood(@RequestParam( "id" ) int id, @SessionAttribute( "client" ) Client client) throws ApplicationException {
 	Food food = foodDao.getFood(id);
 	foodDao.deleteFood(food);
     }
 	
-    
+    @GetMapping ( "/morefood" )
+    public String moreFood(@RequestParam( "last" ) int last, @SessionAttribute( "client" ) Client client, Model model ) throws ApplicationException {
+	model.addAttribute("foodRows", foodDao.getFoodByClientLast(client, last, 10));
+	return "foodrows";
+    }
 }
