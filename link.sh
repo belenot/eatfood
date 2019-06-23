@@ -16,10 +16,22 @@
 ############################################################################################################################
 
 
-trap 'for file in $(find /var/lib/tomcat8/webapps/eatfood/WEB-INF/resources); do if [ -d "$file" ]; then chown tomcat8 "$file"; fi; done' EXIT
+trap 'for file in $(find /var/lib/tomcat8/webapps/eatfood/WEB-INF); do if [ -d "$file" ]; then chown tomcat8 "$file"; fi; done' EXIT
 
 
 for file in $(find /var/lib/tomcat8/webapps/eatfood/WEB-INF/resources); do
+    if [ -d "$file" ]; then
+	chown belenot "$file"
+    fi
+    if [ -f "$file" ]; then
+	link=$file
+	rm $file
+	file=$(echo "$file" | sed -e 's/\/var\/lib\/tomcat8\/webapps\/eatfood/\/home\/belenot\/programming\/projects\/java\/belenot\/eatfood\/src\/main\/webapp/g')
+	ln $file $link
+    fi
+done
+
+for file in $(find /var/lib/tomcat8/webapps/eatfood/WEB-INF/view); do
     if [ -d "$file" ]; then
 	chown belenot "$file"
     fi
