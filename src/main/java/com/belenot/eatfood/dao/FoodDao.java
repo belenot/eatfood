@@ -9,7 +9,7 @@ import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.exception.ApplicationException;
 
 public interface FoodDao {
-    void init() throws ApplicationException;
+    void init();
     void destroy() throws ApplicationException;
     
     Food getFood(int id) throws ApplicationException;

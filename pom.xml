@@ -31,6 +31,19 @@
       <scope>system</scope>
       <systemPath>${CATALINA_LIB}/servlet-api.jar</systemPath>
     </dependency>
+    <!--~/.m2/repository/org/springframework/spring-aop/5.0.9.RELEASE/spring-aop-5.0.9.RELEASE.jar-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>5.0.9.RELEASE</version>
+    </dependency>
+
+    <!-- ~/.m2/repository/org/aspectj/aspectjtools/1.6.2/aspectjtools-1.6.2.jar -->
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjtools</artifactId>
+      <version>1.6.2</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>eatfood</finalName>

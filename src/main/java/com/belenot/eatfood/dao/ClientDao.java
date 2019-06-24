@@ -6,7 +6,7 @@ import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.exception.ApplicationException;
 
 public interface ClientDao {
-    void init() throws ApplicationException;
+    void init();
     void destroy() throws ApplicationException;
     
     Client getClient(int id) throws ApplicationException;

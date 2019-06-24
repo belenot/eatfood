@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.exception.ApplicationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FoodDaoSql implements FoodDao {
     private String connectionAddress;
@@ -30,13 +30,14 @@ public class FoodDaoSql implements FoodDao {
     
     
     private Connection connection;
-    
-    public void init() throws ApplicationException {
+
+
+    public void init() {
 	try {
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
 	} catch (SQLException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
-	    throw new ApplicationException(msg, exc);
+	    //log msg
 	}
     }
     public void destroy() throws ApplicationException {

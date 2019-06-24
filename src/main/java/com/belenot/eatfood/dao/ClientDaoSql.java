@@ -25,13 +25,12 @@ public class ClientDaoSql implements ClientDao {
      * Assume, that corresponding driver loaded in lib directory 
      *
      */
-    
-    public void init() throws ApplicationException {
+    public void init() {
 	try {
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
 	} catch (SQLException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
-	    throw new ApplicationException(msg, exc);
+	    //log msg
 	}
     }
     public void destroy() throws ApplicationException {
@@ -40,7 +39,7 @@ public class ClientDaoSql implements ClientDao {
 		connection.close();
 	} catch (SQLException exc) {
 	    String msg = String.format("Can't close connection with FoodDao(%s)", connectionAddress);
-	    throw new ApplicationException(msg, exc);
+	    //throw new ApplicationException(msg, exc);
 	}
     }
     public Client getClient(int id) throws ApplicationException {

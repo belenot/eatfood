@@ -1,24 +1,32 @@
 package com.belenot.eatfood.context;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
+import com.belenot.eatfood.context.aspect.CritErrorAspect;
 import com.belenot.eatfood.dao.ClientDao;
 import com.belenot.eatfood.dao.ClientDaoSql;
 import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.dao.FoodDaoSql;
 import com.belenot.eatfood.web.interceptor.SessionInterceptor;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 @Configuration
 @EnableWebMvc
+@EnableAspectJAutoProxy
 @ComponentScan( "com.belenot.eatfood" )
 public class WebAppContext implements WebMvcConfigurer {
+    @Autowired
+    public ConfigurableWebApplicationContext ctx;
+    
     @Bean
     public ViewResolver viewResolver() {
 	ViewResolver viewResolver = new InternalResourceViewResolver("/WEB-INF/view/", ".jsp");
@@ -42,6 +50,13 @@ public class WebAppContext implements WebMvcConfigurer {
 	foodDao.setUsername("eatfood");
 	foodDao.setPassword("eatfood");
 	return foodDao;
+    }
+
+    @Bean
+    public CritErrorAspect critErrorAspect() {
+	CritErrorAspect critErrorAspect = new CritErrorAspect();
+	critErrorAspect.setCtx(ctx);
+	return new CritErrorAspect();
     }
 
     @Override
