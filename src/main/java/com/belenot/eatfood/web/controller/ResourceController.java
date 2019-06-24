@@ -14,7 +14,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 
 @Controller
-@RequestMapping( "/**/*.{js,css}" )
+@RequestMapping( "/**/*.{js,css,png,jpg}" )
 public class ResourceController {
     /**
      * example: /eatfood/index/index.css -> WEB-INF/resources/index/index.css

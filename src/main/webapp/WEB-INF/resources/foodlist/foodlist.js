@@ -1,6 +1,8 @@
 window.onload = function () {
     var spinner = document.getElementsByClassName("spinner")[0];
     spinner.addEventListener("scroll", onSpinnerScroll);
+    totalNutrient("protein");
+    updateStats();
 }
 
 function onSpinnerScroll(e) {
@@ -21,8 +23,23 @@ function onSpinnerScroll(e) {
 		for (var i = 0; i < els.length; i++ ) {
 		    spinner.appendChild(els[i]);
 		}
+		updateStats();
 	    }
 	}
     }
 }
 
+function totalNutrient(name) {
+    var nutrientList = document.querySelectorAll(".row > ." + name);
+    var sum = 0;
+    for (var i = 0; i < nutrientList.length; i++) {
+	sum += Number(nutrientList[i].innerText);
+    }
+    return sum;
+}
+function updateStats() {
+    document.getElementById("calories").innerText = totalNutrient("calories");
+    document.getElementById("protein").innerText = totalNutrient("protein");
+    document.getElementById("carbohydrate").innerText = totalNutrient("carbohydrate");
+    document.getElementById("fat").innerText = totalNutrient("fat");
+}

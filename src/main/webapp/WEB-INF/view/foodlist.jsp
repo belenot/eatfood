@@ -10,12 +10,18 @@
     
   </head>
   <body>
-    <%@ include file="header.html" %>
-
-    <div id="body">
-      <%@ include file="addfood.html" %>
-      <div class="spinner">
-	<%@ include file="foodrows.jsp" %>
+    <div id="content-pane">
+      <%@ include file="header.html" %>
+      <div id="body">
+	<div id="left-pane">
+	  <div class="spinner">
+	    <%@ include file="foodrows.jsp" %>
+	  </div>
+	  <%@ include file="addfood.html" %>
+	</div>
+	<div id="right-pane">
+	  <%@ include file="foodstat.html" %>
+	</div>
       </div>
     </div>
   </body>

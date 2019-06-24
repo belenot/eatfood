@@ -2,16 +2,14 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <form id="addfood" action="/eatfood/foodlist/addfood" method="post">
-  <label for"name">Naming</label>
-  <label for"calories">Calories</label>
-  <label for"protein">Protein</label>
-  <label for"carbohydrate">Carbohydrate</label>
-  <label for"fat">Fat</label>
-  
-  <input type="text" name="name">
-  <input type="text" name="calories">
-  <input type="text" name="protein">
-  <input type="text" name="carbohydrate">
-  <input type="text" name="fat">
-  <input type="submit" value="add">
+  <div class="row">
+    <input class="item name" type="text" name="name" placeholder="name">
+    <input class="item" type="text" name="calories" placeholder="kcal">
+    <input class="item" type="text" name="protein" placeholder="prot">
+    <input class="item" type="text" name="carbohydrate" placeholder="carb">
+    <input class="item" type="text" name="fat" placeholder="fat">
+    <input class="item" type="submit" value="Add">
+  </div>
+  <div class="row">
+  </div>
 </form>
