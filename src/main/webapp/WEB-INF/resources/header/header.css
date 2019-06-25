@@ -2,10 +2,10 @@
     display: flex;
     justify-content: space-around;
     width: 100%;
-    
-    border-bottom: 3px solid hsl(0, 0%, 0%);
-
-    border-radius: 5px;
+    border: 3px solid hsl(0, 0%, 0%);
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    background-color: hsl(80, 10%, 90%);
 }
 form {
     width: 20%;

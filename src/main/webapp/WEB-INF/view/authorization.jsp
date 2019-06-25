@@ -16,8 +16,10 @@
 	  <input type="password" name="password">
 	  <input type="submit" value="authorize">
 	</form>
-
       </div>
+    </div>
+    <div id="footer-pane">
+      <%@ include file="footer-pane.html" %>
     </div>
   </body>
 </html>

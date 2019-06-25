@@ -19,5 +19,8 @@
 	</form>
       </div>
     </div>
+    <div id="footer-pane">
+      <%@ include file="footer-pane.html" %>
+    </div>
   </body>
 </html>
