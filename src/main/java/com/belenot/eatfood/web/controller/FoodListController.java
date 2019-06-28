@@ -62,9 +62,10 @@ public class FoodListController {
     }
 
     @PostMapping ( "/deletefood" )
-    public void deleteFood(@RequestParam( "id" ) int id, @SessionAttribute( "client" ) Client client) throws ApplicationException {
+    public void deleteFood(@RequestParam( "id" ) int id, HttpServletResponse response) throws ApplicationException, IOException {
 	Food food = foodDao.getFood(id);
 	foodDao.deleteFood(food);
+	response.sendRedirect("/eatfood/foodlist");
     }
 	
     @GetMapping ( "/morefood" )
