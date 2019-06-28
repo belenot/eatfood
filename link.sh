@@ -19,7 +19,7 @@
 trap 'for file in $(find /var/lib/tomcat8/webapps/eatfood/WEB-INF); do if [ -d "$file" ]; then chown tomcat8 "$file"; fi; done' EXIT
 
 
-for file in $(find /var/lib/tomcat8/webapps/eatfood/WEB-INF/resources); do
+for file in $(find /var/lib/tomcat8/webapps/eatfood/resources); do
     if [ -d "$file" ]; then
 	chown belenot "$file"
     fi

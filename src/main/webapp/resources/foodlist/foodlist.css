@@ -43,8 +43,12 @@ body {
 }
 .row  .row-buttons > a {
     flex: 1;
-    border: 1px solid black;
     text-align: center;
+}
+
+.row .row-buttons > a > img {
+    width: 1em;
+    height: 1em;
 }
 
 #addfood {

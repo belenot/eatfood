@@ -9,6 +9,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class SessionInterceptor implements HandlerInterceptor {
+
+    /**
+     * Registration and Authorization states serv for non-authorized client.
+     * Else client accessed to FoodList and Logout.
+     *
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
 	String uri = request.getRequestURI().split("/")[2];

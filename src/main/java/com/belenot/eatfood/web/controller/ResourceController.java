@@ -13,16 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 
-@Controller
-@RequestMapping( "/**/*.{js,css,png,jpg}" )
+
 public class ResourceController {
     /**
      * example: /eatfood/index/index.css -> WEB-INF/resources/index/index.css
      * eatfood - servlet namespace
      * resources - any ordinary folder which is responsabled to hold such files like css or js
      */
-    @RequestMapping
-    @ResponseBody
+
     public String getSource(HttpServletRequest request) throws IOException, ServletException {
 	ServletContext ctx = request.getServletContext();
 	String[] resourceURIPathArray = request.getRequestURI().split("/");
@@ -38,6 +36,6 @@ public class ResourceController {
 	while( (c = in.read()) > 0 && in.available() > 0 ) {
 	    response += (char) c;
 	}
-	return response;
+	return null;
     }
 }

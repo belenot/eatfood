@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>authorization</title>
-    <link rel="stylesheet" type="text/css" href="/eatfood/authorization/authorization.css">
+    <link rel="stylesheet" type="text/css" href="/eatfood/resources/authorization/authorization.css">
   </head>
   <body>
     <div id="content-pane">

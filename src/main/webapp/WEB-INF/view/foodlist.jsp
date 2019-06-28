@@ -2,8 +2,8 @@
   <head>
     <title>foodlist</title>
 
-    <link rel="stylesheet" type="text/css" href="/eatfood/foodlist/foodlist.css">
-    <script src="/eatfood/foodlist/foodlist.js"></script>
+    <link rel="stylesheet" type="text/css" href="/eatfood/resources/foodlist/foodlist.css">
+    <script src="/eatfood/resources/foodlist/foodlist.js"></script>
     <!---->
     <!--<script src="http://localhost:8080/skewer"></script>-->
     <!---->

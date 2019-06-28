@@ -13,10 +13,10 @@ for (Food food : (List<Food>) request.getAttribute("foodRows")) {
   <label class="item fat"><%= food.getFat() %></label>
   <div class="row-buttons">
     <a href="/eatfood/foodlist/update">
-      <img src="/eatfood/img/pencil.jpg">
+      <img src="/eatfood/resources/img/pencil.png" alt="edit">
     </a>
     <a href="/eatfood/foodlist/delete">
-      <img src="/eatfood/img/close.jpg">
+      <img src="/eatfood/resources/img/close.png" alt="delete">
     </a>
   </div>
 </div>

@@ -16,6 +16,7 @@ import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -26,6 +27,11 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class WebAppContext implements WebMvcConfigurer {
     @Autowired
     public ConfigurableWebApplicationContext ctx;
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    }
     
     @Bean
     public ViewResolver viewResolver() {
