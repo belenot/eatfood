@@ -5,8 +5,7 @@ window.onload = function () {
 	updateImgArray[i].addEventListener("click", onUpdateFoodClick);
     }
     spinner.addEventListener("scroll", onSpinnerScroll);
-    totalNutrient("protein");
-    updateStats();
+    //updateStats();
 }
 
 function onSpinnerScroll(e) {
@@ -15,7 +14,7 @@ function onSpinnerScroll(e) {
 	var length = document.getElementsByClassName("item id").length;
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "/eatfood/foodlist/morefood?last=" + length)
-	xhr.send()
+	xhr.send();
 	xhr.onreadystatechange = function () {
 	    if (xhr.status != 200) {
 		alert("Can't derive your food");
@@ -27,7 +26,7 @@ function onSpinnerScroll(e) {
 		for (var i = 0; i < els.length; i++ ) {
 		    spinner.appendChild(els[i]);
 		}
-		updateStats();
+		//updateStats();
 	    }
 	}
     }

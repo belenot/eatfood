@@ -32,8 +32,9 @@ public class FoodListController {
     private FoodDao foodDao;
     
     @GetMapping
-    public String getHome(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws ApplicationException{
+    public String foodlist(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws ApplicationException{
 	model.addAttribute("foodRows", foodDao.getFoodByClientLast(client, 0, 10));
+	model.addAttribute("totalNutrients", foodDao.totalNutrients(client));
 	return "foodlist";
     }
 

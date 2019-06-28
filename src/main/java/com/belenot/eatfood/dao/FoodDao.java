@@ -19,4 +19,5 @@ public interface FoodDao {
     Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap) throws ApplicationException;
     boolean updateFood(Food food) throws ApplicationException;
     boolean deleteFood(Food food) throws ApplicationException;
+    Map<String, BigDecimal> totalNutrients(Client client) throws ApplicationException;
 }

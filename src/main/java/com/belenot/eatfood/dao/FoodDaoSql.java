@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -202,4 +203,23 @@ public class FoodDaoSql implements FoodDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
+    public Map<String, BigDecimal> totalNutrients(Client client) throws ApplicationException {
+	try {
+	    Map<String, BigDecimal> totalNutrients = new HashMap<>();
+	    PreparedStatement ps = connection.prepareStatement("SELECT sum(calories), sum(protein), sum(carbohydrate), sum(fat) FROM food WHERE client = ?");
+	    ps.setInt(1, client.getId());
+	    ResultSet rs = ps.executeQuery();
+	    if (rs.next()) {
+		totalNutrients.put("calories", rs.getBigDecimal(1));
+		totalNutrients.put("protein", rs.getBigDecimal(2));
+		totalNutrients.put("carbohydrate", rs.getBigDecimal(3));
+		totalNutrients.put("fat", rs.getBigDecimal(4));
+	    }
+	    return totalNutrients;
+	} catch (SQLException exc) {
+	    throw new ApplicationException(String.format("Can' account total nutrients for client { id = %d, login = %s }", client.getId(), client.getLogin()), exc);
+	}
+    }
+	    
+	
 }
