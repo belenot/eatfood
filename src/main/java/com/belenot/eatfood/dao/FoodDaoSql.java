@@ -35,10 +35,10 @@ public class FoodDaoSql implements FoodDao {
 
     public void init() {
 	try {
+	    Class.forName("org.postgresql.Driver");
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
-	} catch (SQLException exc) {
+	} catch (SQLException | ClassNotFoundException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
-	    //log msg
 	}
     }
     public void destroy() throws ApplicationException {

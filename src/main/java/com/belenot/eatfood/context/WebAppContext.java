@@ -43,7 +43,7 @@ public class WebAppContext implements WebMvcConfigurer {
     @Bean( initMethod = "init", destroyMethod = "destroy" )
     ClientDao clientDao() {
 	ClientDaoSql clientDao = new ClientDaoSql();
-	clientDao.setConnectionAddress("jdbc:postgresql://localhost:8832/eatfood");
+	clientDao.setConnectionAddress("jdbc:postgresql://127.0.0.1:8832/eatfood");
 	clientDao.setUsername("eatfood");
 	clientDao.setPassword("eatfood");
 	return clientDao;
@@ -52,7 +52,7 @@ public class WebAppContext implements WebMvcConfigurer {
     @Bean( initMethod = "init", destroyMethod = "destroy" )
     FoodDao foodDao() {
 	FoodDaoSql foodDao = new FoodDaoSql();
-	foodDao.setConnectionAddress("jdbc:postgresql://localhost:8832/eatfood");
+	foodDao.setConnectionAddress("jdbc:postgresql://127.0.0.1:8832/eatfood");
 	foodDao.setUsername("eatfood");
 	foodDao.setPassword("eatfood");
 	return foodDao;

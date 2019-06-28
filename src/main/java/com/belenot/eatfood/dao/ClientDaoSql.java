@@ -20,6 +20,7 @@ public class ClientDaoSql implements ClientDao {
     public void setPassword(String password) { this.password = password; }
     
     private Connection connection;
+    
 
     /**
      * Assume, that corresponding driver loaded in lib directory 
@@ -27,10 +28,10 @@ public class ClientDaoSql implements ClientDao {
      */
     public void init() {
 	try {
+	    Class.forName("org.postgresql.Driver");
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
-	} catch (SQLException exc) {
+	} catch (SQLException | ClassNotFoundException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
-	    //log msg
 	}
     }
     public void destroy() throws ApplicationException {

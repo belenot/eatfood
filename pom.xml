@@ -45,6 +45,25 @@
       <version>1.6.2</version>
     </dependency>
   </dependencies>
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+	<activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+	<belenot.server>TomcatServer</belenot.server>
+	<belenot.url>http://localhost:8080/manager/text</belenot.url>
+      </properties>
+    </profile>
+    <profile>
+      <id>dedicated</id>
+      <properties>
+	<belenot.server>TomcatDedic</belenot.server>
+	<belenot.url>http://91.240.84.78:8080/manager/text</belenot.url>
+      </properties>
+    </profile>
+  </profiles>
   <build>
     <finalName>eatfood</finalName>
     <plugins>
@@ -54,8 +73,8 @@
 	<artifactId>tomcat7-maven-plugin</artifactId>
 	<version>2.2</version>
 	<configuration>
-	  <server>TomcatServer</server>
-	  <url>http://localhost:8080/manager/text</url>
+	  <server>${belenot.server}</server>
+	  <url>${belenot.url}</url>
 	</configuration>
       </plugin>
     </plugins>
