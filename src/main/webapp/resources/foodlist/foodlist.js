@@ -55,15 +55,17 @@ function onUpdateFoodClick(e) {
 	"protein": row.getElementsByClassName("protein")[0].innerText,
 	"carbohydrate": row.getElementsByClassName("carbohydrate")[0].innerText,
 	"fat": row.getElementsByClassName("fat")[0].innerText,
+	"gram": row.getElementsByClassName("gram")[0].innerText
     }
     var addfood = document.querySelector("#addfood .row");
 
     row.style.borderColor = "orange";
     addfood.getElementsByClassName("item")[0].value = food.name;
-    addfood.getElementsByClassName("item")[1].value = food.calories;
-    addfood.getElementsByClassName("item")[2].value = food.protein;
-    addfood.getElementsByClassName("item")[3].value = food.carbohydrate;
-    addfood.getElementsByClassName("item")[4].value = food.fat;
+    addfood.getElementsByClassName("item")[1].value = food.calories / food.gram * 100;
+    addfood.getElementsByClassName("item")[2].value = food.protein / food.gram * 100;
+    addfood.getElementsByClassName("item")[3].value = food.carbohydrate / food.gram * 100;
+    addfood.getElementsByClassName("item")[4].value = food.fat / food.gram * 100;
+    addfood.getElementsByClassName("item")[5].value = food.gram;
     addfood.querySelector("input[type='submit']").value="Update";
     addfood.querySelector("input[type='submit']").style.color = "orange";
     addfood.getElementsByClassName("item")[0].style.backgroundColor = "orange";
@@ -71,6 +73,7 @@ function onUpdateFoodClick(e) {
     addfood.getElementsByClassName("item")[2].style.backgroundColor = "orange";
     addfood.getElementsByClassName("item")[3].style.backgroundColor = "orange";
     addfood.getElementsByClassName("item")[4].style.backgroundColor = "orange";
+    addfood.getElementsByClassName("item")[5].style.backgroundColor = "orange";
     var idDiv = document.createElement("input")
     idDiv.type = "hidden";
     idDiv.name = "id";
@@ -99,6 +102,7 @@ function stopUpdateFoodProcess(nameField) {
     addfood.getElementsByClassName("item")[2].value = "";
     addfood.getElementsByClassName("item")[3].value = "";
     addfood.getElementsByClassName("item")[4].value = "";
+    addfood.getElementsByClassName("item")[5].value = "";
     addfood.querySelector("input[type='submit']").value="Add";
     addfood.querySelector("input[type='submit']").style.color = "hsl(0, 0%, 80%)";
     addfood.getElementsByClassName("item")[0].style.backgroundColor = "inherit";
@@ -106,5 +110,6 @@ function stopUpdateFoodProcess(nameField) {
     addfood.getElementsByClassName("item")[2].style.backgroundColor = "inherit";
     addfood.getElementsByClassName("item")[3].style.backgroundColor = "inherit";
     addfood.getElementsByClassName("item")[4].style.backgroundColor = "inherit";
+    addfood.getElementsByClassName("item")[5].style.backgroundColor = "inherit";
     addfood.parentElement.action="/eatfood/foodlist/addfood";
 }

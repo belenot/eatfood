@@ -35,9 +35,9 @@ public class FoodDaoSql implements FoodDao {
 
     public void init() {
 	try {
-	    Class.forName("org.postgresql.Driver");
+	    //	    Class.forName("org.postgresql.Driver");
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
-	} catch (SQLException | ClassNotFoundException exc) {
+	} catch (SQLException  exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
 	}
     }
@@ -65,6 +65,7 @@ public class FoodDaoSql implements FoodDao {
 	        food.setProtein(rs.getBigDecimal("protein"));
 		food.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
 		food.setFat(rs.getBigDecimal("fat"));
+		food.setGram(rs.getBigDecimal("gram"));
 	    }
 	    return food;	    
 	} catch (SQLException exc) {
@@ -89,6 +90,7 @@ public class FoodDaoSql implements FoodDao {
 		food.setProtein(rs.getBigDecimal("protein"));
 		food.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
 		food.setFat(rs.getBigDecimal("fat"));
+		food.setGram(rs.getBigDecimal("gram"));
 		foodList.add(food);
 	    }
 	    return foodList;
@@ -114,6 +116,7 @@ public class FoodDaoSql implements FoodDao {
 	    food.setProtein(rs.getBigDecimal("protein"));
 	    food.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
 	    food.setFat(rs.getBigDecimal("fat"));
+	    food.setGram(rs.getBigDecimal("gram"));
 	    foodList.add(food);
 	}
 	return foodList;
@@ -122,15 +125,16 @@ public class FoodDaoSql implements FoodDao {
 	    throw new ApplicationException(msg, exc);
 	}
     }
-    public Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap) throws ApplicationException {
+    public Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap, BigDecimal gram) throws ApplicationException {
 	try {
-	    PreparedStatement ps = connection.prepareStatement("INSERT INTO food (name, client, calories, protein, carbohydrate, fat) VALUES (?, ?, ?, ?, ?, ?)");
+	    PreparedStatement ps = connection.prepareStatement("INSERT INTO food (name, client, calories, protein, carbohydrate, fat, gram) VALUES (?, ?, ?, ?, ?, ?, ?)");
 	    ps.setString(1, name);
 	    ps.setInt(2, client.getId());
 	    ps.setBigDecimal(3, nutrientMap.get("calories") != null ? nutrientMap.get("calories") : new BigDecimal(0));
 	    ps.setBigDecimal(4, nutrientMap.get("protein") != null ? nutrientMap.get("protein") : new BigDecimal(0));
 	    ps.setBigDecimal(5, nutrientMap.get("carbohydrate") != null ? nutrientMap.get("carbohydrate") : new BigDecimal(0));
 	    ps.setBigDecimal(6, nutrientMap.get("fat") != null ? nutrientMap.get("fat") : new BigDecimal(0));
+	    ps.setBigDecimal(7, gram);
 	    ps.execute();
 	    ps = connection.prepareStatement("SELECT * FROM food ORDER BY id DESC LIMIT 1");
 	    ResultSet rs = ps.executeQuery();
@@ -143,6 +147,7 @@ public class FoodDaoSql implements FoodDao {
 		food.setProtein(nutrientMap.get("protein") != null ? nutrientMap.get("protein") : new BigDecimal(0));
 		food.setCarbohydrate(nutrientMap.get("carbohydrate") != null ? nutrientMap.get("carbohydrate") : new BigDecimal(0));
 		food.setFat(nutrientMap.get("fat") != null ? nutrientMap.get("fat") : new BigDecimal(0));
+		food.setGram(gram);
 		if (!food.getName().equals(name)) {
 		    String msg = String.format("Can't fetch added food with name = \"" + name + "\" to FoodDao(last added food's name and parameter name are not equal(%s!=%s))", name, food.getName().trim());
 		    throw new ApplicationException(msg);
@@ -171,6 +176,7 @@ public class FoodDaoSql implements FoodDao {
 		food.setCalories(rs.getBigDecimal("carbohydrate"));
 		food.setFat(rs.getBigDecimal("fat"));
 		foodList.add(food);
+		food.setGram(rs.getBigDecimal("gram"));
 	    }
 	    return foodList;
 	} catch (SQLException exc) {
@@ -180,13 +186,14 @@ public class FoodDaoSql implements FoodDao {
     }
     public boolean updateFood(Food food) throws ApplicationException {
 	try {
-	    PreparedStatement ps = connection.prepareStatement("UPDATE food SET name = ?, calories = ?, protein = ?, carbohydrate = ?, fat = ? WHERE id = ?");
+	    PreparedStatement ps = connection.prepareStatement("UPDATE food SET name = ?, calories = ?, protein = ?, carbohydrate = ?, fat = ?, gram = ? WHERE id = ?");
 	    ps.setString(1, food.getName());
 	    ps.setBigDecimal(2, food.getCalories());
 	    ps.setBigDecimal(3, food.getProtein());
 	    ps.setBigDecimal(4, food.getCarbohydrate());
 	    ps.setBigDecimal(5, food.getFat());
 	    ps.setInt(6, food.getId());
+	    ps.setBigDecimal(7, food.getGram());
 	    return ps.execute();
 	} catch (SQLException exc) {
 	    String msg = String.format("Can't update food { id = %d }", food.getId());

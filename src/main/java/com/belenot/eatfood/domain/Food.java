@@ -11,6 +11,7 @@ public class Food {
     private BigDecimal protein;
     private BigDecimal carbohydrate;
     private BigDecimal fat;
+    private BigDecimal gram;
     
     public void setId(int id) { this.id = id; }
     public void setClient(Client client) { this.client = client; }
@@ -19,6 +20,8 @@ public class Food {
     public void setProtein(BigDecimal protein) { this.protein = protein; }
     public void setCarbohydrate(BigDecimal carbohydrate) { this.carbohydrate = carbohydrate; }
     public void setFat(BigDecimal fat) { this.fat = fat; }
+    public void setGram(BigDecimal gram) { this.gram = gram; }
+    
 
     public int getId() { return id; }
     public Client getClient() { return client; }
@@ -27,4 +30,5 @@ public class Food {
     public BigDecimal getProtein() { return protein; }
     public BigDecimal getCarbohydrate() { return carbohydrate; }
     public BigDecimal getFat() { return fat; }
+    public BigDecimal getGram() { return gram; }
 }

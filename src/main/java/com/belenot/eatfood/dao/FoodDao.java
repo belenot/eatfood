@@ -16,7 +16,7 @@ public interface FoodDao {
     List<Food> getFoodByName(String name) throws ApplicationException;
     List<Food> getFoodByClient(Client client, int start, int count) throws ApplicationException;
     List<Food> getFoodByClientLast(Client client, int start, int count) throws ApplicationException;
-    Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap) throws ApplicationException;
+    Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap, BigDecimal gram) throws ApplicationException;
     boolean updateFood(Food food) throws ApplicationException;
     boolean deleteFood(Food food) throws ApplicationException;
     Map<String, BigDecimal> totalNutrients(Client client) throws ApplicationException;

@@ -28,9 +28,9 @@ public class ClientDaoSql implements ClientDao {
      */
     public void init() {
 	try {
-	    Class.forName("org.postgresql.Driver");
+	    //	    Class.forName("org.postgresql.Driver");
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
-	} catch (SQLException | ClassNotFoundException exc) {
+	} catch (SQLException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
 	}
     }

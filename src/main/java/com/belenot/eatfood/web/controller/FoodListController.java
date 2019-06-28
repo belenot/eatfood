@@ -46,7 +46,8 @@ public class FoodListController {
 	nutrientMap.put("protein", request.getParameter("protein") != null ? new BigDecimal(request.getParameter("protein")) : new BigDecimal(0));
 	nutrientMap.put("carbohydrate", request.getParameter("carbohydrate") != null ? new BigDecimal(request.getParameter("carbohydrate")) : new BigDecimal(0));
 	nutrientMap.put("fat", request.getParameter("fat") != null ? new BigDecimal(request.getParameter("fat")) : new BigDecimal(0));
-	Food food = foodDao.addFood(name, client, nutrientMap);
+	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
+	Food food = foodDao.addFood(name, client, nutrientMap, gram);
 	response.sendRedirect("./");
     }
 
@@ -59,6 +60,7 @@ public class FoodListController {
 	food.setProtein(new BigDecimal(request.getParameter("protein")));
 	food.setCarbohydrate(new BigDecimal(request.getParameter("carbohydrate")));
 	food.setFat(new BigDecimal(request.getParameter("fat")));
+	food.setGram(new BigDecimal(request.getParameter("gram")));
 	foodDao.updateFood(food);
 	response.sendRedirect("/eatfood/foodlist");
     }
