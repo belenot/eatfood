@@ -50,7 +50,7 @@ public class FoodListController {
     }
 
     @PostMapping ( "/updatefood" )
-    public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws ApplicationException, IOException {
+    public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws ApplicationException, IOException {
 	Food food = foodDao.getFood(Integer.parseInt(request.getParameter("id")));
 	food.setClient(client);
 	food.setName(request.getParameter("name"));
@@ -59,6 +59,7 @@ public class FoodListController {
 	food.setCarbohydrate(new BigDecimal(request.getParameter("carbohydrate")));
 	food.setFat(new BigDecimal(request.getParameter("fat")));
 	foodDao.updateFood(food);
+	response.sendRedirect("/eatfood/foodlist");
     }
 
     @PostMapping ( "/deletefood" )

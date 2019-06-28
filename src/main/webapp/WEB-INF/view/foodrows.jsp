@@ -13,7 +13,7 @@ for (Food food : (List<Food>) request.getAttribute("foodRows")) {
     <label class="item fat"><%= food.getFat() %></label>
     <form class="row-buttons" method="POST" action="/eatfood/foodlist/deletefood">
       <input type="hidden" class="item id" name="id" value="<%=food.getId()%>">
-      <input type="image" src="/eatfood/resources/img/pencil.png" name="img1" alt="edit">
+      <input type="image" form="" class="update-img" src="/eatfood/resources/img/pencil.png" name="img1" alt="edit">
       <input type="image" src="/eatfood/resources/img/close.png" name="img2" alt="delete" >
     </form>
 </div>

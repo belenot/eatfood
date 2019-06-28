@@ -18,11 +18,12 @@
 	    <%@ include file="foodrows.jsp" %>
 	  </div>
 	  <%@ include file="addfood.html" %>
-	</div>
-	<div id="right-pane">
-	  <%@ include file="foodstat.html" %>
+
+	  <div id="right-pane">
+	    <%@ include file="foodstat.html" %>
+	  </div>
 	</div>
       </div>
-    </div>
+    </div>    
   </body>
 </html>

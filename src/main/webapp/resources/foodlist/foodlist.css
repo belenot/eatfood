@@ -41,15 +41,16 @@ body {
     flex: 1;
     display: flex;
 }
-.row  .row-buttons > a {
-
-}
-
-.row .row-buttons > input[type="image"] {
+.row  .row-buttons * {
     flex: 1;
     text-align: center;
     width: 1em;
 }
+
+.row button {
+    background-color: rgba(0,0,0,0);
+}
+
 
 #addfood {
     width: 80%;
@@ -141,6 +142,7 @@ body {
 }
 #right-pane {
     flex: 2;
+    color:red;
 }
 #foodstat {
     display: grid;
