@@ -1,6 +1,7 @@
 package com.belenot.eatfood.dao;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -62,11 +63,11 @@ public class FoodDaoSql implements FoodDao {
 		food.setId(id);
 		food.setClient(clientDao.getClient(rs.getInt("client")));
 	        food.setName(rs.getString("name"));
-		food.setCalories(rs.getBigDecimal("calories").setScale(2));
-	        food.setProtein(rs.getBigDecimal("protein").setScale(2));
-		food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2));
-		food.setFat(rs.getBigDecimal("fat").setScale(2));
-		food.setGram(rs.getBigDecimal("gram").setScale(2));
+		food.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
+	        food.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
+		food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
+		food.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
+		food.setGram(rs.getBigDecimal("gram").setScale(2, RoundingMode.FLOOR));
 	    }
 	    return food;	    
 	} catch (SQLException exc) {
@@ -87,11 +88,11 @@ public class FoodDaoSql implements FoodDao {
 		food.setId(rs.getInt("id"));
 		food.setName(rs.getString("name"));
 		food.setClient(client);
-		food.setCalories(rs.getBigDecimal("calories").setScale(2));
-		food.setProtein(rs.getBigDecimal("protein").setScale(2));
-		food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2));
-		food.setFat(rs.getBigDecimal("fat").setScale(2));
-		food.setGram(rs.getBigDecimal("gram").setScale(2));
+		food.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
+		food.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
+		food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
+		food.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
+		food.setGram(rs.getBigDecimal("gram").setScale(2, RoundingMode.FLOOR));
 		foodList.add(food);
 	    }
 	    return foodList;
@@ -113,11 +114,11 @@ public class FoodDaoSql implements FoodDao {
 		food.setId(rs.getInt("id"));
 		food.setName(rs.getString("name"));
 		food.setClient(client);
-		food.setCalories(rs.getBigDecimal("calories").setScale(2));
-		food.setProtein(rs.getBigDecimal("protein").setScale(2));
-		food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2));
-		food.setFat(rs.getBigDecimal("fat").setScale(2));
-		food.setGram(rs.getBigDecimal("gram").setScale(2));
+		food.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
+		food.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
+		food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
+		food.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
+		food.setGram(rs.getBigDecimal("gram").setScale(2, RoundingMode.FLOOR));
 		foodList.add(food);
 	}
 	return foodList;
@@ -144,11 +145,11 @@ public class FoodDaoSql implements FoodDao {
 		food.setId(rs.getInt("id"));
 		food.setName(rs.getString("name").trim());
 		food.setClient(client);
-		food.setCalories(nutrientMap.get("calories") != null ? nutrientMap.get("calories").setScale(2) : new BigDecimal(0));
-		food.setProtein(nutrientMap.get("protein") != null ? nutrientMap.get("protein").setScale(2) : new BigDecimal(0));
-		food.setCarbohydrate(nutrientMap.get("carbohydrate") != null ? nutrientMap.get("carbohydrate").setScale(2) : new BigDecimal(0));
-		food.setFat(nutrientMap.get("fat") != null ? nutrientMap.get("fat").setScale(2) : new BigDecimal(0));
-		food.setGram(gram.setScale(2));
+		food.setCalories(nutrientMap.get("calories") != null ? nutrientMap.get("calories").setScale(2, RoundingMode.FLOOR) : new BigDecimal(0));
+		food.setProtein(nutrientMap.get("protein") != null ? nutrientMap.get("protein").setScale(2, RoundingMode.FLOOR) : new BigDecimal(0));
+		food.setCarbohydrate(nutrientMap.get("carbohydrate") != null ? nutrientMap.get("carbohydrate").setScale(2, RoundingMode.FLOOR) : new BigDecimal(0));
+		food.setFat(nutrientMap.get("fat") != null ? nutrientMap.get("fat").setScale(2, RoundingMode.FLOOR) : new BigDecimal(0));
+		food.setGram(gram.setScale(2, RoundingMode.FLOOR));
 		if (!food.getName().equals(name)) {
 		    String msg = String.format("Can't fetch added food with name = \"" + name + "\" to FoodDao(last added food's name and parameter name are not equal(%s!=%s))", name, food.getName().trim());
 		    throw new ApplicationException(msg);
@@ -172,12 +173,12 @@ public class FoodDaoSql implements FoodDao {
 		food.setId(rs.getInt("id"));
 		food.setName(rs.getString("name"));
 		food.setClient(clientDao.getClient(rs.getInt("client")));
-		food.setCalories(rs.getBigDecimal("calories").setScale(2));
-		food.setProtein(rs.getBigDecimal("protein").setScale(2));
-		food.setCalories(rs.getBigDecimal("carbohydrate").setScale(2));
-		food.setFat(rs.getBigDecimal("fat").setScale(2));
+		food.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
+		food.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
+		food.setCalories(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
+		food.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
 		foodList.add(food);
-		food.setGram(rs.getBigDecimal("gram").setScale(2));
+		food.setGram(rs.getBigDecimal("gram").setScale(2, RoundingMode.FLOOR));
 	    }
 	    return foodList;
 	} catch (SQLException exc) {
@@ -223,10 +224,10 @@ public class FoodDaoSql implements FoodDao {
 		BigDecimal carbohydrate = rs.getBigDecimal(3) != null ? rs.getBigDecimal(3) : new BigDecimal(0);
 		BigDecimal fat = rs.getBigDecimal(4) != null ? rs.getBigDecimal(4) : new BigDecimal(0);
 
-		totalNutrients.put("calories", calories.setScale(2));
-		totalNutrients.put("protein", protein.setScale(2));
-		totalNutrients.put("carbohydrate", carbohydrate.setScale(2));
-		totalNutrients.put("fat", fat.setScale(2));
+		totalNutrients.put("calories", calories.setScale(2, RoundingMode.FLOOR));
+		totalNutrients.put("protein", protein.setScale(2, RoundingMode.FLOOR));
+		totalNutrients.put("carbohydrate", carbohydrate.setScale(2, RoundingMode.FLOOR));
+		totalNutrients.put("fat", fat.setScale(2, RoundingMode.FLOOR));
 	    }
 	    return totalNutrients;
 	} catch (SQLException exc) {
