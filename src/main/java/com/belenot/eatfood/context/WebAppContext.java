@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -24,13 +26,18 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebMvc
 @EnableAspectJAutoProxy
 @ComponentScan( "com.belenot.eatfood" )
+@PropertySource( "classpath:server.properties" )
 public class WebAppContext implements WebMvcConfigurer {
+
     @Autowired
     public ConfigurableWebApplicationContext ctx;
 
+    @Autowired
+    public Environment env;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	registry.addResourceHandler("/resources/**").addResourceLocations(env.getProperty("server.resources.path", "/resources/"));
     }
     
     @Bean
@@ -42,18 +49,18 @@ public class WebAppContext implements WebMvcConfigurer {
     @Bean( initMethod = "init", destroyMethod = "destroy" )
     ClientDao clientDao() {
 	ClientDaoSql clientDao = new ClientDaoSql();
-	clientDao.setConnectionAddress("jdbc:postgresql://localhost:8832/eatfood");
-	clientDao.setUsername("eatfood");
-	clientDao.setPassword("eatfood");
+	clientDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
+	clientDao.setUsername(env.getProperty("server.jdbc.username"));
+	clientDao.setPassword(env.getProperty("server.jdbc.password"));
 	return clientDao;
     }
 
     @Bean( initMethod = "init", destroyMethod = "destroy" )
     FoodDao foodDao() {
 	FoodDaoSql foodDao = new FoodDaoSql();
-	foodDao.setConnectionAddress("jdbc:postgresql://localhost:8832/eatfood");
-	foodDao.setUsername("eatfood");
-	foodDao.setPassword("eatfood");
+	foodDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
+	foodDao.setUsername(env.getProperty("server.jdbc.username"));
+	foodDao.setPassword(env.getProperty("server.jdbc.password"));
 	return foodDao;
     }
 
