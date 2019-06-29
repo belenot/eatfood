@@ -54,6 +54,7 @@
       <properties>
 	<belenot.server>TomcatServer</belenot.server>
 	<belenot.url>http://localhost:8080/manager/text</belenot.url>
+	<server.jdbc.manualRegistre>false</server.jdbc.manualRegistre>
       </properties>
     </profile>
     <profile>
@@ -61,6 +62,7 @@
       <properties>
 	<belenot.server>TomcatDedic</belenot.server>
 	<belenot.url>http://91.240.84.78:8080/manager/text</belenot.url>
+	<server.jdbc.manualRegistre>true</server.jdbc.manualRegistre>
       </properties>
     </profile>
   </profiles>
@@ -78,5 +80,11 @@
 	</configuration>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+	<directory>src/main/resources</directory>
+	<filtering>true</filtering>
+      </resource>
+    </resources>
   </build>
 </project>

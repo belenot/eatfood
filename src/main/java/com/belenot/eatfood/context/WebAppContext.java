@@ -52,6 +52,7 @@ public class WebAppContext implements WebMvcConfigurer {
 	clientDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
 	clientDao.setUsername(env.getProperty("server.jdbc.username"));
 	clientDao.setPassword(env.getProperty("server.jdbc.password"));
+	clientDao.setManualRegistre(new Boolean(env.getProperty("server.jdbc.manualRegistre")));
 	return clientDao;
     }
 
@@ -61,6 +62,7 @@ public class WebAppContext implements WebMvcConfigurer {
 	foodDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
 	foodDao.setUsername(env.getProperty("server.jdbc.username"));
 	foodDao.setPassword(env.getProperty("server.jdbc.password"));
+	foodDao.setManualRegistre(new Boolean(env.getProperty("server.jdbc.manualRegistre")));
 	return foodDao;
     }
 

@@ -21,6 +21,7 @@ public class FoodDaoSql implements FoodDao {
     private String connectionAddress;
     private String username;
     private String password;
+    private boolean manualRegistre;
     @Autowired
     private ClientDao clientDao;
     
@@ -28,16 +29,16 @@ public class FoodDaoSql implements FoodDao {
     public void setUsername(String username) { this.username = username; }
     public void setPassword(String password) { this.password = password; }
     public void setClientDao(ClientDao clientDao) { this.clientDao = clientDao; }
-    
+    public void setManualRegistre(boolean manualRegistre) { this.manualRegistre = manualRegistre; }
     
     private Connection connection;
 
 
     public void init() {
 	try {
-	    //	    Class.forName("org.postgresql.Driver");
+	    if (manualRegistre) Class.forName("org.postgresql.Driver");
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
-	} catch (SQLException  exc) {
+	} catch (SQLException | ClassNotFoundException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
 	}
     }

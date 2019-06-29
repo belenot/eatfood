@@ -14,10 +14,12 @@ public class ClientDaoSql implements ClientDao {
     private String connectionAddress;
     private String username;
     private String password;
+    private boolean manualRegistre;
     
     public void setConnectionAddress(String connectionAddress) { this.connectionAddress = connectionAddress; }
     public void setUsername(String username) { this.username = username; }
     public void setPassword(String password) { this.password = password; }
+    public void setManualRegistre(boolean manualRegistre) { this.manualRegistre = manualRegistre; }
     
     private Connection connection;
     
@@ -28,9 +30,9 @@ public class ClientDaoSql implements ClientDao {
      */
     public void init() {
 	try {
-	    //	    Class.forName("org.postgresql.Driver");
+	    if (manualRegistre) Class.forName("org.postgresql.Driver");
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
-	} catch (SQLException exc) {
+	} catch (SQLException | ClassNotFoundException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
 	}
     }
