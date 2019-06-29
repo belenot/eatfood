@@ -194,8 +194,8 @@ public class FoodDaoSql implements FoodDao {
 	    ps.setBigDecimal(3, food.getProtein());
 	    ps.setBigDecimal(4, food.getCarbohydrate());
 	    ps.setBigDecimal(5, food.getFat());
-	    ps.setInt(6, food.getId());
-	    ps.setBigDecimal(7, food.getGram());
+	    ps.setBigDecimal(6, food.getGram());
+	    ps.setInt(7, food.getId());
 	    return ps.execute();
 	} catch (SQLException exc) {
 	    String msg = String.format("Can't update food { id = %d }", food.getId());
