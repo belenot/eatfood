@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.math.RoundingMode" %>
+<%@ page import="java.math.BigDecimal" %>	
 <%
 for (Food food : (List<Food>) request.getAttribute("foodRows")) {
   %>
