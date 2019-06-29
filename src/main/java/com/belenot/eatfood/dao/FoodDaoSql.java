@@ -102,27 +102,27 @@ public class FoodDaoSql implements FoodDao {
     }
     public List<Food> getFoodByClientLast(Client client, int start, int count) throws ApplicationException {
 	try {
-	List<Food> foodList = new ArrayList<>(count);
-	PreparedStatement st = connection.prepareStatement("SELECT * FROM food WHERE client = ? ORDER BY id DESC OFFSET ? LIMIT ?");
-	st.setInt(1, client.getId());
-	st.setInt(2, start);
-	st.setInt(3, count);
-	ResultSet rs = st.executeQuery();
-	while (rs.next()) {
-	    Food food = new Food();
-	    food.setId(rs.getInt("id"));
-	    food.setName(rs.getString("name"));
-	    food.setClient(client);
-	    food.setCalories(rs.getBigDecimal("calories").setScale(2));
-	    food.setProtein(rs.getBigDecimal("protein").setScale(2));
-	    food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2));
-	    food.setFat(rs.getBigDecimal("fat").setScale(2));
-	    food.setGram(rs.getBigDecimal("gram").setScale(2));
-	    foodList.add(food);
+	    List<Food> foodList = new ArrayList<>(count);
+	    PreparedStatement st = connection.prepareStatement("SELECT * FROM food WHERE client = ? ORDER BY id DESC OFFSET ? LIMIT ?");
+	    st.setInt(1, client.getId());
+	    st.setInt(2, start);
+	    st.setInt(3, count);
+	    ResultSet rs = st.executeQuery();
+	    while (rs.next()) {
+		Food food = new Food();
+		food.setId(rs.getInt("id"));
+		food.setName(rs.getString("name"));
+		food.setClient(client);
+		food.setCalories(rs.getBigDecimal("calories").setScale(2));
+		food.setProtein(rs.getBigDecimal("protein").setScale(2));
+		food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2));
+		food.setFat(rs.getBigDecimal("fat").setScale(2));
+		food.setGram(rs.getBigDecimal("gram").setScale(2));
+		foodList.add(food);
 	}
 	return foodList;
 	} catch (SQLException exc) {
-	    String msg = String.format("Can't get last %d food rows for client { id = %d, login = %s}");
+	    String msg = String.format("Can't get last %d food rows for client { id = %d, login = %s}", count, client.getId(), client.getLogin());
 	    throw new ApplicationException(msg, exc);
 	}
     }
@@ -218,10 +218,15 @@ public class FoodDaoSql implements FoodDao {
 	    ps.setInt(1, client.getId());
 	    ResultSet rs = ps.executeQuery();
 	    if (rs.next()) {
-		totalNutrients.put("calories", rs.getBigDecimal(1).setScale(2));
-		totalNutrients.put("protein", rs.getBigDecimal(2).setScale(2));
-		totalNutrients.put("carbohydrate", rs.getBigDecimal(3).setScale(2));
-		totalNutrients.put("fat", rs.getBigDecimal(4).setScale(2));
+		BigDecimal calories = rs.getBigDecimal(1) != null ? rs.getBigDecimal(1) : new BigDecimal(0);
+		BigDecimal protein = rs.getBigDecimal(2) != null ? rs.getBigDecimal(2) : new BigDecimal(0);
+		BigDecimal carbohydrate = rs.getBigDecimal(3) != null ? rs.getBigDecimal(3) : new BigDecimal(0);
+		BigDecimal fat = rs.getBigDecimal(4) != null ? rs.getBigDecimal(4) : new BigDecimal(0);
+
+		totalNutrients.put("calories", calories.setScale(2));
+		totalNutrients.put("protein", protein.setScale(2));
+		totalNutrients.put("carbohydrate", carbohydrate.setScale(2));
+		totalNutrients.put("fat", fat.setScale(2));
 	    }
 	    return totalNutrients;
 	} catch (SQLException exc) {

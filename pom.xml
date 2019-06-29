@@ -54,6 +54,7 @@
       <properties>
 	<belenot.server>TomcatServer</belenot.server>
 	<belenot.url>http://localhost:8080/manager/text</belenot.url>
+	<server.jdbc.connection>jdbc:postgresql://localhost:8832/eatfood</server.jdbc.connection>
 	<server.jdbc.manualRegistre>false</server.jdbc.manualRegistre>
       </properties>
     </profile>
@@ -62,6 +63,7 @@
       <properties>
 	<belenot.server>TomcatDedic</belenot.server>
 	<belenot.url>http://91.240.84.78:8080/manager/text</belenot.url>
+	<server.jdbc.connection>jdbc:postgresql://127.0.0.1:8832/eatfood</server.jdbc.connection>
 	<server.jdbc.manualRegistre>true</server.jdbc.manualRegistre>
       </properties>
     </profile>
