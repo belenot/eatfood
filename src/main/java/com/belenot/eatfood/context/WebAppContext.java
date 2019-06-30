@@ -85,7 +85,6 @@ public class WebAppContext implements WebMvcConfigurer {
     @Bean
     public LoggingAspect loggingAspect() {
 	LoggingAspect loggingAspect = new LoggingAspect();
-	loggingAspect.setLogger(logger());
 	return loggingAspect;
     }
 

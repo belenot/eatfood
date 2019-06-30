@@ -16,6 +16,7 @@ import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.exception.ApplicationException;
 
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FoodDaoSql implements FoodDao {
@@ -41,6 +42,7 @@ public class FoodDaoSql implements FoodDao {
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
 	} catch (SQLException | ClassNotFoundException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
+	    LogManager.getLogger().fatal(msg, exc);
 	}
     }
     public void destroy() throws ApplicationException {
@@ -49,6 +51,7 @@ public class FoodDaoSql implements FoodDao {
 		connection.close();
 	} catch (SQLException exc) {
 	    String msg = String.format("Can't close connection with FoodDao(%s)", connectionAddress);
+	    LogManager.getLogger().warn(msg, exc);
 	    throw new ApplicationException(msg, exc);
 	}
     }

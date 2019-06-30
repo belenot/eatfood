@@ -14,11 +14,10 @@ import org.aspectj.lang.annotation.Aspect;
 
 @Aspect
 public class LoggingAspect {
-    private Logger logger; 
     
-    public void setLogger(Logger logger) { this.logger = logger; }
     @AfterThrowing( throwing = "exc", pointcut = "execution(* com.belenot.eatfood.web.controller.*.*(..))" )
     public void ControllerApplicationExceptionThrowed(JoinPoint jp, ApplicationException exc) throws ApplicationException {
+	Logger logger = LogManager.getLogger(jp.getTarget().getClass());
 	logger.warn(exc.getMessage(), exc);
 	throw exc;
     }

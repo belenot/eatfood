@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.exception.ApplicationException;
 
+import org.apache.logging.log4j.LogManager;
+
 
 public class ClientDaoSql implements ClientDao {
     private String connectionAddress;
@@ -34,6 +36,7 @@ public class ClientDaoSql implements ClientDao {
 	    connection = DriverManager.getConnection(connectionAddress, username, password);
 	} catch (SQLException | ClassNotFoundException exc) {
 	    String msg = String.format("Can't connect to FoodDao(%s)", connectionAddress);
+	    LogManager.getLogger().fatal(msg, exc);
 	}
     }
     public void destroy() throws ApplicationException {
@@ -42,7 +45,8 @@ public class ClientDaoSql implements ClientDao {
 		connection.close();
 	} catch (SQLException exc) {
 	    String msg = String.format("Can't close connection with FoodDao(%s)", connectionAddress);
-	    //throw new ApplicationException(msg, exc);
+	    LogManager.getLogger().warn(msg, exc);
+	    throw new ApplicationException(msg, exc);
 	}
     }
     public Client getClient(int id) throws ApplicationException {

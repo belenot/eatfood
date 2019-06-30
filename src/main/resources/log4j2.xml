@@ -5,13 +5,20 @@
 	  filename="${logger.filename}"
 	  ignoreExceptions="false">
       <PatternLayout>
-	<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+	<Pattern>%highlight{%d %p [%t][%c] %m%n}</Pattern>
+      </PatternLayout>
+    </File>
+    <File name="fileLoggerConcise"
+	  filename="${logger.filename}.concise">
+      <PatternLayout>
+	<Pattern>%highlight{%d %p [%c] %m%n%ex{0}}</Pattern>
       </PatternLayout>
     </File>
   </Appenders>
   <Loggers>
     <Logger name="com.belenot.eatfood" level="all">
       <AppenderRef ref="fileLogger"/>
+      <AppenderRef ref="fileLoggerConcise"/>
     </Logger>
   </Loggers>
 </Configuration>
