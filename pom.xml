@@ -12,6 +12,8 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.sourceEncoding>UTF-8</maven.compiler.sourceEncoding>
     <maven.compiler.targetEncoding>UTF-8</maven.compiler.targetEncoding>
+    <eatfood.home>/var/lib/tomcat8/webapps/eatfood</eatfood.home>
+    <logger.filename>${eatfood.home}/logs/server.log</logger.filename>
   </properties>
 
   
@@ -43,6 +45,20 @@
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjtools</artifactId>
       <version>1.6.2</version>
+    </dependency>
+
+    <!--~/.m2/repository/org/apache/logging/log4j/log4j-api/2.12.0/log4j-api-2.12.0.jar-->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.12.0</version>
+    </dependency>
+
+    <!--~/.m2/repository/org/apache/logging/log4j/log4j-core/2.12.0/log4j-core-2.12.0.jar-->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.12.0</version>
     </dependency>
   </dependencies>
   <profiles>
@@ -81,6 +97,7 @@
 	  <url>${belenot.url}</url>
 	</configuration>
       </plugin>
+
     </plugins>
     <resources>
       <resource>

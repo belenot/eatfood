@@ -1,12 +1,15 @@
 package com.belenot.eatfood.context;
 
 import com.belenot.eatfood.context.aspect.CritErrorAspect;
+import com.belenot.eatfood.context.aspect.LoggingAspect;
 import com.belenot.eatfood.dao.ClientDao;
 import com.belenot.eatfood.dao.ClientDaoSql;
 import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.dao.FoodDaoSql;
 import com.belenot.eatfood.web.interceptor.SessionInterceptor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -47,7 +50,7 @@ public class WebAppContext implements WebMvcConfigurer {
     }
 
     @Bean( initMethod = "init", destroyMethod = "destroy" )
-    ClientDao clientDao() {
+    public ClientDao clientDao() {
 	ClientDaoSql clientDao = new ClientDaoSql();
 	clientDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
 	clientDao.setUsername(env.getProperty("server.jdbc.username"));
@@ -57,7 +60,7 @@ public class WebAppContext implements WebMvcConfigurer {
     }
 
     @Bean( initMethod = "init", destroyMethod = "destroy" )
-    FoodDao foodDao() {
+    public FoodDao foodDao() {
 	FoodDaoSql foodDao = new FoodDaoSql();
 	foodDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
 	foodDao.setUsername(env.getProperty("server.jdbc.username"));
@@ -67,10 +70,23 @@ public class WebAppContext implements WebMvcConfigurer {
     }
 
     @Bean
+    public Logger logger() {
+	Logger logger = LogManager.getLogger();
+	return logger;
+    }
+	
+    @Bean
     public CritErrorAspect critErrorAspect() {
 	CritErrorAspect critErrorAspect = new CritErrorAspect();
 	critErrorAspect.setCtx(ctx);
 	return new CritErrorAspect();
+    }
+
+    @Bean
+    public LoggingAspect loggingAspect() {
+	LoggingAspect loggingAspect = new LoggingAspect();
+	loggingAspect.setLogger(logger());
+	return loggingAspect;
     }
 
     @Override
