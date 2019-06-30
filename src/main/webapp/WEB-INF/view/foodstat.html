@@ -1,8 +1,9 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="java.math.BigDecimal" %>
+<%@ page import="org.springframework.context.MessageSource" %>
 
 <div id="foodstat">
-  <label class="total" >Total</label>
+  <label class="total" ><%= ((MessageSource) request.getAttribute("messageSource")).getMessage("total", null, request.getLocale()) %></label>
   
   <label class="calories">Calories:</label>
   <label id="calories"><%= ((Map<String, BigDecimal>) request.getAttribute("totalNutrients")).get("calories")%></label>

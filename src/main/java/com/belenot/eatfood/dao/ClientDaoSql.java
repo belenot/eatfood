@@ -116,7 +116,7 @@ public class ClientDaoSql implements ClientDao {
 	    String errorCode = exc.getSQLState();
 	    String msg = String.format("(SQL %s)Can't add client with login = \"%s\" to ClientDao", errorCode, login);
 	    if (errorCode.equals("23505")) {//psql error unique_violation
-		msg = String.format("Client with such name exists already");
+		msg += String.format(".Client with such name exists already");
 	    }
 	    throw new ApplicationException(msg, exc);
 	}

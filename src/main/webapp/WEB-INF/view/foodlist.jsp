@@ -1,6 +1,7 @@
+<%@ page import="org.springframework.context.MessageSource" %>
 <html>
   <head>
-    <title>foodlist</title>
+    <title><%= ((MessageSource) request.getAttribute("messageSource")).getMessage("foodlist", null, request.getLocale()) %></title>
 
     <link rel="stylesheet" type="text/css" href="/eatfood/resources/foodlist/foodlist.css">
     <script src="/eatfood/resources/foodlist/foodlist.js"></script>

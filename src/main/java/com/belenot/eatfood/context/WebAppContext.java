@@ -6,16 +6,19 @@ import com.belenot.eatfood.dao.ClientDao;
 import com.belenot.eatfood.dao.ClientDaoSql;
 import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.dao.FoodDaoSql;
+import com.belenot.eatfood.web.interceptor.EncodingInterceptor;
 import com.belenot.eatfood.web.interceptor.SessionInterceptor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.ViewResolver;
@@ -88,8 +91,17 @@ public class WebAppContext implements WebMvcConfigurer {
 	return loggingAspect;
     }
 
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+	messageSource.setBasename("eatfoodFormat");
+	messageSource.setDefaultEncoding("UTF-8");
+	return messageSource;
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+	registry.addInterceptor(new EncodingInterceptor());
 	registry.addInterceptor(new SessionInterceptor());
     }
 }

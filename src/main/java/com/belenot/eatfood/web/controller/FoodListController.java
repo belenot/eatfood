@@ -2,9 +2,7 @@ package com.belenot.eatfood.web.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +14,7 @@ import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.exception.ApplicationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +29,14 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 public class FoodListController {
     @Autowired
     private FoodDao foodDao;
+    @Autowired
+    private MessageSource messageSource;
     
     @GetMapping
     public String foodlist(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws ApplicationException{
 	model.addAttribute("foodRows", foodDao.getFoodByClientLast(client, 0, 10));
 	model.addAttribute("totalNutrients", foodDao.totalNutrients(client));
+	model.addAttribute("messageSource", messageSource);
 	return "foodlist";
     }
 
