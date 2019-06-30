@@ -161,7 +161,7 @@ public class FoodDaoSql implements FoodDao {
 	    }
 	    return null;
 	} catch (SQLException exc) {
-	    String msg = String.format("Can't add food{name=%s} to FoodDao");
+	    String msg = String.format("Can't add food{name=%s} to FoodDao", name);
 	    throw new ApplicationException(msg, exc);
 	}
     }

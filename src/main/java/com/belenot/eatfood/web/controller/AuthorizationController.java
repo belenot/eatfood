@@ -38,6 +38,9 @@ public class AuthorizationController {
 	    HttpSession session = request.getSession();
 	    session.setAttribute("client", client);
 	    response.sendRedirect("/eatfood/foodlist");
+	} else {
+	    //Bad
+	    throw new ApplicationException("Such client doesn't exist");
 	}
     }
 	    
