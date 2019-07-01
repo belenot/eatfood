@@ -4,7 +4,7 @@
   <groupId>com.belenot.eatfood</groupId>
   <artifactId>eatfood</artifactId>
   <packaging>war</packaging>
-  <version>0.1</version>
+  <version>0.2</version>
   <name>eatfood</name>
 
   <properties>
