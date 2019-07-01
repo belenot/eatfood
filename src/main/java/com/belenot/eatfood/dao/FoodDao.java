@@ -12,7 +12,7 @@ public interface FoodDao<T extends FoodCriteria<?>> {
     Food newFood(Food food) throws Exception;
     Food updateFood(Food food) throws Exception;
     Food getFoodById(int id) throws Exception;
-    List<Food> getFoodByCriteria(FoodCriteria<?> foodCriteria) throws Exception;
+    List<Food> getFoodByCriteria(T foodCriteria) throws Exception;
     Food deleteFood(Food food) throws Exception;
     
     Map<String, BigDecimal> totalNutrients(Client client) throws Exception;
