@@ -14,9 +14,8 @@ public class ClientDaoSql implements ClientDao {
     private AccountDao accountDao;
     public void setConnection(Connection connection) { this.connection = connection; }
     public void setAccountDao(AccountDao accountDao) { this.accountDao = accountDao; }
-
     @Override
-    public Client getClientById(int id) throws SQLException {
+    public Client getClientById(int id) throws Exception {
 	Client client = null;
 	PreparedStatement ps = connection.prepareStatement("SELECT * FROM client WHERE id = ?");
 	ps.setInt(1, id);
@@ -30,9 +29,8 @@ public class ClientDaoSql implements ClientDao {
 	}
 	return client;
     }
-
     @Override
-    public Client getClientByAccount(Account account) throws SQLException {
+    public Client getClientByAccount(Account account) throws Exception {
 	Client client = null;
 	PreparedStatement ps = connection.prepareStatement("SELECT * FROM client JOIN account ON client.id = account.client WHERE account.login = ? AND account.password = ?");
 	ps.setString(1, account.getLogin());
@@ -47,9 +45,8 @@ public class ClientDaoSql implements ClientDao {
 	}
 	return client;
     }
-
     @Override
-    public Client newClient(Client client, Account account) throws SQLException {
+    public Client newClient(Client client, Account account) throws Exception {
 	Client clientResult = null;
 	PreparedStatement ps = connection.prepareStatement("INSERT INTO client (name, surname, email) VALUES (?, ?, ?)");
 	ps.setString(1, client.getName());
@@ -69,9 +66,8 @@ public class ClientDaoSql implements ClientDao {
 	accountDao.newAccount(account);
 	return clientResult;
     }
-
     @Override
-    public Client updateClient(Client client) throws SQLException {
+    public Client updateClient(Client client) throws Exception {
 	Client clientResult = null;
 	PreparedStatement ps = connection.prepareStatement("UPDATE client SET name = ?, surname = ?, email = ? WHERE id = ?");
 	ps.setString(1, client.getName());
@@ -90,9 +86,8 @@ public class ClientDaoSql implements ClientDao {
 	}
 	return clientResult;
     }
-	
     @Override
-    public Client deleteClient(Client client) throws SQLException {
+    public Client deleteClient(Client client) throws Exception {
 	Client clientResult = null;
 	PreparedStatement ps = connection.prepareStatement("DELETE FROM client WHERE id = ?");
 	ps.setInt(1, client.getId());
@@ -103,7 +98,5 @@ public class ClientDaoSql implements ClientDao {
 	clientResult.setEmail(client.getEmail());
 	return clientResult;
     }
-
-
 	
 }

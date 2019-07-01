@@ -1,11 +1,12 @@
 package com.belenot.eatfood.domain;
 
+import java.util.Date;
+
 public class Account {
     private String login;
     private String password;
     private Date regDate;
     private Client client;
-
 
     public void setLogin(String login) { this.login = login; }
     public void setPassword(String password) { this.password = password; }
