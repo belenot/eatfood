@@ -1,11 +1,14 @@
 package com.belenot.eatfood.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.domain.FoodList;
@@ -115,7 +118,21 @@ public class FoodListDaoSql implements FoodListDao {
 	return foodListListResult;
     }
     
-    
+
+    @Override
+    public Map<String, BigDecimal> totalNutrients(FoodList foodList) throws Exception{
+	Map<String, BigDecimal> totalNutrientMap = new HashMap<>();
+	PreparedStatement ps = connection.prepareStatement("SELECT sum(calories), sum(protein), sum(carbohydrate), sum(fat) FROM food_list_record WHERE food_list = ?");
+	ps.setInt(1, foodList.getId());
+	ResultSet rs = ps.executeQuery();
+	if (rs.next()) {
+	    totalNutrientMap.put("calories", rs.getBigDecimal(1));
+	    totalNutrientMap.put("protein", rs.getBigDecimal(2));
+	    totalNutrientMap.put("carbohydrate", rs.getBigDecimal(3));
+	    totalNutrientMap.put("fat", rs.getBigDecimal(4));
+	}
+	return totalNutrientMap;
+    }
 	
 	
 }    

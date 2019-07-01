@@ -134,10 +134,10 @@ public class FoodDaoSql implements FoodDao<FoodCriteriaSql> {
 	ps.setInt(1, client.getId());
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
-	    totalNutrientMap.put("calories", rs.getBigDecimal("calores"));
-	    totalNutrientMap.put("protein", rs.getBigDecimal("protein"));
-	    totalNutrientMap.put("carbohydrate", rs.getBigDecimal("carbohydrate"));
-	    totalNutrientMap.put("fat", rs.getBigDecimal("fat"));
+	    totalNutrientMap.put("calories", rs.getBigDecimal(1));
+	    totalNutrientMap.put("protein", rs.getBigDecimal(2));
+	    totalNutrientMap.put("carbohydrate", rs.getBigDecimal(3));
+	    totalNutrientMap.put("fat", rs.getBigDecimal(4));
 	}
 	return totalNutrientMap;
     }
