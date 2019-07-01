@@ -55,7 +55,7 @@ public class AccountDaoSql implements AccountDao {
     public Account getAccount(Account account) throws Exception {
 	Account accountResult = null;
 	PreparedStatement ps = connection.prepareStatement("SELECT * FROM account WHERE client = ?");
-	ps.setInt(1, account.client);
+	ps.setInt(1, account.getClient().getId());
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    accountResult = new Account();
