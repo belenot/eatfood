@@ -3,6 +3,7 @@ package com.belenot.eatfood.dao;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Dose;
@@ -15,4 +16,5 @@ public interface DoseDao {
     List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc) throws Exception;
     void updateDose(Dose dose) throws Exception;
     void deleteDose(Dose dose) throws Exception;
+    Map<String, BigDecimal> totalNutrients(Client client) throws Exception;
 }

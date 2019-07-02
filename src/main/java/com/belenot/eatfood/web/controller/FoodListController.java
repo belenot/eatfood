@@ -36,8 +36,7 @@ public class FoodListController {
     @GetMapping
     public String foodlist(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws Exception{
 	model.addAttribute("foodRows", daoService.getFoodByClient(client, 0, 10, true));
-	/*add total nutrients*/
-	///model.addAttribute("totalNutrients", daoService.totalNutrients(client));
+	model.addAttribute("totalNutrients", daoService.totalNutrients(client));
 	model.addAttribute("messageSource", messageSource);
 	return "foodlist";
     }

@@ -92,5 +92,9 @@ public class DaoServiceImpl implements DaoService {
     public void updateDose(Dose dose) throws Exception {
 	doseDao.updateDose(dose);
     }
+    @Override
+    public Map<String, BigDecimal> totalNutrients(Client client) throws Exception{
+	return doseDao.totalNutrients(client);
+    }
 
 }

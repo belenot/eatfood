@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Dose;
@@ -103,5 +105,18 @@ public class DoseDaoSql implements DoseDao {
 	ps.setInt(1, dose.getId());
 	ps.execute();
     }
-    
+    @Override
+    public Map<String, BigDecimal> totalNutrients(Client client) throws Exception {
+	Map<String, BigDecimal> totalNutrients = new HashMap<>();
+	PreparedStatement ps = connection.prepareStatement("SELECT sum(f.calories*d.gram/100), sum(f.protein*d.gram/100), sum(f.carbohydrate*d.gram/100), sum(f.fat*d.gram/100) FROM food f INNER JOIN dose d ON f.id = d.food WHERE f.id in (SELECT food FROM client WHERE id = ?)");
+	ps.setInt(1, client.getId());
+	ResultSet rs = ps.executeQuery();
+	if (rs.next()) {
+	    totalNutrients.put("calories", rs.getBigDecimal(1));
+	    totalNutrients.put("protein", rs.getBigDecimal(2));
+	    totalNutrients.put("carbohydrate", rs.getBigDecimal(3));
+	    totalNutrients.put("fat", rs.getBigDecimal(4));
+	}
+	return totalNutrients;
+    }
 }
