@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
@@ -30,14 +31,16 @@ public class AuthorizationController {
     }
 
     @PostMapping
-    public void authorization(HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
+    @ResponseBody
+    public String authorization(HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
 	String login = request.getParameter("login");
 	String password = request.getParameter("password");
 	Client client = daoService.getClientByLogin(login, password);
 	if (client != null) {
 	    HttpSession session = request.getSession();
 	    session.setAttribute("client", client);
-	    response.sendRedirect("/eatfood/foodlist");
+	    return client.getLogin() + "/" + client.getName();
+	    //response.sendRedirect("/eatfood/foodlist");
 	} else {
 	    //Bad
 	    throw new ApplicationException("Such client doesn't exist");
