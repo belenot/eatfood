@@ -29,7 +29,7 @@ public class DoseDaoSql implements DoseDao {
 	ps.setBigDecimal(2, gram);
 	ps.setDate(3, new java.sql.Date(date.getTime()));
 	ps.execute();
-	ps = connection.prepareStatement("SELECT * FROM dose GROUP BY id LIMIT 1");
+	ps = connection.prepareStatement("SELECT * FROM dose ORDER BY id LIMIT 1");
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    dose = new Dose();
@@ -58,7 +58,7 @@ public class DoseDaoSql implements DoseDao {
     @Override
     public List<Dose> getDoseByFood(Food food, int offset, int limit, boolean desc) throws Exception {
 	List<Dose> doseList = new ArrayList<>();
-	PreparedStatement ps = connection.prepareStatement("SELECT * FROM dose WHERE food = ? GROUP BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ?");
+	PreparedStatement ps = connection.prepareStatement("SELECT * FROM dose WHERE food = ? ORDER BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ?");
 	ps.setInt(1, food.getId());
 	ps.setInt(2, offset);
 	ps.setInt(3, limit);
@@ -76,7 +76,7 @@ public class DoseDaoSql implements DoseDao {
     @Override
     public List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc) throws Exception {
 	List<Dose> doseList = new ArrayList<>();
-	PreparedStatement ps = connection.prepareStatement("SELECT * FROM dose WHERE food IN (SELECT id FROM food WHERE client = ?) GROUP BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ?");
+	PreparedStatement ps = connection.prepareStatement("SELECT * FROM dose WHERE food IN (SELECT id FROM food WHERE client = ?) ORDER BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ?");
 	ps.setInt(1, client.getId());
 	ps.setInt(2, offset);
 	ps.setInt(3, limit);

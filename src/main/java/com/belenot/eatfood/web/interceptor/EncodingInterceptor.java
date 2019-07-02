@@ -11,6 +11,7 @@ public class EncodingInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 	response.setCharacterEncoding("UTF-8");
+	request.setCharacterEncoding("UTF-8");
     }
 }
     
