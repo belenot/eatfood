@@ -10,6 +10,7 @@ import com.belenot.eatfood.exception.ApplicationException;
 
 public class ClientDaoSql implements ClientDao {
     private Connection connection;
+    public void setConnection(Connection connection) { this. connection = connection; }
     
     public Client getClientById(int id) throws Exception {
 	Client client = null;
@@ -63,10 +64,10 @@ public class ClientDaoSql implements ClientDao {
 	client.setLogin(login);
 	return client;
     }
-    public void updateClient(Client client) throws ApplicationException {
+    public void updateClient(Client client) throws Exception {
 	throw new Exception("Method(ClientDao.updateClient(Client client)) isn't supported yet");
     }
-    public boolean deleteClient(Client client) throws ApplicationException {
+    public boolean deleteClient(Client client) throws Exception {
 	throw new Exception("Method(ClientDao.deleteClient(Client client)) isn't supported yet");
     }
     
