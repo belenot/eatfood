@@ -4,8 +4,12 @@ import com.belenot.eatfood.context.aspect.CritErrorAspect;
 import com.belenot.eatfood.context.aspect.LoggingAspect;
 import com.belenot.eatfood.dao.ClientDao;
 import com.belenot.eatfood.dao.ClientDaoSql;
+import com.belenot.eatfood.dao.DoseDao;
+import com.belenot.eatfood.dao.DoseDaoSql;
 import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.dao.FoodDaoSql;
+import com.belenot.eatfood.service.DaoService;
+import com.belenot.eatfood.service.DaoServiceImpl;
 import com.belenot.eatfood.web.interceptor.EncodingInterceptor;
 import com.belenot.eatfood.web.interceptor.SessionInterceptor;
 
@@ -31,7 +35,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @EnableWebMvc
 @EnableAspectJAutoProxy
-@ComponentScan( "com.belenot.eatfood" )
+@ComponentScan( "com.belenot.eatfood.aspect, com.belenot.eatfood.web" )
 @PropertySource( "classpath:server.properties" )
 public class WebAppContext implements WebMvcConfigurer {
 
@@ -51,46 +55,56 @@ public class WebAppContext implements WebMvcConfigurer {
 	ViewResolver viewResolver = new InternalResourceViewResolver("/WEB-INF/view/", ".jsp");
 	return viewResolver;
     }
-
-    @Bean( initMethod = "init", destroyMethod = "destroy" )
+    @Bean
+    public DaoService daoService() {
+	DaoServiceImpl daoServiceImpl = new DaoServiceImpl();
+	daoServiceImpl.setClientDao(clientDao());
+	daoServiceImpl.setFoodDao(foodDao());
+	daoServiceImpl.setDoseDao(doseDao());
+	return daoServiceImpl;
+    }
+    @Bean
+    public JdbcConnectionFactory jdbcConnectionFactory() {
+	JdbcConnectionFactory jdbcConnectionFactory = new JdbcConnectionFactory();
+	jdbcConnectionFactory.setAddress("jdbc:postgresql://localhost:8832/eatfood2?currentSchema=v0_2");
+	jdbcConnectionFactory.setUsername("eatfood");
+	jdbcConnectionFactory.setPassword("eatfood");
+	return jdbcConnectionFactory;
+    }
+    @Bean
     public ClientDao clientDao() {
 	ClientDaoSql clientDao = new ClientDaoSql();
-	clientDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
-	clientDao.setUsername(env.getProperty("server.jdbc.username"));
-	clientDao.setPassword(env.getProperty("server.jdbc.password"));
-	clientDao.setManualRegistre(new Boolean(env.getProperty("server.jdbc.manualRegistre")));
+	clientDao.setConnection(jdbcConnectionFactory().getConnection());
 	return clientDao;
     }
-
-    @Bean( initMethod = "init", destroyMethod = "destroy" )
+    @Bean
     public FoodDao foodDao() {
 	FoodDaoSql foodDao = new FoodDaoSql();
-	foodDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
-	foodDao.setUsername(env.getProperty("server.jdbc.username"));
-	foodDao.setPassword(env.getProperty("server.jdbc.password"));
-	foodDao.setManualRegistre(new Boolean(env.getProperty("server.jdbc.manualRegistre")));
+	foodDao.setConnection(jdbcConnectionFactory().getConnection());
 	return foodDao;
     }
-
+    @Bean
+    public DoseDao doseDao() {
+	DoseDaoSql doseDao = new DoseDaoSql();
+	doseDao.setConnection(jdbcConnectionFactory().getConnection());
+	return doseDao;
+    }
     @Bean
     public Logger logger() {
 	Logger logger = LogManager.getLogger();
 	return logger;
     }
-	
     @Bean
     public CritErrorAspect critErrorAspect() {
 	CritErrorAspect critErrorAspect = new CritErrorAspect();
 	critErrorAspect.setCtx(ctx);
 	return new CritErrorAspect();
     }
-
     @Bean
     public LoggingAspect loggingAspect() {
 	LoggingAspect loggingAspect = new LoggingAspect();
 	return loggingAspect;
     }
-
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -98,7 +112,6 @@ public class WebAppContext implements WebMvcConfigurer {
 	messageSource.setDefaultEncoding("UTF-8");
 	return messageSource;
     }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 	registry.addInterceptor(new EncodingInterceptor());
