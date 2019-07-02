@@ -8,10 +8,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.exception.ApplicationException;
+import com.belenot.eatfood.service.DaoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -28,15 +28,15 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 @RequestMapping( "/foodlist" )
 public class FoodListController {
     @Autowired
-    private FoodDao foodDao;
+    DaoService<?> daoService;
     @Autowired
     private MessageSource messageSource;
     
     @GetMapping
     public String foodlist(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws ApplicationException{
-	model.addAttribute("foodRows", foodDao.getFoodByClientLast(client, 0, 10));
-	model.addAttribute("totalNutrients", foodDao.totalNutrients(client));
-	model.addAttribute("messageSource", messageSource);
+	//model.addAttribute("foodRows", foodDao.getFoodByClientLast(client, 0, 10));
+	//model.addAttribute("totalNutrients", foodDao.totalNutrients(client));
+	//model.addAttribute("messageSource", messageSource);
 	return "foodlist";
     }
 
@@ -49,34 +49,30 @@ public class FoodListController {
 	nutrientMap.put("carbohydrate", request.getParameter("carbohydrate") != null ? new BigDecimal(request.getParameter("carbohydrate")) : new BigDecimal(0));
 	nutrientMap.put("fat", request.getParameter("fat") != null ? new BigDecimal(request.getParameter("fat")) : new BigDecimal(0));
 	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
-	Food food = foodDao.addFood(name, client, nutrientMap, gram);
 	response.sendRedirect("./");
     }
 
     @PostMapping ( "/updatefood" )
-    public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws ApplicationException, IOException {
-	Food food = foodDao.getFood(Integer.parseInt(request.getParameter("id")));
+    public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws ApplicationException, IOException, Exception {
+	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("id")));
 	food.setClient(client);
 	food.setName(request.getParameter("name"));
 	food.setCalories(new BigDecimal(request.getParameter("calories")));
 	food.setProtein(new BigDecimal(request.getParameter("protein")));
 	food.setCarbohydrate(new BigDecimal(request.getParameter("carbohydrate")));
 	food.setFat(new BigDecimal(request.getParameter("fat")));
-	food.setGram(new BigDecimal(request.getParameter("gram")));
-	foodDao.updateFood(food);
+	//food.setGram(new BigDecimal(request.getParameter("gram")));
 	response.sendRedirect("/eatfood/foodlist");
     }
 
     @PostMapping ( "/deletefood" )
     public void deleteFood(@RequestParam( "id" ) int id, HttpServletResponse response) throws ApplicationException, IOException {
-	Food food = foodDao.getFood(id);
-	foodDao.deleteFood(food);
 	response.sendRedirect("/eatfood/foodlist");
     }
 	
     @GetMapping ( "/morefood" )
     public String moreFood(@RequestParam( "last" ) int last, @SessionAttribute( "client" ) Client client, Model model ) throws ApplicationException {
-	model.addAttribute("foodRows", foodDao.getFoodByClientLast(client, last, 10));
+	//model.addAttribute("foodRows", foodDao.getFoodByClientLast(client, last, 10));
 	return "foodrows";
     }
 }

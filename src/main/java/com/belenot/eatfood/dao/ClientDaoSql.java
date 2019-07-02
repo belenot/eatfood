@@ -7,9 +7,12 @@ import java.sql.ResultSet;
 import com.belenot.eatfood.domain.Account;
 import com.belenot.eatfood.domain.Client;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class ClientDaoSql implements ClientDao {
     private Connection connection;
+    @Autowired
     private AccountDaoSql accountDaoSql;
     public void setConnection(Connection connection) { this.connection = connection; }
     public void setAccountDaoSql(AccountDaoSql accountDaoSql) { this.accountDaoSql = accountDaoSql; }
@@ -37,10 +40,10 @@ public class ClientDaoSql implements ClientDao {
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    client = new Client();
-	    client.setId(rs.getInt("client.id"));
-	    client.setName(rs.getString("client.name"));
-	    client.setSurname(rs.getString("client.surname"));
-	    client.setEmail(rs.getString("client.email"));
+	    client.setId(rs.getInt("id"));
+	    client.setName(rs.getString("name"));
+	    client.setSurname(rs.getString("surname"));
+	    client.setEmail(rs.getString("email"));
 	}
 	return client;
     }
@@ -100,8 +103,8 @@ public class ClientDaoSql implements ClientDao {
 
     @Override
     public String toString() {
-	String str = String.format("ClientDaoSql{%s, AccountDaoSql=%s}",
-				   connection != null ? connection.toString() : null, accountDaoSql);
+	String str = String.format("ClientDaoSql{%s}",
+				   connection != null ? connection.toString() : null);
 	return str;
     }
 	

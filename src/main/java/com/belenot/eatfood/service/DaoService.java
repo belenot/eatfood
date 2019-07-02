@@ -6,7 +6,10 @@ import com.belenot.eatfood.dao.FoodCriteria;
 import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.dao.FoodListDao;
 
-public interface DaoService<T extends FoodCriteria<?>> extends ClientDao, FoodDao<T>, FoodListDao, AccountDao {
+import org.springframework.context.Lifecycle;
+
+
+public interface DaoService<T extends FoodCriteria<?>> extends ClientDao, FoodDao<T>, FoodListDao, AccountDao, AutoCloseable {
     
     
 }

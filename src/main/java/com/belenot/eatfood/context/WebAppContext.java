@@ -2,12 +2,13 @@ package com.belenot.eatfood.context;
 
 import com.belenot.eatfood.context.aspect.CritErrorAspect;
 import com.belenot.eatfood.context.aspect.LoggingAspect;
-import com.belenot.eatfood.dao.ClientDao;
+import com.belenot.eatfood.dao.AccountDaoSql;
 import com.belenot.eatfood.dao.ClientDaoSql;
-import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.dao.FoodDaoSql;
+import com.belenot.eatfood.dao.FoodListDaoSql;
+import com.belenot.eatfood.service.DaoService;
+import com.belenot.eatfood.service.DaoSqlService;
 import com.belenot.eatfood.web.interceptor.EncodingInterceptor;
-import com.belenot.eatfood.web.interceptor.SessionInterceptor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,24 +53,40 @@ public class WebAppContext implements WebMvcConfigurer {
 	return viewResolver;
     }
 
-    @Bean( initMethod = "init", destroyMethod = "destroy" )
-    public ClientDao clientDao() {
-	ClientDaoSql clientDao = new ClientDaoSql();
-	clientDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
-	clientDao.setUsername(env.getProperty("server.jdbc.username"));
-	clientDao.setPassword(env.getProperty("server.jdbc.password"));
-	clientDao.setManualRegistre(new Boolean(env.getProperty("server.jdbc.manualRegistre")));
-	return clientDao;
+    //Change init on event when context is fully loaded
+    @Bean ( initMethod = "init" )
+    public DaoService<?> daoSqlService() {
+	DaoSqlService daoSqlService = new DaoSqlService();
+	daoSqlService.setConnectionAddress("jdbc:postgresql://localhost:8832/eatfood2");
+	daoSqlService.setUsername("eatfood");
+	daoSqlService.setPassword("eatfood");
+	daoSqlService.setClientDaoSql(clientDaoSql());
+	daoSqlService.setAccountDaoSql(accountDaoSql());
+	daoSqlService.setFoodDaoSql(foodDaoSql());
+	daoSqlService.setFoodListDaoSql(foodListDaoSql());
+	
+	return daoSqlService;
     }
 
-    @Bean( initMethod = "init", destroyMethod = "destroy" )
-    public FoodDao foodDao() {
-	FoodDaoSql foodDao = new FoodDaoSql();
-	foodDao.setConnectionAddress(env.getProperty("server.jdbc.connection"));
-	foodDao.setUsername(env.getProperty("server.jdbc.username"));
-	foodDao.setPassword(env.getProperty("server.jdbc.password"));
-	foodDao.setManualRegistre(new Boolean(env.getProperty("server.jdbc.manualRegistre")));
-	return foodDao;
+    @Bean
+    public ClientDaoSql clientDaoSql() {
+	ClientDaoSql clientDaoSql = new ClientDaoSql();
+	return clientDaoSql;
+    }
+    @Bean
+    public AccountDaoSql accountDaoSql() {
+	AccountDaoSql accountDaoSql = new AccountDaoSql();
+	return accountDaoSql;
+    }
+    @Bean
+    public FoodDaoSql foodDaoSql() {
+	FoodDaoSql foodDaoSql = new FoodDaoSql();
+	return foodDaoSql;
+    }
+    @Bean
+    public FoodListDaoSql foodListDaoSql() {
+	FoodListDaoSql foodListDaoSql = new FoodListDaoSql();
+	return foodListDaoSql;
     }
 
     @Bean
@@ -102,6 +119,6 @@ public class WebAppContext implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 	registry.addInterceptor(new EncodingInterceptor());
-	registry.addInterceptor(new SessionInterceptor());
+	//registry.addInterceptor(new SessionInterceptor());
     }
 }

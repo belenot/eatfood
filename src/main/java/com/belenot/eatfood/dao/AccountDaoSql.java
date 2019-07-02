@@ -8,8 +8,11 @@ import java.sql.ResultSet;
 import com.belenot.eatfood.domain.Account;
 import com.belenot.eatfood.domain.Client;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class AccountDaoSql implements AccountDao {
     private Connection connection;
+    @Autowired
     private ClientDaoSql clientDaoSql;
     public void setConnection(Connection connection) { this.connection = connection; }
     public void setClientDaoSql(ClientDaoSql clientDaoSql) { this.clientDaoSql = clientDaoSql; }
@@ -23,7 +26,7 @@ public class AccountDaoSql implements AccountDao {
 	ps.setInt(3, account.getClient().getId());
 	ps.setDate(4, new Date(System.currentTimeMillis()));
 	ps.execute();
-	ps = connection.prepareStatement("SELECT * FROM account ORDER BY id DESC LIMIT 1");
+	ps = connection.prepareStatement("SELECT * FROM account ORDER BY client DESC LIMIT 1");
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    accountResult = new Account();
@@ -69,7 +72,7 @@ public class AccountDaoSql implements AccountDao {
 
     @Override
     public String toString() {
-	String str = String.format("AccountDaoSql: %s, ClientDaoSql=%s", connection != null ? connection.toString() : null, clientDaoSql);
+	String str = String.format("AccountDaoSql: %s", connection != null ? connection.toString() : null);
 	return str;
     }
 

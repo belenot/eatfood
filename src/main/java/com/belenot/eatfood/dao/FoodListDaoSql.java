@@ -13,9 +13,13 @@ import java.util.Map;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.domain.FoodList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class FoodListDaoSql implements FoodListDao {
     private Connection connection;
+    @Autowired
     private FoodDaoSql foodDaoSql;
+    @Autowired
     private ClientDaoSql clientDaoSql;
 
     public void setConnection(Connection connection) { this.connection = connection; }
@@ -135,7 +139,7 @@ public class FoodListDaoSql implements FoodListDao {
     }
     @Override
     public String toString() {
-	String str = String.format("FoodListDaoSql: %s, ClientDaoSqlSql=%s, FoodDaoSql=%s", connection != null ? connection.toString() : null, clientDaoSql, foodDaoSql);
+	String str = String.format("FoodListDaoSql: %s", connection != null ? connection.toString() : null);
 	return str;
     }	
 	
