@@ -4,9 +4,16 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Dose {
+    private int id;
     private Food food;
     private Date date;
     private BigDecimal gram;
+    public int getId() {
+	return id;
+    }
+    public void setId(int id) {
+	this.id = id;
+    }
     public Food getFood() {
 	return food;
     }
