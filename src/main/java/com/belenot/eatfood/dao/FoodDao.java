@@ -9,15 +9,10 @@ import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.exception.ApplicationException;
 
 public interface FoodDao {
-    void init();
-    void destroy() throws ApplicationException;
-    
-    Food getFood(int id) throws ApplicationException;
-    List<Food> getFoodByName(String name) throws ApplicationException;
-    List<Food> getFoodByClient(Client client, int start, int count) throws ApplicationException;
-    List<Food> getFoodByClientLast(Client client, int start, int count) throws ApplicationException;
-    Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap, BigDecimal gram) throws ApplicationException;
-    boolean updateFood(Food food) throws ApplicationException;
-    boolean deleteFood(Food food) throws ApplicationException;
-    Map<String, BigDecimal> totalNutrients(Client client) throws ApplicationException;
+    Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap, boolean common) throws Exception;
+    Food getFoodById(int id) throws Exception;
+    List<Food> getFoodByClient(Client client, int start, int count, boolean desc) throws Exception;
+    List<Food> getFoodByName(String name, int start, int count, boolean desc) throws Exception;
+    void updateFood(Food food) throws Exception;
+    boolean deleteFood(Food food) throws Exception;
 }
