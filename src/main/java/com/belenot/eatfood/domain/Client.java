@@ -15,4 +15,10 @@ public class Client {
     public String getName() { return name; }
     public String getSurname() { return surname; }
     public String getEmail() { return email; }
+
+    @Override
+    public String toString() {
+	String msg = String.format("Client:\n\tId: %d;\n\tName: %s;\n\tSurname: %s;\n\tEmail: %s;\n", id, name, surname, email);
+	return msg;
+    }
 }

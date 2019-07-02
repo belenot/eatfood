@@ -10,9 +10,9 @@ import com.belenot.eatfood.domain.Client;
 
 public class AccountDaoSql implements AccountDao {
     private Connection connection;
-    private ClientDao clientDao;
+    private ClientDaoSql clientDaoSql;
     public void setConnection(Connection connection) { this.connection = connection; }
-    public void setClientDao(ClientDao clientDao) { this.clientDao = clientDao; }
+    public void setClientDaoSql(ClientDaoSql clientDaoSql) { this.clientDaoSql = clientDaoSql; }
 
     @Override
     public Account newAccount(Account account) throws Exception {
@@ -29,7 +29,7 @@ public class AccountDaoSql implements AccountDao {
 	    accountResult = new Account();
 	    accountResult.setLogin(rs.getString("login"));
 	    accountResult.setPassword(rs.getString("password"));
-	    accountResult.setClient(clientDao.getClientById(rs.getInt("client")));
+	    accountResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	    accountResult.setRegDate(rs.getDate("reg_date"));
 	}
 	return accountResult;
@@ -46,7 +46,7 @@ public class AccountDaoSql implements AccountDao {
 	    accountResult.setLogin(rs.getString("login"));
 	    accountResult.setPassword(rs.getString("password"));
 	    accountResult.setRegDate(rs.getDate("reg_date"));
-	    accountResult.setClient(clientDao.getClientById(rs.getInt("client")));
+	    accountResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	}
 	return accountResult;
     }
@@ -62,9 +62,15 @@ public class AccountDaoSql implements AccountDao {
 	    accountResult.setLogin(rs.getString("login"));
 	    accountResult.setPassword(rs.getString("password"));
 	    accountResult.setRegDate(rs.getDate("reg_date"));
-	    accountResult.setClient(clientDao.getClientById(rs.getInt("client")));
+	    accountResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	}
 	return accountResult;
+    }
+
+    @Override
+    public String toString() {
+	String str = String.format("AccountDaoSql: %s, ClientDaoSql=%s", connection != null ? connection.toString() : null, clientDaoSql);
+	return str;
     }
 
 }

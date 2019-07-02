@@ -3,7 +3,6 @@ package com.belenot.eatfood.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import com.belenot.eatfood.domain.Account;
 import com.belenot.eatfood.domain.Client;
@@ -11,9 +10,9 @@ import com.belenot.eatfood.domain.Client;
 
 public class ClientDaoSql implements ClientDao {
     private Connection connection;
-    private AccountDao accountDao;
+    private AccountDaoSql accountDaoSql;
     public void setConnection(Connection connection) { this.connection = connection; }
-    public void setAccountDao(AccountDao accountDao) { this.accountDao = accountDao; }
+    public void setAccountDaoSql(AccountDaoSql accountDaoSql) { this.accountDaoSql = accountDaoSql; }
     @Override
     public Client getClientById(int id) throws Exception {
 	Client client = null;
@@ -63,7 +62,7 @@ public class ClientDaoSql implements ClientDao {
 	    clientResult.setEmail(rs.getString("email"));
 	}
 	account.setClient(clientResult);
-	accountDao.newAccount(account);
+	accountDaoSql.newAccount(account);
 	return clientResult;
     }
     @Override
@@ -97,6 +96,13 @@ public class ClientDaoSql implements ClientDao {
 	clientResult.setSurname(client.getSurname());
 	clientResult.setEmail(client.getEmail());
 	return clientResult;
+    }
+
+    @Override
+    public String toString() {
+	String str = String.format("ClientDaoSql{%s, AccountDaoSql=%s}",
+				   connection != null ? connection.toString() : null, accountDaoSql);
+	return str;
     }
 	
 }

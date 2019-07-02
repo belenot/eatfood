@@ -1,8 +1,10 @@
 package com.belenot.eatfood.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FoodList {
@@ -41,6 +43,20 @@ public class FoodList {
 	    return true;
 	}
 	return false;
+    }
+
+    @Override
+    public String toString() {
+	String str = String.format("FoodList:\n\tId: %d;\n\tClient: %d;\n\tDay: %s;\n\tSize: %d;\n",
+				   id, client != null ? client.getId() : null, day.toString(), foodRecordMap.size());
+	return str;
+    }
+    public List<String> printRecords() {
+	List<String> printedRecords = new ArrayList<>(foodRecordMap.size());
+	for (Food food : foodRecordMap.keySet()) {
+	    printedRecords.add(String.format("%d: %.2f", food.getId(), foodRecordMap.get(food).doubleValue()));
+	}
+	return printedRecords;
     }
 	
     

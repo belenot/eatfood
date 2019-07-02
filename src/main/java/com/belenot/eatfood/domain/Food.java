@@ -30,4 +30,14 @@ public class Food {
     public BigDecimal getCarbohydrate() { return carbohydrate; }
     public BigDecimal getFat() { return fat; }
 
+    @Override
+    public String toString() {
+	String str = String.format("Food:\n\tId: %d;\n\tClient: %d;\n\tAncestor: %d;\n\tName: %s;\n\tCalories: %.2f;\n\tProtein: %.2f;\n\tCarbohydrate: %.2f;\n\tFat: %.2f;\n",
+				   id,
+				   client != null ? client.getId() : null,
+				   ancestor != null ? ancestor.getId() : null,
+				   name, calories.doubleValue(), protein.doubleValue(), carbohydrate.doubleValue(), fat.doubleValue());
+	return str;
+    }
+
 }

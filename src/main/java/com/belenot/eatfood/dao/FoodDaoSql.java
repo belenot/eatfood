@@ -14,9 +14,9 @@ import com.belenot.eatfood.domain.Food;
 
 public class FoodDaoSql implements FoodDao<FoodCriteriaSql> {
     private Connection connection;
-    private ClientDao clientDao;
+    private ClientDaoSql clientDaoSql;
     public void setConnection(Connection connection) { this.connection = connection; }
-    public void setClientDao(ClientDao clientDao) { this.clientDao = clientDao; }
+    public void setClientDaoSql(ClientDaoSql clientDaoSql) { this.clientDaoSql = clientDaoSql; }
 
     @Override
     public Food newFood(Food food) throws Exception {
@@ -39,7 +39,7 @@ public class FoodDaoSql implements FoodDao<FoodCriteriaSql> {
 	    foodResult.setProtein(rs.getBigDecimal("protein"));
 	    foodResult.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
 	    foodResult.setFat(rs.getBigDecimal("fat"));
-	    foodResult.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	    foodResult.setAncestor(getFoodById(rs.getInt("ancestor")));
 	}
 	return foodResult;
@@ -67,7 +67,7 @@ public class FoodDaoSql implements FoodDao<FoodCriteriaSql> {
 	    foodResult.setProtein(rs.getBigDecimal("protein"));
 	    foodResult.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
 	    foodResult.setFat(rs.getBigDecimal("fat"));
-	    foodResult.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	    foodResult.setAncestor(getFoodById(rs.getInt("ancestor")));
 	    foodResult.setId(rs.getInt("id"));
 	}
@@ -86,7 +86,7 @@ public class FoodDaoSql implements FoodDao<FoodCriteriaSql> {
 	    foodResult.setProtein(rs.getBigDecimal("protein"));
 	    foodResult.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
 	    foodResult.setFat(rs.getBigDecimal("fat"));
-	    foodResult.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	    foodResult.setAncestor(getFoodById(rs.getInt("ancestor")));
 	    foodResult.setId(rs.getInt("id"));
 	}
@@ -121,7 +121,7 @@ public class FoodDaoSql implements FoodDao<FoodCriteriaSql> {
 	    food.setProtein(rs.getBigDecimal("protein"));
 	    food.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
 	    food.setFat(rs.getBigDecimal("fat"));
-	    food.setClient(clientDao.getClientById(rs.getInt("client")));
+	    food.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	    food.setAncestor(getFoodById(rs.getInt("ancestor")));
 	    foodListResult.add(food);
 	}
@@ -140,6 +140,12 @@ public class FoodDaoSql implements FoodDao<FoodCriteriaSql> {
 	    totalNutrientMap.put("fat", rs.getBigDecimal(4));
 	}
 	return totalNutrientMap;
+    }
+
+    @Override
+    public String toString() {
+	String str = String.format("FoodDaoSql: %s, ClientDaoSql=%s", connection != null ? connection.toString() : null, clientDaoSql);
+	return str;
     }
 	
 }

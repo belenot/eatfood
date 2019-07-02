@@ -17,5 +17,13 @@ public class Account {
     public String getPassword() { return password; }
     public Date getRegDate() { return regDate; }
     public Client getClient() { return client; }
-    
+
+    @Override
+    public String toString() {
+	String str = String.format("Account:\n\tLogin: %s;\n\tRegDate: %s;\n\tClient: %d;\n",
+				   login,
+				   regDate != null ? regDate.toString() : null,
+				   client != null ? client.getId() : null);
+	return str;
+    }
 }

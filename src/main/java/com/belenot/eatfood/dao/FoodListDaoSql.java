@@ -15,12 +15,12 @@ import com.belenot.eatfood.domain.FoodList;
 
 public class FoodListDaoSql implements FoodListDao {
     private Connection connection;
-    private FoodDaoSql foodDao;
-    private ClientDao clientDao;
+    private FoodDaoSql foodDaoSql;
+    private ClientDaoSql clientDaoSql;
 
     public void setConnection(Connection connection) { this.connection = connection; }
-    public void setFoodDao(FoodDaoSql foodDao) { this.foodDao = foodDao; }
-    public void setClientDao(ClientDao clientDao) { this.clientDao = clientDao; }
+    public void setFoodDaoSql(FoodDaoSql foodDaoSql) { this.foodDaoSql = foodDaoSql; }
+    public void setClientDaoSql(ClientDaoSql clientDaoSql) { this.clientDaoSql = clientDaoSql; }
     @Override
     public FoodList newFoodList(FoodList foodList) throws Exception {
 	FoodList foodListResult = null;
@@ -33,7 +33,7 @@ public class FoodListDaoSql implements FoodListDao {
 	if (rs.next()) {
 	    foodListResult = new FoodList();
 	    foodListResult.setId(rs.getInt("id"));
-	    foodListResult.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodListResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	    foodListResult.setDay(rs.getDate("date"));
 	}
 	return foodListResult;
@@ -68,12 +68,12 @@ public class FoodListDaoSql implements FoodListDao {
 	if (rs.next()) {
 	    foodListResult = new FoodList();
 	    foodListResult.setId(rs.getInt("id"));
-	    foodListResult.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodListResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
 	    foodListResult.setDay(rs.getDate("day"));
 	} else { return foodListResult; }
 	ps = connection.prepareStatement("SELECT * FROM food_list_record WHERE food_list = ?");
 	while (rs.next()) {
-	    foodListResult.addFoodRecord(foodDao.getFoodById(rs.getInt("food")), rs.getBigDecimal("gram"));
+	    foodListResult.addFoodRecord(foodDaoSql.getFoodById(rs.getInt("food")), rs.getBigDecimal("gram"));
 	}
 	return foodListResult;
     }
@@ -133,6 +133,10 @@ public class FoodListDaoSql implements FoodListDao {
 	}
 	return totalNutrientMap;
     }
-	
+    @Override
+    public String toString() {
+	String str = String.format("FoodListDaoSql: %s, ClientDaoSqlSql=%s, FoodDaoSql=%s", connection != null ? connection.toString() : null, clientDaoSql, foodDaoSql);
+	return str;
+    }	
 	
 }    
