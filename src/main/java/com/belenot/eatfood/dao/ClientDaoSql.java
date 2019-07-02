@@ -19,9 +19,12 @@ public class ClientDaoSql implements ClientDao {
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    client = new Client();
-	    String login = rs.getString("login");
-	    client.setId(id);
-	    client.setLogin(login);
+	    client.setId(rs.getInt("id"));
+	    client.setLogin(rs.getString("login"));
+	    client.setPassword(rs.getString("password"));
+	    client.setName(rs.getString("name"));
+	    client.setSurname(rs.getString("surname"));
+	    client.setEmail(rs.getString("email"));
 	}
 	return client;
     }
@@ -33,35 +36,40 @@ public class ClientDaoSql implements ClientDao {
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    client = new Client();
-	    int id = rs.getInt("id");
-	    client.setId(id);
-	    client.setLogin(login);
-		
+	    client.setId(rs.getInt("id"));
+	    client.setLogin(rs.getString("login"));
+	    client.setPassword(rs.getString("password"));
+	    client.setName(rs.getString("name"));
+	    client.setSurname(rs.getString("surname"));
+	    client.setEmail(rs.getString("email"));
 	}
 	return client;
     }
     public Client addClient(String login, String password, String name, String surname, String email) throws Exception {
-	PreparedStatement ps = connection.prepareStatement("INSERT INTO client (login, password) VALUES (?, ?)");
+	Client client = null;
+	PreparedStatement ps = connection.prepareStatement("INSERT INTO client (login, password, name, surname, email) VALUES (?, ?, ?, ?, ?)");
 	ps.setString(1, login);
 	ps.setString(2, password);
+	ps.setString(3, name);
+	ps.setString(4, surname);
+	ps.setString(5, email);
 	ps.execute();
 	ps = connection.prepareStatement("SELECT * FROM client ORDER BY id DESC LIMIT 1");
 	ResultSet rs = ps.executeQuery();
 	int id = -1;
 	String addedLogin = null;
 	if (rs.next()) {
-	    id = rs.getInt("id");
-	    addedLogin = rs.getString("login").trim();
-	}
-	    
-	if (id < 0) throw new ApplicationException("Can't fetch added client with login = \"" + login + "\" to ClientDao(there's no such client)");
-	if (!addedLogin.equals(login)) {
+	    client = new Client();
+	    client.setId(rs.getInt("id"));
+	    client.setLogin(rs.getString("login"));
+	    client.setPassword(rs.getString("password"));
+	    client.setName(rs.getString("name"));
+	    client.setSurname(rs.getString("surname"));
+	    client.setEmail(rs.getString("email"));
+	} else {
 	    String msg = String.format("Can't fetch added client with login = \"" + login + "\" to ClientDao(last added client's login and parameter login are not equal(%s!=%s))", login, addedLogin);
 	    throw new ApplicationException(msg);
 	}
-	Client client = new Client();
-	client.setId(id);
-	client.setLogin(login);
 	return client;
     }
     public void updateClient(Client client) throws Exception {
