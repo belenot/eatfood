@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +48,7 @@ public class FoodListController {
     @ResponseBody
     public String addFood(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	String name = request.getParameter("name");
-	boolean common = new Boolean(request.getParameter("common"));
+	boolean common = request.getParameter("common").equals("on");
 	Map<String, BigDecimal> nutrientMap = new HashMap<>();
 	nutrientMap.put("calories", request.getParameter("calories") != null ? new BigDecimal(request.getParameter("calories")) : new BigDecimal(0));
 	nutrientMap.put("protein", request.getParameter("protein") != null ? new BigDecimal(request.getParameter("protein")) : new BigDecimal(0));
@@ -110,6 +111,29 @@ public class FoodListController {
 	daoService.deleteDose(dose);
 	response.sendRedirect("/eatfood/foodlist");
     }
+
+    @GetMapping( "/foods" )
+    @ResponseBody
+    public String foods(@RequestParam( "offset" ) int offset, @RequestParam( "count" ) int count, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	List<Food> foods = daoService.getFoodByClient(client, offset, count, true);
+	StringBuilder sb = new StringBuilder();
+	for (Food food : foods) {
+	    sb.append(String.format("<div>%s</div><br>",food.toString()));
+	}
+	return sb.toString();
+    }
+
+    @GetMapping( "doses" )
+    @ResponseBody
+    public String doses(@RequestParam( "offset" ) int offset, @RequestParam( "count" ) int count, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	List<Dose> doses = daoService.getDoseByClient(client, offset, count, true);
+	StringBuilder sb = new StringBuilder();
+	for (Dose dose : doses) {
+	    sb.append(String.format("<div>%s</div><br>", dose.toString()));
+	}
+	return sb.toString();
+    }
+    
 	
     @GetMapping( "/morefood" )
     public String moreFood(@RequestParam( "last" ) int last, @SessionAttribute( "client" ) Client client, Model model ) throws Exception {

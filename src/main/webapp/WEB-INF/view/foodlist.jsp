@@ -57,8 +57,8 @@
 	<input type="text" name="id">
 	<input type="submit" value="ok">
       </form>
-      <a href="/eatfood/foodlist/foods">foods</a>
-      <a href="/eatfood/foodlist/doses">doses</a>
+      <a href="/eatfood/foodlist/foods?offset=0&count=10">foods</a>
+      <a href="/eatfood/foodlist/doses?offset=0&count=10">doses</a>
     </div>
   </body>
 </html>

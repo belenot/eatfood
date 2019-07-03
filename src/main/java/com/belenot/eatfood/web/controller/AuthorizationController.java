@@ -31,16 +31,14 @@ public class AuthorizationController {
     }
 
     @PostMapping
-    @ResponseBody
-    public String authorization(HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
+    public void authorization(HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
 	String login = request.getParameter("login");
 	String password = request.getParameter("password");
 	Client client = daoService.getClientByLogin(login, password);
 	if (client != null) {
 	    HttpSession session = request.getSession();
 	    session.setAttribute("client", client);
-	    return client.getLogin() + "/" + client.getName();
-	    //response.sendRedirect("/eatfood/foodlist");
+	    response.sendRedirect("/eatfood/foodlist");
 	} else {
 	    //Bad
 	    throw new ApplicationException("Such client doesn't exist");
