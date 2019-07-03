@@ -31,4 +31,19 @@ public class Food {
     public BigDecimal getCarbohydrate() { return carbohydrate; }
     public BigDecimal getFat() { return fat; }
 
+    @Override
+    public String toString() {
+        String id = Integer.toString(getId());
+        String client = getClient() != null? Integer.toString(getClient().getId()) : "null";
+	String name = getName();
+        String common = Boolean.toString(isCommon());
+	String calories = getCalories() != null ? Double.toString(getCalories().doubleValue()) : "null";
+	String protein = getProtein() != null ? Double.toString(getProtein().doubleValue()) : "null";
+	String carbohydrate = getCarbohydrate() != null ? Double.toString(getCarbohydrate().doubleValue()) : "null";
+	String fat = getFat() != null ? Double.toString(getFat().doubleValue()) : "null";
+	String str = String.format("Food:\n\tid=%s\n\tclient=%s\n\tname=%s\n\tcommon=%s\n\tcalories=%s\n\tprotein=%s\n\tcarbohydrate=%s\n\tfat=%s\n",
+				   id, client, name, common, calories, protein, carbohydrate, fat);
+	return str;
+    }
+
 }

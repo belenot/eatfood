@@ -80,12 +80,14 @@ public class WebAppContext implements WebMvcConfigurer {
     @Bean
     public FoodDao foodDao() {
 	FoodDaoSql foodDao = new FoodDaoSql();
+	foodDao.setClientDao(clientDao());
 	foodDao.setConnection(jdbcConnectionFactory().getConnection());
 	return foodDao;
     }
     @Bean
     public DoseDao doseDao() {
 	DoseDaoSql doseDao = new DoseDaoSql();
+	doseDao.setFoodDao(foodDao());
 	doseDao.setConnection(jdbcConnectionFactory().getConnection());
 	return doseDao;
     }

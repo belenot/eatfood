@@ -4,6 +4,7 @@
     <title>Registration</title>
   </head>
   <body>
+    <%@ include file="menuBar.html" %>
     <h1>Registration</h1>
     <form action="registration" method="post" id="auth-form">
       <label for="login">Login</label>

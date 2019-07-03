@@ -8,10 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.belenot.eatfood.dao.FoodDao;
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
-import com.belenot.eatfood.exception.ApplicationException;
 import com.belenot.eatfood.service.DaoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 
@@ -42,15 +41,18 @@ public class FoodListController {
     }
 
     @PostMapping( "/addfood" )
-    public void addFood(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    @ResponseBody
+    public String addFood(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	String name = request.getParameter("name");
+	boolean common = new Boolean(request.getParameter("common"));
 	Map<String, BigDecimal> nutrientMap = new HashMap<>();
 	nutrientMap.put("calories", request.getParameter("calories") != null ? new BigDecimal(request.getParameter("calories")) : new BigDecimal(0));
 	nutrientMap.put("protein", request.getParameter("protein") != null ? new BigDecimal(request.getParameter("protein")) : new BigDecimal(0));
 	nutrientMap.put("carbohydrate", request.getParameter("carbohydrate") != null ? new BigDecimal(request.getParameter("carbohydrate")) : new BigDecimal(0));
 	nutrientMap.put("fat", request.getParameter("fat") != null ? new BigDecimal(request.getParameter("fat")) : new BigDecimal(0));
-	Food food = daoService.addFood(name, client, nutrientMap, /*fictive*/false);
-	response.sendRedirect("./");
+	Food food = daoService.addFood(name, client, nutrientMap, common);
+	//response.sendRedirect("./");
+	return food.toString();
     }
 
     @PostMapping ( "/updatefood" )
