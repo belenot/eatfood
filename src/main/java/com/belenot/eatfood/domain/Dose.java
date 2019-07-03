@@ -38,7 +38,8 @@ public class Dose {
 	String id = Integer.toString(getId());
 	String food = getFood() != null ? Integer.toString(getFood().getId()) : "null";
 	String date = getDate().toString();
-	String str = String.format("Dose:\n\tid=%s\n\tfood=%s\n\tdate=%s\n", id, food, date);
+	String gram = getGram().toString();
+	String str = String.format("Dose:\n\tid=%s\n\tfood=%s\n\tdate=%s\n\tgram=%s", id, food, date, gram);
 	return str;
     }
 	

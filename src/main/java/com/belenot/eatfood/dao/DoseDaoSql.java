@@ -29,7 +29,7 @@ public class DoseDaoSql implements DoseDao {
 	ps.setBigDecimal(2, gram);
 	ps.setDate(3, new java.sql.Date(date.getTime()));
 	ps.execute();
-	ps = connection.prepareStatement("SELECT * FROM dose ORDER BY id LIMIT 1");
+	ps = connection.prepareStatement("SELECT * FROM dose ORDER BY id DESC LIMIT 1");
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    dose = new Dose();

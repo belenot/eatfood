@@ -63,24 +63,40 @@ public class FoodListController {
     public String addDose(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("food")));
 	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
-	Date date = new SimpleDateFormat("dd-mm-yyyy").parse(request.getParameter("date"));
+	Date date = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("date"));
 	Dose dose = daoService.newDose(food, gram, date);
 	return dose.toString();
     }
 
-    @PostMapping ( "/updatefood" )
-    public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
+    @PostMapping( "/updatefood" )
+    @ResponseBody
+    public String updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
 	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("id")));
 	food.setClient(client);
+	food.setCommon(Boolean.valueOf(request.getParameter("common")));
 	food.setName(request.getParameter("name"));
 	food.setCalories(new BigDecimal(request.getParameter("calories")));
 	food.setProtein(new BigDecimal(request.getParameter("protein")));
 	food.setCarbohydrate(new BigDecimal(request.getParameter("carbohydrate")));
 	food.setFat(new BigDecimal(request.getParameter("fat")));
 	daoService.updateFood(food);
-	response.sendRedirect("/eatfood/foodlist");
+	//response.sendRedirect("/eatfood/foodlist");
+	return daoService.getFoodById(food.getId()).toString();
     }
 
+    @PostMapping( "/updatedose" )
+    @ResponseBody
+    public String updateDose(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	Dose dose = daoService.getDoseById(Integer.parseInt(request.getParameter("id")));
+	Date date = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("date"));
+	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
+	/*dose.setFood(..);/* can't update food, because its not logical(if food change, than it will be another dose"*/
+	dose.setDate(date);
+	dose.setGram(gram);
+	daoService.updateDose(dose);
+	return daoService.getDoseById(dose.getId()).toString();
+	
+    }
     @PostMapping ( "/deletefood" )
     public void deleteFood(@RequestParam( "id" ) int id, HttpServletResponse response) throws Exception, IOException {
 	Food food = daoService.getFoodById(id);
@@ -88,14 +104,14 @@ public class FoodListController {
 	response.sendRedirect("/eatfood/foodlist");
     }
 
-    @PostMapping ( "/deletedose" )
+    @PostMapping( "/deletedose" )
     public void deleteDose(@RequestParam( "id" ) int id, HttpServletResponse response) throws Exception, IOException {
 	Dose dose = daoService.getDoseById(id);
 	daoService.deleteDose(dose);
 	response.sendRedirect("/eatfood/foodlist");
     }
 	
-    @GetMapping ( "/morefood" )
+    @GetMapping( "/morefood" )
     public String moreFood(@RequestParam( "last" ) int last, @SessionAttribute( "client" ) Client client, Model model ) throws Exception {
 	model.addAttribute("foodRows", daoService.getDoseByClient(client, last, 10, true));
 	return "foodrows";
