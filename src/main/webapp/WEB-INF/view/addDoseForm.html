@@ -1,13 +1,10 @@
-<form class="add-dose" action="/eatfood/foodlist/addDose" method="post">
-  <div hidden>
-    <input class="name" type="text" name="name" placeholder="name">
-    <input class="item" type="text" name="calories" placeholder="kcal">
-    <input class="item" type="text" name="protein" placeholder="prot">
-    <input class="item" type="text" name="carbohydrate" placeholder="carb">
-    <input class="item" type="text" name="fat" placeholder="fat">
+<form class="add-dose dose-row" action="/eatfood/foodlist/adddose" method="post">
+  <div class="dose">
+    <input class="food-name" type="text" name="name" placeholder="name">
+    <input class="gram" type="text" name="gram" placeholder="gram">
+    <input class="date" type="date" name="date">
   </div>
-  <input class="food-range" type="range" name="food">
-  <input class="item" type="text" name="gram" placeholder="gram">
-  <input class="date" type="date" name="date">
-  <input class="item" type="submit" value="Add">
+  <div class="dose-control">
+    <input class="item" type="submit" value="Add">
+  </div>
 </form>

@@ -37,36 +37,33 @@ public class FoodListController {
     private MessageSource messageSource;
     
     @GetMapping
-    public String foodlist(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws Exception{
+    public String foodlist(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws Exception {
 	model.addAttribute("doseList", daoService.getDoseByClient(client, 0, 10, true));
 	model.addAttribute("totalNutrients", daoService.totalNutrients(client));
-	model.addAttribute("messageSource", messageSource);
+	model.addAttribute("foodList", daoService.getFoodByClient(client, 0, Integer.MAX_VALUE, false));
 	return "foodlist";
     }
 
     @PostMapping( "/addfood" )
-    @ResponseBody
-    public String addFood(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public void addFood(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	String name = request.getParameter("name");
-	boolean common = request.getParameter("common").equals("on");
+	boolean common = request.getParameter("common") != null && request.getParameter("common").equals("on");
 	Map<String, BigDecimal> nutrientMap = new HashMap<>();
 	nutrientMap.put("calories", request.getParameter("calories") != null ? new BigDecimal(request.getParameter("calories")) : new BigDecimal(0));
 	nutrientMap.put("protein", request.getParameter("protein") != null ? new BigDecimal(request.getParameter("protein")) : new BigDecimal(0));
 	nutrientMap.put("carbohydrate", request.getParameter("carbohydrate") != null ? new BigDecimal(request.getParameter("carbohydrate")) : new BigDecimal(0));
 	nutrientMap.put("fat", request.getParameter("fat") != null ? new BigDecimal(request.getParameter("fat")) : new BigDecimal(0));
-	Food food = daoService.addFood(name, client, nutrientMap, common);
-	//response.sendRedirect("./");
-	return food.toString();
+	daoService.addFood(name, client, nutrientMap, common);
+	response.sendRedirect("./");
     }
 
     @PostMapping( "/adddose" )
-    @ResponseBody
-    public String addDose(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("food")));
+    public void addDose(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	Food food = daoService.getFoodByName(request.getParameter("name"), 0, 1, false).get(0);
 	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
 	Date date = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("date"));
-	Dose dose = daoService.newDose(food, gram, date);
-	return dose.toString();
+	daoService.newDose(food, gram, date);
+	response.sendRedirect("./");
     }
 
     @PostMapping( "/updatefood" )

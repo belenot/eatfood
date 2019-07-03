@@ -1,0 +1,14 @@
+<div class="food-row">
+  <div class="food">
+    <label class="food-name"> <%= food.getName() %> </label>
+    <label class="common"> <%= food.isCommon() ? "common" : "uncommon" %> </label>
+    <label class="calories"> <%= food.getCalories().toString() %> </label>
+    <label class="protein"> <%= food.getProtein().toString() %> </label>
+    <label class="carbohydrate"> <%= food.getCarbohydrate().toString() %> </label>
+    <label class="fat"> <%= food.getFat().toString() %> </label>
+  </div>
+    <div class="food-control">
+    <button class="food-update-form--activate" >update</button>
+    <button class="food-delete-form--activate" >delete</button>
+  </div>
+</div>

@@ -1,25 +1,14 @@
 <div class="dose-row">
   <div class="dose">
-    <label class="food-name">Name</label>
-    <div class="nutrients">
-      <label class="calories">Calories</label>
-      <label class="protein">Protein</label>
-      <label class="carbohydrate">Carbo</label>
-      <label class="fat">Fat</label>
-    </div>
-    <label class="gram">Gram</label>
-    <label class="date">Date</label>
+    <label class="food-name"><%= dose.getFood().getName() %></label>
+    <label class="gram"><%= dose.getGram() %></label>
+    <label class="date"><%= dose.getDate().toString() %></label>
   </div>
-  <form class="dose-action" method="POST" action="/eatfood/foodlist/changedose">
-    <select class="select-food" name="food">
-      <option value="1">Макароны</option>
-      <option value="3">Сыр</option>
-    </select>
-    </select>
-    <input type="hidden" class="item id" name="id" value="dose.getId()">
-    <input type="image" class="update-img" name="update" alt="update">
-    <input type="image" class="delete-img" name="delete" alt="delete">
-  </form>
+  <div class="dose-control">
+    <button class="dose-update-form--activate" >update</button>
+    <button class="dose-delete-form--activate" >delete</button>
+  </div>
+  
 </div>
 
 
