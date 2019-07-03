@@ -2,6 +2,8 @@ package com.belenot.eatfood.web.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.belenot.eatfood.domain.Client;
+import com.belenot.eatfood.domain.Dose;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.service.DaoService;
 
@@ -55,6 +58,16 @@ public class FoodListController {
 	return food.toString();
     }
 
+    @PostMapping( "/adddose" )
+    @ResponseBody
+    public String addDose(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("food")));
+	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
+	Date date = new SimpleDateFormat("dd-mm-yyyy").parse(request.getParameter("date"));
+	Dose dose = daoService.newDose(food, gram, date);
+	return dose.toString();
+    }
+
     @PostMapping ( "/updatefood" )
     public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
 	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("id")));
@@ -72,6 +85,13 @@ public class FoodListController {
     public void deleteFood(@RequestParam( "id" ) int id, HttpServletResponse response) throws Exception, IOException {
 	Food food = daoService.getFoodById(id);
 	daoService.deleteFood(food);
+	response.sendRedirect("/eatfood/foodlist");
+    }
+
+    @PostMapping ( "/deletedose" )
+    public void deleteDose(@RequestParam( "id" ) int id, HttpServletResponse response) throws Exception, IOException {
+	Dose dose = daoService.getDoseById(id);
+	daoService.deleteDose(dose);
 	response.sendRedirect("/eatfood/foodlist");
     }
 	

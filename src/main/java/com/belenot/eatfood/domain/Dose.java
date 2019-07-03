@@ -32,4 +32,14 @@ public class Dose {
     public void setGram(BigDecimal gram) {
 	this.gram = gram;
     }
+
+    @Override
+    public String toString() {
+	String id = Integer.toString(getId());
+	String food = getFood() != null ? Integer.toString(getFood().getId()) : "null";
+	String date = getDate().toString();
+	String str = String.format("Dose:\n\tid=%s\n\tfood=%s\n\tdate=%s\n", id, food, date);
+	return str;
+    }
+	
 }
