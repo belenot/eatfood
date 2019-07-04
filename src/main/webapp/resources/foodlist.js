@@ -47,8 +47,25 @@ function onLoadDosesBtnClick(e) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200) {
-	    alert(xhr.responseText);
+	    refreshDosesPane(JSON.parse(xhr.responseText));
 	}
     };
     xhr.send('date=' + date);
+}
+
+function refreshDosesPane(doses) {
+    var dosesPane = document.getElementById("doses-pane")
+    var dosesPaneChildren = dosesPane.querySelectorAll("div.dose-row");
+    for (var i = 0; i < dosesPaneChildren.length; i++) {
+	dosesPane.removeChild(dosesPaneChildren[i]);
+    }
+    for (var i = 0; i < doses.length; i++) {
+	var doseRow = document.getElementById("dose-row-template").content.firstElementChild.cloneNode(true);
+	doseRow.getElementsByClassName("food-name")[0].innerText = doses[i]["food-name"];
+	doseRow.getElementsByClassName("dose-gram")[0].innerText = doses[i]["dose-gram"];
+	doseRow.getElementsByClassName("dose-date")[0].innerText = doses[i]["dose-date"];
+	doseRow.getElementsByClassName("dose-id")[0].value = doses[i]["dose-id"];
+	dosesPane.insertAdjacentElement('afterbegin', doseRow);
+    }
+	
 }
