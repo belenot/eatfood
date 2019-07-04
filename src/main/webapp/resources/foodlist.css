@@ -63,16 +63,22 @@ body > div {
     display: flex;
     background-color: hsl(270, 50%, 50%);
 }
+.food-row * {
+    border: 1px solid black;
+    margin: 1px;
+}
 .food-row > .food {
-    margin: 5px;
-    flex: 6;
+    flex: 7;
     display: flex;
+}
+.food-row > .food > .food-name {
+    flex: 3;
 }
 .food-row > .food > * {
     flex: 1;
 }
 .food-row > .food-control {
-    flex: 2;
+    flex: 1;
     display: flex;
 }
 .food-row > .food-control > * {

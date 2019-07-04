@@ -67,19 +67,17 @@ public class FoodListController {
     }
 
     @PostMapping( "/updatefood" )
-    @ResponseBody
-    public String updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
+    public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
 	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("id").trim()));
 	food.setClient(client);
-	food.setCommon(Boolean.valueOf(request.getParameter("common")));
+	food.setCommon(request.getParameter("common") != null);
 	food.setName(request.getParameter("name"));
 	food.setCalories(new BigDecimal(request.getParameter("calories")));
 	food.setProtein(new BigDecimal(request.getParameter("protein")));
 	food.setCarbohydrate(new BigDecimal(request.getParameter("carbohydrate")));
 	food.setFat(new BigDecimal(request.getParameter("fat")));
 	daoService.updateFood(food);
-	//response.sendRedirect("/eatfood/foodlist");
-	return daoService.getFoodById(food.getId()).toString();
+	response.sendRedirect("/eatfood/foodlist");
     }
 
     @PostMapping( "/updatedose" )

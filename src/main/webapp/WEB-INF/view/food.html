@@ -1,14 +1,15 @@
 <div class="food-row">
   <div class="food">
-    <label class="food-name"> <%= food.getName() %> </label>
-    <label class="common"> <%= food.isCommon() ? "common" : "uncommon" %> </label>
-    <label class="calories"> <%= food.getCalories().toString() %> </label>
-    <label class="protein"> <%= food.getProtein().toString() %> </label>
-    <label class="carbohydrate"> <%= food.getCarbohydrate().toString() %> </label>
-    <label class="fat"> <%= food.getFat().toString() %> </label>
+    <label class="food-name"><%= food.getName() %></label>
+    <label class="food-common"><%= food.isCommon() ? "common" : "uncommon" %></label>
+    <label class="food-calories"><%= food.getCalories().toString() %></label>
+    <label class="food-protein"><%= food.getProtein().toString() %></label>
+    <label class="food-carbohydrate"><%= food.getCarbohydrate().toString() %></label>
+    <label class="food-fat"><%= food.getFat().toString() %></label>
   </div>
-    <div class="food-control">
-    <button class="food-update-form--activate" >update</button>
-    <button class="food-delete-form--activate" >delete</button>
-  </div>
+  <form class="food-control" action="/eatfood/foodlist/deletefood" method="post">
+    <input class="food-id" type="hidden" name="id" value="<%= food.getId() %>">
+    <button onclick="onUpdateFoodBtnClick(event);" >update</button>
+    <input type="submit" class="food-delete-form--activate" value="delete">
+  </form>
 </div>
