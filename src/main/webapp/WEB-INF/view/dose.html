@@ -1,14 +1,12 @@
 <div class="dose-row">
   <div class="dose">
     <label class="food-name"><%= dose.getFood().getName() %></label>
-    <label class="gram"><%= dose.getGram() %></label>
-    <label class="date"><%= dose.getDate().toString() %></label>
+    <label class="dose-gram"><%= dose.getGram() %></label>
+    <label class="dose-date"><%= dose.getDate().toString() %></label>
   </div>
-  <div class="dose-control">
-    <button class="dose-update-form--activate" >update</button>
-    <button class="dose-delete-form--activate" >delete</button>
-  </div>
-  
+  <form class="dose-control" action="/eatfood/foodlist/deletedose" method="post">
+    <input class="dose-id" type="hidden" name="id" value="<%= dose.getId() %>">
+    <button onclick="onUpdateDoseBtnClick(event);" >update</button>
+    <input type="submit" class="dose-delete-form--activate" value="delete">
+  </form>
 </div>
-
-

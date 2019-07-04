@@ -6,6 +6,7 @@
   <head>
     <title>Food List</title>
     <link rel="stylesheet" href="/eatfood/resources/foodlist.css" type="text/css">
+    <script src="/eatfood/resources/foodlist.js"></script>
   </head>
   <body>
     
@@ -35,6 +36,12 @@
 
     <div id="total-nutrients-pane">
       <%@ include file="totalNutrients.html" %>
+    </div>
+
+    <div hidden>
+      <template id="update-dose-template">
+	<%@ include file="updateDoseTemplate.html" %>
+      </template>
     </div>
     
   </body>

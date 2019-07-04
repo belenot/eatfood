@@ -69,7 +69,7 @@ public class FoodListController {
     @PostMapping( "/updatefood" )
     @ResponseBody
     public String updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
-	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("id")));
+	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("id").trim()));
 	food.setClient(client);
 	food.setCommon(Boolean.valueOf(request.getParameter("common")));
 	food.setName(request.getParameter("name"));
@@ -83,8 +83,7 @@ public class FoodListController {
     }
 
     @PostMapping( "/updatedose" )
-    @ResponseBody
-    public String updateDose(HttpServletRequest request, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public void updateDose(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	Dose dose = daoService.getDoseById(Integer.parseInt(request.getParameter("id")));
 	Date date = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("date"));
 	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
@@ -92,7 +91,7 @@ public class FoodListController {
 	dose.setDate(date);
 	dose.setGram(gram);
 	daoService.updateDose(dose);
-	return daoService.getDoseById(dose.getId()).toString();
+	response.sendRedirect("./");
 	
     }
     @PostMapping ( "/deletefood" )

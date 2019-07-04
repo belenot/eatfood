@@ -35,7 +35,7 @@ body > div {
     background-color: hsl(200, 50%, 60%);
 }
 .dose-row > .dose .food-name {
-    flex: 1;
+    flex: 5;
 }
 .dose-row > .dose > .nutrients {
     flex: 4;
@@ -44,10 +44,10 @@ body > div {
 .dose-row > .dose > .nutrients > * {
     flex: 1;
 }
-.dose-row > .dose > .gram {
+.dose-row > .dose > .dose-gram {
     flex: 1;
 }
-.dose-row > .dose > .date {
+.dose-row > .dose > .dose-date {
     flex: 1;
 }
 .dose-row > .dose-control {
