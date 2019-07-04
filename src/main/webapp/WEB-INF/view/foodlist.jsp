@@ -2,6 +2,11 @@
 <%@ page import="com.belenot.eatfood.domain.Dose" %>
 <%@ page import="com.belenot.eatfood.domain.Food" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.math.BigDecimal" %>
+<%
+  Map<String, BigDecimal> totalNutrients = (Map<String, BigDecimal>)request.getAttribute("totalNutrients");
+  %>
 <html>
   <head>
     <title>Food List</title>
