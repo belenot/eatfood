@@ -23,7 +23,12 @@
       <% for (Dose dose : (List<Dose>) request.getAttribute("doseList")) { %>
       <%@ include file="dose.html" %>
       <% } %>
+      <div>
+	<input type="date" name="date">
+	<button onclick="onLoadDosesBtnClick(event);">get</button>
+      </div>
     </div>
+
     
     <div id="add-dose-form-pane" >
       <%@ include file="addDoseForm.html" %>
@@ -44,6 +49,9 @@
     </div>
 
     <div hidden>
+      <template id="dose-row-template">
+	<%@ include file="doseRowTemplate.html" %>
+      </template>
       <template id="update-dose-template">
 	<%@ include file="updateDoseTemplate.html" %>
       </template>

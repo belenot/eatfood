@@ -1,0 +1,12 @@
+<div class="dose-row">
+  <div class="dose">
+    <label class="food-name"></label>
+    <label class="dose-gram"></label>
+    <label class="dose-date"></label>
+  </div>
+  <form class="dose-control" action="/eatfood/foodlist/deletedose" method="post">
+    <input class="dose-id" type="hidden" name="id">
+    <button onclick="onUpdateDoseBtnClick(event);">update</button>
+    <input type="submit" value="delete">
+  </form>
+</div>

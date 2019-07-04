@@ -3,6 +3,7 @@ package com.belenot.eatfood.web.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Dose;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.service.DaoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -117,18 +119,28 @@ public class FoodListController {
 	return sb.toString();
     }
 
-    @GetMapping( "doses" )
+    @PostMapping( path = "/doses", produces="application/json" )
     @ResponseBody
-    public String doses(@RequestParam( "offset" ) int offset, @RequestParam( "count" ) int count, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	List<Dose> doses = daoService.getDoseByClient(client, offset, count, true);
-	StringBuilder sb = new StringBuilder();
+    public String doses(@RequestParam( "date" ) String date, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, new SimpleDateFormat("yyyy-MM-dd").parse(date));
+	List<Map<String, String>> doseList = new ArrayList<>();
 	for (Dose dose : doses) {
-	    sb.append(String.format("<div>%s</div><br>", dose.toString()));
+	    Map<String, String> doseMap = new HashMap<>();
+	    doseMap.put("dose-id", "" + dose.getId());
+	    doseMap.put("food-id", "" + dose.getFood().getId());
+	    doseMap.put("food-name", dose.getFood().getName());
+	    doseMap.put("food-calories", dose.getFood().getCalories().setScale(2).toString());
+	    doseMap.put("food-protein", dose.getFood().getProtein().setScale(2).toString());
+	    doseMap.put("food-carbohydrate", dose.getFood().getCarbohydrate().setScale(2).toString());
+	    doseMap.put("food-fat", dose.getFood().getFat().setScale(2).toString());
+	    doseMap.put("dose-gram", dose.getGram().setScale(2).toString());
+	    doseMap.put("dose-date", dose.getDate().toString());
+	    doseList.add(doseMap);
 	}
-	return sb.toString();
+	ObjectMapper mapper = new ObjectMapper();
+	return mapper.writeValueAsString(doseList);
     }
     
-	
     @GetMapping( "/morefood" )
     public String moreFood(@RequestParam( "last" ) int last, @SessionAttribute( "client" ) Client client, Model model ) throws Exception {
 	model.addAttribute("foodRows", daoService.getDoseByClient(client, last, 10, true));

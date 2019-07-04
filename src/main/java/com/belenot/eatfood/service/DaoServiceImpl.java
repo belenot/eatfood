@@ -77,6 +77,10 @@ public class DaoServiceImpl implements DaoService {
 	return doseDao.getDoseByClient(client, offset, limit, desc);
     }
     @Override
+    public List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc, Date date) throws Exception {
+	return doseDao.getDoseByClient(client, offset, limit, desc, date);
+    }
+    @Override
     public List<Dose> getDoseByFood(Food food, int offset, int limit, boolean desc) throws Exception {
 	return doseDao.getDoseByFood(food, offset, limit, desc);
     }

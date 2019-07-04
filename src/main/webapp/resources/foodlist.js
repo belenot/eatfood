@@ -1,5 +1,5 @@
 window.onload = function () {
-
+    
 }
 
 function onUpdateDoseBtnClick(e) {
@@ -40,4 +40,15 @@ function onUpdateFoodBtnClick(e) {
     foodRow.parentElement.replaceChild(updateFoodForm, foodRow);
 }
     
-    
+function onLoadDosesBtnClick(e) {
+    var date = encodeURIComponent(e.target.previousElementSibling.value);
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/doses", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200) {
+	    alert(xhr.responseText);
+	}
+    };
+    xhr.send('date=' + date);
+}
