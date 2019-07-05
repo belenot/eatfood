@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,9 +21,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.format.Formatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -121,8 +125,8 @@ public class FoodListController {
 
     @PostMapping( path = "/doses", produces="application/json" )
     @ResponseBody
-    public String doses(@RequestParam( "date" ) String date, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, new SimpleDateFormat("yyyy-MM-dd").parse(date));
+    public String doses(@RequestParam( "date" ) Date date, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, date);
 	List<Map<String, String>> doseList = new ArrayList<>();
 	for (Dose dose : doses) {
 	    Map<String, String> doseMap = new HashMap<>();
@@ -139,6 +143,23 @@ public class FoodListController {
 	}
 	ObjectMapper mapper = new ObjectMapper();
 	return mapper.writeValueAsString(doseList);
+    }
+
+    @InitBinder
+    public void bindShitDate(WebDataBinder binder) {
+	binder.addCustomFormatter(new Formatter<Date>() {
+		public Date parse(String str, Locale locale) {
+		    try {
+			return (new SimpleDateFormat("yyyy-MM-dd", locale)).parse(str);
+		    } catch (Exception exc) {
+			return null;
+		    }
+		}
+		public String print(Date date, Locale locale) {
+		    return (new SimpleDateFormat("yyyy-MM-dd", locale)).format(date);
+		}
+	    });
+		
     }
     
     @GetMapping( "/morefood" )
