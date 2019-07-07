@@ -29,13 +29,8 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public void registration(HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
-	String login = request.getParameter("login");
-	String password = request.getParameter("password");
-	String name = request.getParameter("name");
-	String surname = request.getParameter("surname");
-	String email = request.getParameter("email");
-	Client client = daoService.addClient(login, password, name, surname, email);
+    public void registration(Client client, HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
+	client = daoService.addClient(client);
 	if (client != null) {
 	    HttpSession session = request.getSession();
 	    session.setAttribute("client", client);

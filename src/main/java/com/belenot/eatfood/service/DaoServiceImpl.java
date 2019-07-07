@@ -24,8 +24,8 @@ public class DaoServiceImpl implements DaoService {
 
 
     @Override
-    public Client addClient(String login, String password, String name, String surname, String email) throws Exception {
-	return clientDao.addClient(login, password, name, surname, email);
+    public Client addClient(Client client) throws Exception {
+	return clientDao.addClient(client);
     }
     @Override
     public boolean deleteClient(Client client) throws Exception {

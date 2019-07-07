@@ -53,7 +53,6 @@ public class FoodListController {
 
     @PostMapping( "/addfood" )
     public void addFood(Food food, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	Map<String, BigDecimal> nutrientMap = new HashMap<>();
 	food.setClient(client);
 	daoService.addFood(food);
 	response.sendRedirect("./");
@@ -71,12 +70,12 @@ public class FoodListController {
     public void updateFood(Food food, HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
 	food.setClient(client);
 	daoService.updateFood(food);
-	response.sendRedirect("/eatfood/foodlist");
+	response.sendRedirect("./");
     }
 
     @PostMapping( "/updatedose" )
     public void updateDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	/*dose.setFood(..);/* can't update food, because its not logical(if food change, than it will be another dose"*/
+	/*dose.setFood(..);/* can't update food, because its not logical(if food change, than it would be another dose"*/
 	daoService.updateDose(dose);
 	response.sendRedirect("./");
 	
@@ -84,13 +83,13 @@ public class FoodListController {
     @PostMapping ( "/deletefood" )
     public void deleteFood(Food food, HttpServletResponse response) throws Exception, IOException {
 	daoService.deleteFood(food);
-	response.sendRedirect("/eatfood/foodlist");
+	response.sendRedirect("./");
     }
 
     @PostMapping( "/deletedose" )
     public void deleteDose(Dose dose, HttpServletResponse response) throws Exception, IOException {
 	daoService.deleteDose(dose);
-	response.sendRedirect("/eatfood/foodlist");
+	response.sendRedirect("./");
     }
 
     @GetMapping( "/foods" )

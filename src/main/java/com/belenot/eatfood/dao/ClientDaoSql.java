@@ -45,32 +45,30 @@ public class ClientDaoSql implements ClientDao {
 	}
 	return client;
     }
-    public Client addClient(String login, String password, String name, String surname, String email) throws Exception {
-	Client client = null;
+    public Client addClient(Client client) throws Exception {
+	Client clientReturn = null;
 	PreparedStatement ps = connection.prepareStatement("INSERT INTO client (login, password, name, surname, email) VALUES (?, ?, ?, ?, ?)");
-	ps.setString(1, login);
-	ps.setString(2, password);
-	ps.setString(3, name);
-	ps.setString(4, surname);
-	ps.setString(5, email);
+	ps.setString(1, client.getLogin());
+	ps.setString(2, client.getPassword());
+	ps.setString(3, client.getName());
+	ps.setString(4, client.getSurname());
+	ps.setString(5, client.getEmail());
 	ps.execute();
 	ps = connection.prepareStatement("SELECT * FROM client ORDER BY id DESC LIMIT 1");
 	ResultSet rs = ps.executeQuery();
-	int id = -1;
-	String addedLogin = null;
 	if (rs.next()) {
-	    client = new Client();
-	    client.setId(rs.getInt("id"));
-	    client.setLogin(rs.getString("login"));
-	    client.setPassword(rs.getString("password"));
-	    client.setName(rs.getString("name"));
-	    client.setSurname(rs.getString("surname"));
-	    client.setEmail(rs.getString("email"));
+	    clientReturn = new Client();
+	    clientReturn.setId(rs.getInt("id"));
+	    clientReturn.setLogin(rs.getString("login"));
+	    clientReturn.setPassword(rs.getString("password"));
+	    clientReturn.setName(rs.getString("name"));
+	    clientReturn.setSurname(rs.getString("surname"));
+	    clientReturn.setEmail(rs.getString("email"));
+	    return clientReturn;
 	} else {
-	    String msg = String.format("Can't fetch added client with login = \"" + login + "\" to ClientDao(last added client's login and parameter login are not equal(%s!=%s))", login, addedLogin);
+	    String msg = String.format("Can't fetch added client with login = \"" + client.getLogin() + "\" to ClientDao(last added client's login and parameter login are not equal(%s!=%s))", client.getLogin(), clientReturn);
 	    throw new ApplicationException(msg);
 	}
-	return client;
     }
     public void updateClient(Client client) throws Exception {
 	throw new Exception("Method(ClientDao.updateClient(Client client)) isn't supported yet");
