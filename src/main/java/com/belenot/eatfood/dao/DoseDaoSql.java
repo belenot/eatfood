@@ -130,10 +130,10 @@ public class DoseDaoSql implements DoseDao {
 	ps.setInt(1, client.getId());
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
-	    totalNutrients.put("calories", rs.getBigDecimal(1));
-	    totalNutrients.put("protein", rs.getBigDecimal(2));
-	    totalNutrients.put("carbohydrate", rs.getBigDecimal(3));
-	    totalNutrients.put("fat", rs.getBigDecimal(4));
+	    totalNutrients.put("calories", rs.getBigDecimal(1) == null ? new BigDecimal(0) : rs.getBigDecimal(1) );
+	    totalNutrients.put("protein", rs.getBigDecimal(2) == null ? new BigDecimal(0) : rs.getBigDecimal(2) );
+	    totalNutrients.put("carbohydrate", rs.getBigDecimal(3) == null ? new BigDecimal(0) : rs.getBigDecimal(3) );
+	    totalNutrients.put("fat", rs.getBigDecimal(4) == null ? new BigDecimal(0) : rs.getBigDecimal(4) );
 	}
 	return totalNutrients;
     }
