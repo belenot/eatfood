@@ -67,27 +67,15 @@ public class FoodListController {
     }
 
     @PostMapping( "/updatefood" )
-    public void updateFood(HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
-	Food food = daoService.getFoodById(Integer.parseInt(request.getParameter("id").trim()));
+    public void updateFood(Food food, HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
 	food.setClient(client);
-	food.setCommon(request.getParameter("common") != null);
-	food.setName(request.getParameter("name"));
-	food.setCalories(new BigDecimal(request.getParameter("calories")));
-	food.setProtein(new BigDecimal(request.getParameter("protein")));
-	food.setCarbohydrate(new BigDecimal(request.getParameter("carbohydrate")));
-	food.setFat(new BigDecimal(request.getParameter("fat")));
 	daoService.updateFood(food);
 	response.sendRedirect("/eatfood/foodlist");
     }
 
     @PostMapping( "/updatedose" )
-    public void updateDose(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	Dose dose = daoService.getDoseById(Integer.parseInt(request.getParameter("id")));
-	Date date = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("date"));
-	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
+    public void updateDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	/*dose.setFood(..);/* can't update food, because its not logical(if food change, than it will be another dose"*/
-	dose.setDate(date);
-	dose.setGram(gram);
 	daoService.updateDose(dose);
 	response.sendRedirect("./");
 	
