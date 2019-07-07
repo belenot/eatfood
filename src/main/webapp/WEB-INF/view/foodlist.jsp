@@ -55,6 +55,9 @@
       <template id="update-dose-template">
 	<%@ include file="updateDoseTemplate.html" %>
       </template>
+      <template id="food-row-template">
+	<%@ include file="foodRowTemplate.html" %>
+      </template>
       <template id="update-food-template">
 	<%@ include file="updateFoodTemplate.html" %>
       </template>

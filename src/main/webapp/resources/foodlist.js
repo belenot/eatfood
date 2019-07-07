@@ -55,6 +55,65 @@ function onUpdateDoseSubmitBtnClick(e) {
 	     "date="+doseDate);
     
 }
+function onDeleteDoseBtnClick(e) {
+    var doseRow = e.target.parentElement.parentElement;
+    var id = doseRow.querySelector(".dose-id").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/deletedose");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    id = encodeURIComponent(id);
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText === "true") {
+	    deleteDoseFromPane(doseRow);
+	}
+	else if (xhr.readyState === 4) {
+	    alert("Dose wasn't deleted: " + xhr.responseText);
+	}
+    }
+    xhr.send("id="+id);
+}
+function onAddDoseBtnClick(e) {
+    var addDoseForm = e.target.parentElement.parentElement;
+    var foodName = encodeURIComponent(addDoseForm.querySelector(".food-name").value);
+    addDoseForm.querySelector(".food-name").value = null;
+    var doseGram = encodeURIComponent(addDoseForm.querySelector(".dose-gram").value);
+    addDoseForm.querySelector(".dose-gram").value = null;
+    var doseDate = encodeURIComponent(addDoseForm.querySelector(".dose-date").value);
+    addDoseForm.querySelector(".dose-date").value = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/adddose");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200 &&
+	    jsonValidate(xhr.responseText)) {
+	    doseRow = populateDoseRow(JSON.parse(xhr.responseText));
+	    addDoseRowToPane(doseRow);
+	} else if (xhr.readyState === 4) {
+	    alert("Can't add dose: " + xhr.responseText);
+	}
+    }
+    xhr.send("food.name="+foodName+"&&"+
+	     "gram="+doseGram+"&&"+
+	     "date="+doseDate);
+}
+function deleteDoseFromPane(doseRow) {
+    doseRow.parentElement.removeChild(doseRow);
+}
+function populateDoseRow(jsonObject, doseRow) {
+    if (doseRow == null || doseRow === "undefined") {
+	doseRow = document.getElementById("dose-row-template").content.firstElementChild.cloneNode(true);
+    }
+    doseRow.querySelector(".food-name").innerText = jsonObject.foodModel.name;
+    doseRow.querySelector(".dose-gram").innerText = jsonObject.gram;
+    doseRow.querySelector(".dose-date").innerText = jsonObject.date;
+    doseRow.querySelector(".dose-id").value = jsonObject.id;
+    return doseRow;
+}
+function addDoseRowToPane(doseRow) {
+    var dosePane = document.getElementById("doses-pane");
+    dosePane.insertAdjacentElement("afterbegin", doseRow);
+}
+
 function onUpdateFoodBtnClick(e) {
     var foodRow = e.target.parentElement.parentElement;
     var updateFoodForm = document.getElementById("update-food-template").content.firstElementChild.cloneNode(true);
@@ -70,6 +129,27 @@ function onUpdateFoodBtnClick(e) {
     closeFormBtn.setAttribute("data-origin", foodRow.outerHTML);
     foodRow.parentElement.replaceChild(updateFoodForm, foodRow);
 }
+function onDeleteFoodBtnClick(e) {
+    var foodRow = e.target.parentElement.parentElement;
+    var id = foodRow.querySelector(".food-id").value
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/deletefood");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    id = encodeURIComponent(id);
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText === "true") {
+	    deleteFoodFromPane(foodRow);
+	} else if (xhr.readyState === 4) {
+	    alert("Can't delete food: " + xhr.responseText);
+	}
+    }
+    xhr.send("id="+id);
+    
+}
+function deleteFoodFromPane(foodRow) {
+    foodRow.parentElement.removeChild(foodRow);
+}
+
 function onLoadDosesBtnClick(e) {
     var date = encodeURIComponent(e.target.previousElementSibling.value);
     var xhr = new XMLHttpRequest();
@@ -98,64 +178,7 @@ function refreshDosesPane(doses) {
     }
 	
 }
-function onDeleteDoseBtnClick(e) {
-    var doseRow = e.target.parentElement.parentElement;
-    var xhr = new XMLHttpRequest();
-    xhr.open("post", "/eatfood/foodlist/deletedose");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    var id = doseRow.querySelector(".dose-id").value;
-    id = encodeURIComponent(id);
-    xhr.onreadystatechange = function() {
-	if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText === "true") {
-	    deleteDoseFromPane(doseRow);
-	}
-	else if (xhr.readyState === 4) {
-	    alert("Dose wasn't deleted: " + xhr.responseText);
-	}
-    }
-    xhr.send("id="+id);
-}
-function deleteDoseFromPane(doseRow) {
-    doseRow.parentElement.removeChild(doseRow);
-}
-function onAddDoseBtnClick(e) {
-    var addDoseForm = e.target.parentElement.parentElement;
-    var foodName = encodeURIComponent(addDoseForm.querySelector(".food-name").value);
-    addDoseForm.querySelector(".food-name").value = null;
-    var doseGram = encodeURIComponent(addDoseForm.querySelector(".dose-gram").value);
-    addDoseForm.querySelector(".dose-gram").value = null;
-    var doseDate = encodeURIComponent(addDoseForm.querySelector(".dose-date").value);
-    addDoseForm.querySelector(".dose-date").value = null;
-    var xhr = new XMLHttpRequest();
-    xhr.open("post", "/eatfood/foodlist/adddose");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-	if (xhr.readyState === 4 && xhr.status === 200 &&
-	    jsonValidate(xhr.responseText)) {
-	    doseRow = populateDoseRow(JSON.parse(xhr.responseText));
-	    addDoseRowToPane(doseRow);
-	} else if (xhr.readyState === 4) {
-	    alert("Can't add dose: " + xhr.responseText);
-	}
-    }
-    xhr.send("food.name="+foodName+"&&"+
-	     "gram="+doseGram+"&&"+
-	     "date="+doseDate);
-}
-function populateDoseRow(jsonObject, doseRow) {
-    if (doseRow == null || doseRow === "undefined") {
-	doseRow = document.getElementById("dose-row-template").content.firstElementChild.cloneNode(true);
-    }
-    doseRow.querySelector(".food-name").innerText = jsonObject.foodModel.name;
-    doseRow.querySelector(".dose-gram").innerText = jsonObject.gram;
-    doseRow.querySelector(".dose-date").innerText = jsonObject.date;
-    doseRow.querySelector(".dose-id").value = jsonObject.id;
-    return doseRow;
-}
-function addDoseRowToPane(doseRow) {
-    var dosePane = document.getElementById("doses-pane");
-    dosePane.insertAdjacentElement("afterbegin", doseRow);
-}
+
 	    
 	    
     

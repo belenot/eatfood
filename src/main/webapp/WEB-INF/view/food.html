@@ -7,9 +7,9 @@
     <label class="food-carbohydrate"><%= food.getCarbohydrate().toString() %></label>
     <label class="food-fat"><%= food.getFat().toString() %></label>
   </div>
-  <form class="food-control" action="/eatfood/foodlist/deletefood" method="post">
+  <div class="food-control">
     <input class="food-id" type="hidden" name="id" value="<%= food.getId() %>">
     <button onclick="onUpdateFoodBtnClick(event);" >update</button>
-    <input type="submit" value="delete">
-  </form>
+    <button onclick="onDeleteFoodBtnClick(event);">delete</button>
+  </div>
 </div>
