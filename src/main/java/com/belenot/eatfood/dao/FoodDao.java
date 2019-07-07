@@ -9,7 +9,7 @@ import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.exception.ApplicationException;
 
 public interface FoodDao {
-    Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap, boolean common) throws Exception;
+    Food addFood(Food food) throws Exception;
     Food getFoodById(int id) throws Exception;
     List<Food> getFoodByClient(Client client, int start, int count, boolean desc) throws Exception;
     /**

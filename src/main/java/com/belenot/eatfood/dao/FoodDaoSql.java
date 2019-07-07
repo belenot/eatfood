@@ -18,29 +18,29 @@ public class FoodDaoSql implements FoodDao {
     public void setClientDao(ClientDao clientDao) { this.clientDao = clientDao; }
     public void setConnection(Connection connection) { this.connection = connection; }
 
-    public Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap, boolean common) throws Exception {
+    public Food addFood(Food food) throws Exception {
 	PreparedStatement ps = connection.prepareStatement("INSERT INTO food (name, client, common, calories, protein, carbohydrate, fat) VALUES (?, ?, ?, ?, ?, ?, ?)");
-	ps.setString(1, name);
-	ps.setInt(2, client.getId());
-	ps.setBoolean(3, common);
-	ps.setBigDecimal(4, nutrientMap.get("calories") != null ? nutrientMap.get("calories") : new BigDecimal(0));
-	ps.setBigDecimal(5, nutrientMap.get("protein") != null ? nutrientMap.get("protein") : new BigDecimal(0));
-	ps.setBigDecimal(6, nutrientMap.get("carbohydrate") != null ? nutrientMap.get("carbohydrate") : new BigDecimal(0));
-	ps.setBigDecimal(7, nutrientMap.get("fat") != null ? nutrientMap.get("fat") : new BigDecimal(0));
+	ps.setString(1, food.getName());
+	ps.setInt(2, food.getClient().getId());
+	ps.setBoolean(3, food.isCommon());
+	ps.setBigDecimal(4, food.getCalories());
+	ps.setBigDecimal(5, food.getProtein());
+	ps.setBigDecimal(6, food.getCarbohydrate());
+	ps.setBigDecimal(7, food.getFat());
 	ps.execute();
 	ps = connection.prepareStatement("SELECT * FROM food ORDER BY id DESC LIMIT 1");
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
-	    Food food = new Food();
-	    food.setId(rs.getInt("id"));
-	    food.setName(rs.getString("name").trim());
-	    food.setClient(clientDao.getClientById(rs.getInt("client")));
-	    food.setCommon(rs.getBoolean("common"));
-	    food.setCalories(rs.getBigDecimal("calories"));
-	    food.setProtein(rs.getBigDecimal("protein"));
-	    food.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
-	    food.setFat(rs.getBigDecimal("fat"));
-	    return food;
+	    Food foodReturn = new Food();
+	    foodReturn.setId(rs.getInt("id"));
+	    foodReturn.setName(rs.getString("name").trim());
+	    foodReturn.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodReturn.setCommon(rs.getBoolean("common"));
+	    foodReturn.setCalories(rs.getBigDecimal("calories"));
+	    foodReturn.setProtein(rs.getBigDecimal("protein"));
+	    foodReturn.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
+	    foodReturn.setFat(rs.getBigDecimal("fat"));
+	    return foodReturn;
 	}
 	return null;	    
     }

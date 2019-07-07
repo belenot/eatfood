@@ -24,6 +24,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -118,5 +119,9 @@ public class WebAppContext implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 	registry.addInterceptor(new EncodingInterceptor());
 	registry.addInterceptor(new SessionInterceptor());
+    }
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+	
     }
 }

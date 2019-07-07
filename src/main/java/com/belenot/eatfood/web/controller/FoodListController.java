@@ -51,24 +51,18 @@ public class FoodListController {
     }
 
     @PostMapping( "/addfood" )
-    public void addFood(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	String name = request.getParameter("name");
-	boolean common = request.getParameter("common") != null && request.getParameter("common").equals("on");
+    public void addFood(Food food, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	Map<String, BigDecimal> nutrientMap = new HashMap<>();
-	nutrientMap.put("calories", request.getParameter("calories") != null ? new BigDecimal(request.getParameter("calories")) : new BigDecimal(0));
-	nutrientMap.put("protein", request.getParameter("protein") != null ? new BigDecimal(request.getParameter("protein")) : new BigDecimal(0));
-	nutrientMap.put("carbohydrate", request.getParameter("carbohydrate") != null ? new BigDecimal(request.getParameter("carbohydrate")) : new BigDecimal(0));
-	nutrientMap.put("fat", request.getParameter("fat") != null ? new BigDecimal(request.getParameter("fat")) : new BigDecimal(0));
-	daoService.addFood(name, client, nutrientMap, common);
+	food.setClient(client);
+	daoService.addFood(food);
 	response.sendRedirect("./");
     }
 
     @PostMapping( "/adddose" )
-    public void addDose(HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public void addDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	Food food = daoService.getFoodByName(request.getParameter("name"), 0, 1, false).get(0);
-	BigDecimal gram = new BigDecimal(request.getParameter("gram"));
-	Date date = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("date"));
-	daoService.newDose(food, gram, date);
+	dose.setFood(food);
+	daoService.newDose(dose);
 	response.sendRedirect("./");
     }
 
@@ -159,7 +153,13 @@ public class FoodListController {
 		    return (new SimpleDateFormat("yyyy-MM-dd", locale)).format(date);
 		}
 	    });
-		
+	binder.addCustomFormatter(new Formatter<Client>() {
+		@Override
+		public Client parse(String id, Locale locale) { try { return daoService.getClientById(Integer.parseInt(id)); } catch (Exception exc) { return null; } }
+		@Override
+		public String print(Client client, Locale locale) { return client.toString(); }
+	    });
+	
     }
     
     @GetMapping( "/morefood" )

@@ -44,9 +44,9 @@ public class DaoServiceImpl implements DaoService {
 	clientDao.updateClient(client);
     }
     @Override
-    public Food addFood(String name, Client client, Map<String, BigDecimal> nutrientMap, boolean common)
+    public Food addFood(Food food)
 	throws Exception {
-	return foodDao.addFood(name, client, nutrientMap, common);
+	return foodDao.addFood(food);
     }
     @Override
     public boolean deleteFood(Food food) throws Exception {
@@ -89,8 +89,8 @@ public class DaoServiceImpl implements DaoService {
 	return doseDao.getDoseById(id);
     }
     @Override
-    public Dose newDose(Food food, BigDecimal gram, Date date) throws Exception {
-	return doseDao.newDose(food, gram, date);
+    public Dose newDose(Dose dose) throws Exception {
+	return doseDao.newDose(dose);
     }
     @Override
     public void updateDose(Dose dose) throws Exception {

@@ -22,23 +22,22 @@ public class DoseDaoSql implements DoseDao {
     public void setFoodDao(FoodDao foodDao) { this.foodDao = foodDao; }
     
     @Override
-    public Dose newDose(Food food, BigDecimal gram, Date date) throws Exception {
-	Dose dose = null;
+    public Dose newDose(Dose dose) throws Exception {
 	PreparedStatement ps = connection.prepareStatement("INSERT INTO dose (food, gram, date) VALUES (?, ?, ?)");
-	ps.setInt(1, food.getId());
-	ps.setBigDecimal(2, gram);
-	ps.setDate(3, new java.sql.Date(date.getTime()));
+	ps.setInt(1, dose.getFood().getId());
+	ps.setBigDecimal(2, dose.getGram());
+	ps.setDate(3, new java.sql.Date(dose.getDate().getTime()));
 	ps.execute();
 	ps = connection.prepareStatement("SELECT * FROM dose ORDER BY id DESC LIMIT 1");
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
-	    dose = new Dose();
-	    dose.setId(rs.getInt("id"));
-	    dose.setFood(foodDao.getFoodById(rs.getInt("food")));
-	    dose.setDate(rs.getDate("date"));
-	    dose.setGram(rs.getBigDecimal("gram"));
+	    Dose doseReturn = new Dose();
+	    doseReturn.setId(rs.getInt("id"));
+	    doseReturn.setFood(foodDao.getFoodById(rs.getInt("food")));
+	    doseReturn.setDate(rs.getDate("date"));
+	    doseReturn.setGram(rs.getBigDecimal("gram"));
 	}
-	return dose;
+	return null;
     }
     @Override
     public Dose getDoseById(int id) throws Exception {

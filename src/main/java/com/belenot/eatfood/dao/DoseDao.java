@@ -10,7 +10,7 @@ import com.belenot.eatfood.domain.Dose;
 import com.belenot.eatfood.domain.Food;
 
 public interface DoseDao {
-    Dose newDose(Food food, BigDecimal gram, Date date) throws Exception;
+    Dose newDose(Dose dose) throws Exception;
     Dose getDoseById(int id) throws Exception;
     List<Dose> getDoseByFood(Food food, int offset, int limit, boolean desc) throws Exception;
     List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc) throws Exception;
