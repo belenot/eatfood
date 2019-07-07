@@ -18,7 +18,9 @@ import com.belenot.eatfood.domain.Dose;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.service.DaoService;
 import com.belenot.eatfood.web.model.DoseModel;
+import com.belenot.eatfood.web.model.FoodModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -42,6 +44,8 @@ public class FoodListController {
     private DaoService daoService;
     @Autowired
     private MessageSource messageSource;
+    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectWriter objectWriter = objectMapper.writer();
     
     @GetMapping
     public String foodlist(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws Exception {
@@ -52,44 +56,50 @@ public class FoodListController {
     }
 
     @PostMapping( "/addfood" )
-    public void addFood(Food food, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    @ResponseBody
+    public String addFood(Food food, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	food.setClient(client);
-	daoService.addFood(food);
-	response.sendRedirect("./");
+	food = daoService.addFood(food);
+	return objectWriter.writeValueAsString(new FoodModel(food));
     }
 
     @PostMapping( "/adddose" )
-    public void addDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    @ResponseBody
+    public String addDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	Food food = daoService.getFoodByName(request.getParameter("name"), 0, 1, false).get(0);
 	dose.setFood(food);
-	daoService.newDose(dose);
-	response.sendRedirect("./");
+        dose = daoService.newDose(dose);
+	return objectWriter.writeValueAsString(new DoseModel(dose));
     }
 
     @PostMapping( "/updatefood" )
-    public void updateFood(Food food, HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
+    @ResponseBody
+    public String updateFood(Food food, HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
 	food.setClient(client);
-	daoService.updateFood(food);
-	response.sendRedirect("./");
+        daoService.updateFood(food);
+	food = daoService.getFoodById(food.getId());
+	return objectWriter.writeValueAsString(new FoodModel(food));
     }
 
     @PostMapping( "/updatedose" )
-    public void updateDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    @ResponseBody
+    public String updateDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	/*dose.setFood(..);/* can't update food, because its not logical(if food change, than it would be another dose"*/
 	daoService.updateDose(dose);
-	response.sendRedirect("./");
-	
+	dose = daoService.getDoseById(dose.getId());
+	return objectWriter.writeValueAsString(new DoseModel(dose));
     }
+    
     @PostMapping ( "/deletefood" )
-    public void deleteFood(Food food, HttpServletResponse response) throws Exception, IOException {
-	daoService.deleteFood(food);
-	response.sendRedirect("./");
+    @ResponseBody
+    public String deleteFood(Food food, HttpServletResponse response) throws Exception, IOException {
+	return Boolean.toString(daoService.deleteFood(food));
     }
 
     @PostMapping( "/deletedose" )
-    public void deleteDose(Dose dose, HttpServletResponse response) throws Exception, IOException {
-	daoService.deleteDose(dose);
-	response.sendRedirect("./");
+    @ResponseBody
+    public String deleteDose(Dose dose, HttpServletResponse response) throws Exception, IOException {
+	return Boolean.toString(daoService.deleteDose(dose));
     }
 
     @GetMapping( "/foods" )

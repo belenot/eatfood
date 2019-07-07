@@ -69,8 +69,8 @@ public class DaoServiceImpl implements DaoService {
 	foodDao.updateFood(food);
     }
     @Override
-    public void deleteDose(Dose dose) throws Exception {
-	doseDao.deleteDose(dose);
+    public boolean deleteDose(Dose dose) throws Exception {
+	return doseDao.deleteDose(dose);
     }
     @Override
     public List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc) throws Exception {

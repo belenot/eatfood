@@ -118,7 +118,7 @@ public class FoodDaoSql implements FoodDao {
     public boolean deleteFood(Food food) throws Exception {
 	PreparedStatement ps = connection.prepareStatement("DELETE FROM food WHERE id = ?");
 	ps.setInt(1, food.getId());
-	return ps.execute();
+	return ps.executeUpdate() == 1;
     }
 	
 }

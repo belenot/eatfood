@@ -36,6 +36,7 @@ public class DoseDaoSql implements DoseDao {
 	    doseReturn.setFood(foodDao.getFoodById(rs.getInt("food")));
 	    doseReturn.setDate(rs.getDate("date"));
 	    doseReturn.setGram(rs.getBigDecimal("gram"));
+	    return doseReturn;
 	}
 	return null;
     }
@@ -118,10 +119,10 @@ public class DoseDaoSql implements DoseDao {
 	ps.execute();
     }
     @Override
-    public void deleteDose(Dose dose) throws Exception {
+    public boolean deleteDose(Dose dose) throws Exception {
 	PreparedStatement ps = connection.prepareStatement("DELETE FROM dose WHERE id = ?");
 	ps.setInt(1, dose.getId());
-	ps.execute();
+	return ps.executeUpdate() == 1;
     }
     @Override
     public Map<String, BigDecimal> totalNutrients(Client client) throws Exception {

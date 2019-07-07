@@ -16,6 +16,6 @@ public interface DoseDao {
     List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc) throws Exception;
     List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc, Date date) throws Exception;
     void updateDose(Dose dose) throws Exception;
-    void deleteDose(Dose dose) throws Exception;
+    boolean deleteDose(Dose dose) throws Exception;
     Map<String, BigDecimal> totalNutrients(Client client) throws Exception;
 }
