@@ -14,7 +14,6 @@ function onUpdateDoseBtnClick(e) {
     closeFormBtn.setAttribute("data-origin", doseRow.outerHTML);
     doseRow.parentElement.replaceChild(updateDoseForm, doseRow);
 }
-
 function onCloseFormBtnClick(e) {
     var closeFormBtn = e.target;
     var template = document.createElement("template");
@@ -23,7 +22,6 @@ function onCloseFormBtnClick(e) {
     var updateXForm = closeFormBtn.parentElement.parentElement;
     updateXForm.parentElement.replaceChild(originX, updateXForm);
 }
-
 function onUpdateFoodBtnClick(e) {
     var foodRow = e.target.parentElement.parentElement;
     var updateFoodForm = document.getElementById("update-food-template").content.firstElementChild.cloneNode(true);
@@ -39,7 +37,6 @@ function onUpdateFoodBtnClick(e) {
     closeFormBtn.setAttribute("data-origin", foodRow.outerHTML);
     foodRow.parentElement.replaceChild(updateFoodForm, foodRow);
 }
-    
 function onLoadDosesBtnClick(e) {
     var date = encodeURIComponent(e.target.previousElementSibling.value);
     var xhr = new XMLHttpRequest();
@@ -52,7 +49,6 @@ function onLoadDosesBtnClick(e) {
     };
     xhr.send('date=' + date);
 }
-
 function refreshDosesPane(doses) {
     var dosesPane = document.getElementById("doses-pane")
     var dosesPaneChildren = dosesPane.querySelectorAll("div.dose-row");
@@ -68,4 +64,24 @@ function refreshDosesPane(doses) {
 	dosesPane.insertAdjacentElement('afterbegin', doseRow);
     }
 	
+}
+function onDeleteDoseBtnClick(e) {
+    var doseRow = e.target.parentElement.parentElement;
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/deletedose");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    var id = doseRow.querySelector(".dose-id").value;
+    id = encodeURIComponent(id);
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200) {
+	    deleteDoseFromPane(doseRow);
+	}
+	else if (xhr.readyState === 4) {
+	    alert("Dose wasn't deleted: " + xhr.responseText);
+	}
+    }
+    xhr.send("id="+id);
+}
+function deleteDoseFromPane(doseRow) {
+    doseRow.parentElement.removeChild(doseRow);
 }
