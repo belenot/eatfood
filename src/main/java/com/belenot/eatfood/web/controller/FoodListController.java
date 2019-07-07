@@ -81,15 +81,13 @@ public class FoodListController {
 	
     }
     @PostMapping ( "/deletefood" )
-    public void deleteFood(@RequestParam( "id" ) int id, HttpServletResponse response) throws Exception, IOException {
-	Food food = daoService.getFoodById(id);
+    public void deleteFood(Food food, HttpServletResponse response) throws Exception, IOException {
 	daoService.deleteFood(food);
 	response.sendRedirect("/eatfood/foodlist");
     }
 
     @PostMapping( "/deletedose" )
-    public void deleteDose(@RequestParam( "id" ) int id, HttpServletResponse response) throws Exception, IOException {
-	Dose dose = daoService.getDoseById(id);
+    public void deleteDose(Dose dose, HttpServletResponse response) throws Exception, IOException {
 	daoService.deleteDose(dose);
 	response.sendRedirect("/eatfood/foodlist");
     }
