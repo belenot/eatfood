@@ -146,10 +146,60 @@ function onDeleteFoodBtnClick(e) {
     xhr.send("id="+id);
     
 }
+function onAddFoodBtnClick(e) {
+    var addFoodForm = e.target.parentElement;
+    var name = encodeURIComponent(addFoodForm.querySelector(".name").value);
+    addFoodForm.querySelector(".name").value = null;
+    var common = encodeURIComponent(addFoodForm.querySelector(".common").checked ? "true" : "false");
+    addFoodForm.querySelector(".common").checked = null;
+    var calories = encodeURIComponent(addFoodForm.querySelector(".calories").value);
+    addFoodForm.querySelector(".calories").value = null;
+    var protein = encodeURIComponent(addFoodForm.querySelector(".protein").value);
+    addFoodForm.querySelector(".protein").value = null;
+    var carbohydrate = encodeURIComponent(addFoodForm.querySelector(".carbohydrate").value);
+    addFoodForm.querySelector(".carbohydrate").value = null;
+    var fat = encodeURIComponent(addFoodForm.querySelector(".fat").value);
+    addFoodForm.querySelector(".fat").value = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/addfood");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200
+	    && jsonValidate(xhr.responseText)) {
+	    foodRow = populateFoodRow(JSON.parse(xhr.responseText))
+	    addFoodRowToPane(foodRow);
+	} else if (xhr.readyStat === 4) {
+	    alert("Can't  add food: " + xhr.responseText);
+	}
+    }
+    xhr.send("name="+name+"&&"+
+	     "common="+common+"&&"+
+	     "calories="+calories+"&&"+
+	     "protein="+protein+"&&"+
+	     "carbohydrate="+carbohydrate+"&&"+
+	     "fat="+fat);	    
+}    
 function deleteFoodFromPane(foodRow) {
     foodRow.parentElement.removeChild(foodRow);
 }
-
+function populateFoodRow(jsonObject, foodRow) {
+    if (foodRow == null || doseRow === "undefined") {
+	foodRow = document.getElementById("food-row-template").content.firstElementChild.cloneNode(true);
+    }
+    foodRow.querySelector(".food-name").innerText = jsonObject.name;
+    foodRow.querySelector(".food-common").innerText = jsonObject.common;
+    foodRow.querySelector(".food-calories").innerText = jsonObject.calories;
+    foodRow.querySelector(".food-protein").innerText = jsonObject.protein;
+    foodRow.querySelector(".food-carbohydrate").innerText = jsonObject.carbohydrate;
+    foodRow.querySelector(".food-fat").innerText = jsonObject.fat;
+    foodRow.querySelector(".food-id").value = jsonObject.id;
+    return foodRow;
+}
+function addFoodRowToPane(foodRow) {
+    var foodsPane = document.getElementById("foods-pane");
+    foodsPane.insertAdjacentElement("afterbegin", foodRow);
+}
+    
 function onLoadDosesBtnClick(e) {
     var date = encodeURIComponent(e.target.previousElementSibling.value);
     var xhr = new XMLHttpRequest();
