@@ -1,7 +1,14 @@
 window.onload = function () {
     
 }
-
+function jsonValidate(jsonObject) {
+    try {
+	JSON.parse(jsonObject);
+	return true;
+    } catch (e) {
+	return false;
+    }
+}
 function onUpdateDoseBtnClick(e) {
     var doseRow = e.target.parentElement.parentElement;
     var updateDoseForm = document.getElementById("update-dose-template").content.firstElementChild.cloneNode(true);
@@ -73,7 +80,7 @@ function onDeleteDoseBtnClick(e) {
     var id = doseRow.querySelector(".dose-id").value;
     id = encodeURIComponent(id);
     xhr.onreadystatechange = function() {
-	if (xhr.readyState === 4 && xhr.status === 200) {
+	if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText === "true") {
 	    deleteDoseFromPane(doseRow);
 	}
 	else if (xhr.readyState === 4) {
@@ -85,3 +92,42 @@ function onDeleteDoseBtnClick(e) {
 function deleteDoseFromPane(doseRow) {
     doseRow.parentElement.removeChild(doseRow);
 }
+function onAddDoseBtnClick(e) {
+    var addDoseForm = e.target.parentElement.parentElement;
+    var foodName = encodeURIComponent(addDoseForm.querySelector(".food-name").value);
+    addDoseForm.querySelector(".food-name").value = null;
+    var doseGram = encodeURIComponent(addDoseForm.querySelector(".dose-gram").value);
+    addDoseForm.querySelector(".dose-gram").value = null;
+    var doseDate = encodeURIComponent(addDoseForm.querySelector(".dose-date").value);
+    addDoseForm.querySelector(".dose-date").value = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/adddose");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200 &&
+	    jsonValidate(xhr.responseText)) {
+	    doseRow = createDoseRow(JSON.parse(xhr.responseText));
+	    addDoseRowToPane(doseRow);
+	} else if (xhr.readyState === 4) {
+	    alert("Can't add dose: " + xhr.responseText);
+	}
+    }
+    xhr.send("food.name="+foodName+"&&"+
+	     "gram="+doseGram+"&&"+
+	     "date="+doseDate);
+}
+function createDoseRow(jsonObject) {
+    var doseRow = document.getElementById("dose-row-template").content.firstElementChild.cloneNode(true);
+    doseRow.querySelector(".food-name").innerText = jsonObject.foodModel.name;
+    doseRow.querySelector(".dose-gram").innerText = jsonObject.gram;
+    doseRow.querySelector(".dose-date").innerText = jsonObject.date;
+    doseRow.querySelector(".dose-id").value = jsonObject.id;
+    return doseRow;
+}
+function addDoseRowToPane(doseRow) {
+    var dosePane = document.getElementById("doses-pane");
+    dosePane.insertAdjacentElement("afterbegin", doseRow);
+}
+	    
+	    
+    

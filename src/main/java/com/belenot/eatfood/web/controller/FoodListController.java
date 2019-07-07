@@ -66,7 +66,7 @@ public class FoodListController {
     @PostMapping( "/adddose" )
     @ResponseBody
     public String addDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	Food food = daoService.getFoodByName(request.getParameter("name"), 0, 1, false).get(0);
+	Food food = daoService.getFoodByName(dose.getFood().getName(), 0, 1, false).get(0);
 	dose.setFood(food);
         dose = daoService.newDose(dose);
 	return objectWriter.writeValueAsString(new DoseModel(dose));
