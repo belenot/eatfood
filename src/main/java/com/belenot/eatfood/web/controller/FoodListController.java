@@ -17,6 +17,7 @@ import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Dose;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.service.DaoService;
+import com.belenot.eatfood.web.model.DoseModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,19 +108,9 @@ public class FoodListController {
     @ResponseBody
     public String doses(@RequestParam( "date" ) Date date, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, date);
-	List<Map<String, String>> doseList = new ArrayList<>();
+	List<DoseModel> doseList = new ArrayList<>();
 	for (Dose dose : doses) {
-	    Map<String, String> doseMap = new HashMap<>();
-	    doseMap.put("dose-id", "" + dose.getId());
-	    doseMap.put("food-id", "" + dose.getFood().getId());
-	    doseMap.put("food-name", dose.getFood().getName());
-	    doseMap.put("food-calories", dose.getFood().getCalories().setScale(2).toString());
-	    doseMap.put("food-protein", dose.getFood().getProtein().setScale(2).toString());
-	    doseMap.put("food-carbohydrate", dose.getFood().getCarbohydrate().setScale(2).toString());
-	    doseMap.put("food-fat", dose.getFood().getFat().setScale(2).toString());
-	    doseMap.put("dose-gram", dose.getGram().setScale(2).toString());
-	    doseMap.put("dose-date", dose.getDate().toString());
-	    doseList.add(doseMap);
+	    doseList.add(new DoseModel(dose));
 	}
 	ObjectMapper mapper = new ObjectMapper();
 	return mapper.writeValueAsString(doseList);
