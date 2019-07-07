@@ -9,6 +9,15 @@ function jsonValidate(jsonObject) {
 	return false;
     }
 }
+function onCloseFormBtnClick(e) {
+    var closeFormBtn = e.target;
+    var template = document.createElement("template");
+    template.innerHTML = closeFormBtn.getAttribute("data-origin");
+    var originX = template.content.firstChild;
+    var updateXForm = closeFormBtn.parentElement.parentElement;
+    updateXForm.parentElement.replaceChild(originX, updateXForm);
+}
+
 function onUpdateDoseBtnClick(e) {
     var doseRow = e.target.parentElement.parentElement;
     var updateDoseForm = document.getElementById("update-dose-template").content.firstElementChild.cloneNode(true);
@@ -21,13 +30,30 @@ function onUpdateDoseBtnClick(e) {
     closeFormBtn.setAttribute("data-origin", doseRow.outerHTML);
     doseRow.parentElement.replaceChild(updateDoseForm, doseRow);
 }
-function onCloseFormBtnClick(e) {
-    var closeFormBtn = e.target;
-    var template = document.createElement("template");
-    template.innerHTML = closeFormBtn.getAttribute("data-origin");
-    var originX = template.content.firstChild;
-    var updateXForm = closeFormBtn.parentElement.parentElement;
-    updateXForm.parentElement.replaceChild(originX, updateXForm);
+function onUpdateDoseSubmitBtnClick(e) {
+    var addDoseForm = e.target.parentElement.parentElement;
+    var doseId = encodeURIComponent(addDoseForm.querySelector(".dose-id").value);
+    addDoseForm.querySelector(".dose-id").value = null;
+    var doseGram = encodeURIComponent(addDoseForm.querySelector(".dose-gram").value);
+    addDoseForm.querySelector(".dose-gram").value = null;
+    var doseDate = encodeURIComponent(addDoseForm.querySelector(".dose-date").value);
+    addDoseForm.querySelector(".dose-date").value = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/updatedose");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200 &&
+	    jsonValidate(xhr.responseText)) {
+	    var doseRow = populateDoseRow(JSON.parse(xhr.responseText));
+	    addDoseForm.parentElement.replaceChild(doseRow, addDoseForm);
+	} else if (xhr.readyState === 4) {
+	    alert("Can't update dose: " + xhr.responseText);
+	}
+    }
+    xhr.send("id="+doseId+"&&"+
+	     "gram="+doseGram+"&&"+
+	     "date="+doseDate);
+    
 }
 function onUpdateFoodBtnClick(e) {
     var foodRow = e.target.parentElement.parentElement;
@@ -106,7 +132,7 @@ function onAddDoseBtnClick(e) {
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200 &&
 	    jsonValidate(xhr.responseText)) {
-	    doseRow = createDoseRow(JSON.parse(xhr.responseText));
+	    doseRow = populateDoseRow(JSON.parse(xhr.responseText));
 	    addDoseRowToPane(doseRow);
 	} else if (xhr.readyState === 4) {
 	    alert("Can't add dose: " + xhr.responseText);
@@ -116,8 +142,10 @@ function onAddDoseBtnClick(e) {
 	     "gram="+doseGram+"&&"+
 	     "date="+doseDate);
 }
-function createDoseRow(jsonObject) {
-    var doseRow = document.getElementById("dose-row-template").content.firstElementChild.cloneNode(true);
+function populateDoseRow(jsonObject, doseRow) {
+    if (doseRow == null || doseRow === "undefined") {
+	doseRow = document.getElementById("dose-row-template").content.firstElementChild.cloneNode(true);
+    }
     doseRow.querySelector(".food-name").innerText = jsonObject.foodModel.name;
     doseRow.querySelector(".dose-gram").innerText = jsonObject.gram;
     doseRow.querySelector(".dose-date").innerText = jsonObject.date;

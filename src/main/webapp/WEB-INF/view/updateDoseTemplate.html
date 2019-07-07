@@ -1,4 +1,4 @@
-<form class="dose-row" action="/eatfood/foodlist/updatedose" method="post">
+<div class="dose-row">
   <div class="dose">
     <label class="food-name">name</label>
     <input class="dose-gram" type="text" name="gram">
@@ -6,7 +6,7 @@
   </div>
   <div class="dose-control">
     <input class="dose-id" type="hidden" name="id">
-    <input type="submit" class="dose-update-form" value="ok"><!--remove class-->
-    <button class="dose-update-close-btn" >close</button>
+    <button class="dose-update-form" onclick="onUpdateDoseSubmitBtnClick(event);">ok</button>
+    <button class="dose-update-close-btn">close</button>
   </div>
-</form>
+</div>
