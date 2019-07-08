@@ -1,4 +1,4 @@
-<form class="food-row" action="/eatfood/foodlist/updatefood" method="post">
+<div class="food-row">
   <div class="food">
     <input type="text" name="name" class="food-name" >
     <input type="checkbox" name="common" class="food-common">
@@ -9,7 +9,7 @@
   </div>
   <div class="food-control">
     <input class="food-id" type="hidden" name="id">
-    <input type="submit" class="food-update-form" value="ok"><!--remove class-->
+    <button class="food-update-form" onclick="onUpdateFoodSubmitBtnClick(event)">ok</button>
     <button class="food-update-close-btn" >close</button>
-  </form>
+  </div>
 </form>

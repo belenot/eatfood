@@ -129,6 +129,43 @@ function onUpdateFoodBtnClick(e) {
     closeFormBtn.setAttribute("data-origin", foodRow.outerHTML);
     foodRow.parentElement.replaceChild(updateFoodForm, foodRow);
 }
+function onUpdateFoodSubmitBtnClick(e) {
+    var updateFoodForm = e.target.parentElement.parentElement;
+    var id = encodeURIComponent(updateFoodForm.querySelector(".food-id").value);
+    updateFoodForm.querySelector(".food-id").value = null;    
+    var name = encodeURIComponent(updateFoodForm.querySelector(".food-name").value);
+    updateFoodForm.querySelector(".food-name").value = null;
+    var common = encodeURIComponent(updateFoodForm.querySelector(".food-common").checked ? "true" : "false");
+    updateFoodForm.querySelector(".food-common").checked = null;
+    var calories = encodeURIComponent(updateFoodForm.querySelector(".food-calories").value);
+    updateFoodForm.querySelector(".food-calories").value = null;
+    var protein = encodeURIComponent(updateFoodForm.querySelector(".food-protein").value);
+    updateFoodForm.querySelector(".food-protein").value = null;
+    var carbohydrate = encodeURIComponent(updateFoodForm.querySelector(".food-carbohydrate").value);
+    updateFoodForm.querySelector(".food-carbohydrate").value = null;
+    var fat = encodeURIComponent(updateFoodForm.querySelector(".food-fat").value);
+    updateFoodForm.querySelector(".food-fat").value = null;
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/foodlist/updatefood");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200 &&
+	    jsonValidate(xhr.responseText)) {
+	    var doseRow = populateFoodRow(JSON.parse(xhr.responseText));
+	    updateFoodForm.parentElement.replaceChild(doseRow, updateFoodForm);
+	} else if (xhr.readyState === 4) {
+	    alert("Can't update dose: " + xhr.responseText);
+	}
+    }
+    xhr.send("id="+id+"&&"+
+	     "name="+name+"&&"+
+	     "common="+common+"&&"+
+	     "calories="+calories+"&&"+
+	     "protein="+protein+"&&"+
+	     "carbohydrate="+carbohydrate+"&&"+
+	     "fat="+fat);	    
+    
+}
 function onDeleteFoodBtnClick(e) {
     var foodRow = e.target.parentElement.parentElement;
     var id = foodRow.querySelector(".food-id").value
@@ -178,7 +215,7 @@ function onAddFoodBtnClick(e) {
 	     "protein="+protein+"&&"+
 	     "carbohydrate="+carbohydrate+"&&"+
 	     "fat="+fat);	    
-}    
+}
 function deleteFoodFromPane(foodRow) {
     foodRow.parentElement.removeChild(foodRow);
 }
@@ -187,7 +224,7 @@ function populateFoodRow(jsonObject, foodRow) {
 	foodRow = document.getElementById("food-row-template").content.firstElementChild.cloneNode(true);
     }
     foodRow.querySelector(".food-name").innerText = jsonObject.name;
-    foodRow.querySelector(".food-common").innerText = jsonObject.common;
+    foodRow.querySelector(".food-common").innerText = jsonObject.common ? "common" : "uncommon";
     foodRow.querySelector(".food-calories").innerText = jsonObject.calories;
     foodRow.querySelector(".food-protein").innerText = jsonObject.protein;
     foodRow.querySelector(".food-carbohydrate").innerText = jsonObject.carbohydrate;
