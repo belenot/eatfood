@@ -1,5 +1,8 @@
 package com.belenot.eatfood.context;
 
+import java.nio.charset.Charset;
+import java.util.List;
+
 import com.belenot.eatfood.context.aspect.CritErrorAspect;
 import com.belenot.eatfood.context.aspect.LoggingAspect;
 import com.belenot.eatfood.dao.ClientDao;
@@ -24,7 +27,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.AbstractHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -120,8 +124,15 @@ public class WebAppContext implements WebMvcConfigurer {
 	registry.addInterceptor(new EncodingInterceptor());
 	registry.addInterceptor(new SessionInterceptor());
     }
+    /**
+     * Need because of ResponseBody setting default to ISO-8...-1
+     */
     @Override
-    public void addFormatters(FormatterRegistry registry) {
-	
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+	for (HttpMessageConverter converter : converters) {
+	    if (converter instanceof AbstractHttpMessageConverter) {
+		((AbstractHttpMessageConverter) converter).setDefaultCharset(Charset.forName("UTF-8"));
+	    }
+	}
     }
 }
