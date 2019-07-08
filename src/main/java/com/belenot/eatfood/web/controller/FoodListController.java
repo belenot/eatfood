@@ -1,14 +1,11 @@
 package com.belenot.eatfood.web.controller;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -116,8 +113,8 @@ public class FoodListController {
 
     @PostMapping( path = "/doses", produces="application/json" )
     @ResponseBody
-    public String doses(@RequestParam( "date" ) Date date, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, date);
+    public String doses(@RequestParam( "dateFirst" ) Date dateFirst, @RequestParam( "dateLast" ) Date dateLast, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, dateFirst, dateLast);
 	List<DoseModel> doseList = new ArrayList<>();
 	for (Dose dose : doses) {
 	    doseList.add(new DoseModel(dose));
@@ -127,7 +124,7 @@ public class FoodListController {
     }
 
     @InitBinder
-    public void bindShitDate(WebDataBinder binder) {
+    public void initBinder(WebDataBinder binder) {
 	binder.addCustomFormatter(new Formatter<Date>() {
 		public Date parse(String str, Locale locale) {
 		    try {

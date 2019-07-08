@@ -50,8 +50,8 @@ function onUpdateDoseSubmitBtnClick(e) {
 	    alert("Can't update dose: " + xhr.responseText);
 	}
     }
-    xhr.send("id="+doseId+"&&"+
-	     "gram="+doseGram+"&&"+
+    xhr.send("id="+doseId+"&"+
+	     "gram="+doseGram+"&"+
 	     "date="+doseDate);
     
 }
@@ -92,8 +92,8 @@ function onAddDoseBtnClick(e) {
 	    alert("Can't add dose: " + xhr.responseText);
 	}
     }
-    xhr.send("food.name="+foodName+"&&"+
-	     "gram="+doseGram+"&&"+
+    xhr.send("food.name="+foodName+"&"+
+	     "gram="+doseGram+"&"+
 	     "date="+doseDate);
 }
 function deleteDoseFromPane(doseRow) {
@@ -157,12 +157,12 @@ function onUpdateFoodSubmitBtnClick(e) {
 	    alert("Can't update dose: " + xhr.responseText);
 	}
     }
-    xhr.send("id="+id+"&&"+
-	     "name="+name+"&&"+
-	     "common="+common+"&&"+
-	     "calories="+calories+"&&"+
-	     "protein="+protein+"&&"+
-	     "carbohydrate="+carbohydrate+"&&"+
+    xhr.send("id="+id+"&"+
+	     "name="+name+"&"+
+	     "common="+common+"&"+
+	     "calories="+calories+"&"+
+	     "protein="+protein+"&"+
+	     "carbohydrate="+carbohydrate+"&"+
 	     "fat="+fat);	    
     
 }
@@ -209,11 +209,11 @@ function onAddFoodBtnClick(e) {
 	    alert("Can't  add food: " + xhr.responseText);
 	}
     }
-    xhr.send("name="+name+"&&"+
-	     "common="+common+"&&"+
-	     "calories="+calories+"&&"+
-	     "protein="+protein+"&&"+
-	     "carbohydrate="+carbohydrate+"&&"+
+    xhr.send("name="+name+"&"+
+	     "common="+common+"&"+
+	     "calories="+calories+"&"+
+	     "protein="+protein+"&"+
+	     "carbohydrate="+carbohydrate+"&"+
 	     "fat="+fat);	    
 }
 function deleteFoodFromPane(foodRow) {
@@ -238,7 +238,9 @@ function addFoodRowToPane(foodRow) {
 }
     
 function onLoadDosesBtnClick(e) {
-    var date = encodeURIComponent(e.target.previousElementSibling.value);
+    var dateFirst = encodeURIComponent(e.target.previousElementSibling.previousElementSibling.value);
+    var dateLast = encodeURIComponent(e.target.previousElementSibling.value);
+    
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/foodlist/doses", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -247,7 +249,8 @@ function onLoadDosesBtnClick(e) {
 	    refreshDosesPane(JSON.parse(xhr.responseText));
 	}
     };
-    xhr.send('date=' + date);
+    xhr.send("dateFirst="+dateFirst+"&"+
+	     "dateLast="+dateLast);
 }
 function refreshDosesPane(doses) {
     var dosesPane = document.getElementById("doses-pane")

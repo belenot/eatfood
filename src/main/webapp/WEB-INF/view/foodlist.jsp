@@ -24,7 +24,8 @@
       <%@ include file="dose.html" %>
       <% } %>
       <div>
-	<input type="date" name="date">
+	<input type="date" name="dateFirst">
+	<input type="date" name="dateLast">
 	<button onclick="onLoadDosesBtnClick(event);">get</button>
       </div>
     </div>

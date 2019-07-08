@@ -92,13 +92,14 @@ public class DoseDaoSql implements DoseDao {
 	return doseList;
     }
     @Override
-    public List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc, Date date) throws Exception {
+    public List<Dose> getDoseByClient(Client client, int offset, int limit, boolean desc, Date dateFirst, Date dateLast) throws Exception {
 	List<Dose> doseList = new ArrayList<>();
-	PreparedStatement ps = connection.prepareStatement("SELECT * FROM dose WHERE food IN (SELECT id FROM food WHERE client = ?) AND date = ? ORDER BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ?");
+	PreparedStatement ps = connection.prepareStatement("SELECT * FROM dose WHERE food IN (SELECT id FROM food WHERE client = ?) AND date >= ? AND date <= ? ORDER BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ?");
 	ps.setInt(1, client.getId());
-	ps.setDate(2, new java.sql.Date(date.getTime()));
-	ps.setInt(3, offset);
-	ps.setInt(4, limit);
+	ps.setDate(2, new java.sql.Date(dateFirst.getTime()));
+	ps.setDate(3, new java.sql.Date(dateLast.getTime()));
+	ps.setInt(4, offset);
+	ps.setInt(5, limit);
 	ResultSet rs = ps.executeQuery();
 	while (rs.next()) {
 	    Dose dose = new Dose();
