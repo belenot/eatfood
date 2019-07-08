@@ -61,8 +61,8 @@ public class DaoServiceImpl implements DaoService {
 	return foodDao.getFoodById(id);
     }
     @Override
-    public List<Food> getFoodByName(String name, int start, int count, boolean desc) throws Exception {
-	return foodDao.getFoodByName(name, start, count, desc);
+    public List<Food> getFoodByName(Food food, int start, int count, boolean desc) throws Exception {
+	return foodDao.getFoodByName(food, start, count, desc);
     }
     @Override
     public void updateFood(Food food) throws Exception {

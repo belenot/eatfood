@@ -83,24 +83,25 @@ public class FoodDaoSql implements FoodDao {
 	}
 	return foodList;
     }
-    public List<Food> getFoodByName(String name, int start, int count, boolean desc) throws Exception {
+    public List<Food> getFoodByName(Food food, int start, int count, boolean desc) throws Exception {
 	List<Food> foodList = new ArrayList<>();
-	PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE name = ? ORDER BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ? ");
-	ps.setString(1, name);
-	ps.setInt(2, start);
-	ps.setInt(3, count);
+	PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE name = ? AND client = ? ORDER BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ? ");
+	ps.setString(1, food.getName());
+	ps.setInt(2, food.getClient().getId());
+	ps.setInt(3, start);
+	ps.setInt(4, count);
 	ResultSet rs = ps.executeQuery();
 	while (rs.next()) {
-	    Food food = new Food();
-	    food.setId(rs.getInt("id"));
-	    food.setName(rs.getString("name"));
-	    food.setClient(clientDao.getClientById(rs.getInt("client")));
-	    food.setCommon(rs.getBoolean("common"));
-	    food.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
-	    food.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
-	    food.setCalories(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
-	    food.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
-	    foodList.add(food);
+	    Food foodReturn = new Food();
+	    foodReturn.setId(rs.getInt("id"));
+	    foodReturn.setName(rs.getString("name"));
+	    foodReturn.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodReturn.setCommon(rs.getBoolean("common"));
+	    foodReturn.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
+	    foodReturn.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
+	    foodReturn.setCalories(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
+	    foodReturn.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
+	    foodList.add(foodReturn);
 	}
 	return foodList;
     }
