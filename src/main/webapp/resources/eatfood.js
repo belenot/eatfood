@@ -49,7 +49,7 @@ function onUpdateDoseSubmitBtnClick(e) {
     addDoseForm.querySelector(".dose-date").value = null;
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/doselist/updatedose");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200 &&
 	    jsonValidate(xhr.responseText)) {
@@ -70,7 +70,7 @@ function onDeleteDoseBtnClick(e) {
     var id = doseRow.querySelector(".dose-id").value;
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/doselist/deletedose");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     id = encodeURIComponent(id);
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText === "true") {
@@ -92,7 +92,7 @@ function onAddDoseBtnClick(e) {
     addDoseForm.querySelector(".dose-date").value = null;
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/doselist/adddose");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200 &&
 	    jsonValidate(xhr.responseText)) {
@@ -164,7 +164,7 @@ function onUpdateFoodSubmitBtnClick(e) {
     updateFoodForm.querySelector(".food-fat").value = null;
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/foodlist/updatefood");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200 &&
 	    jsonValidate(xhr.responseText)) {
@@ -188,7 +188,7 @@ function onDeleteFoodBtnClick(e) {
     var id = foodRow.querySelector(".food-id").value
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/foodlist/deletefood");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     id = encodeURIComponent(id);
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200 && xhr.responseText === "true") {
@@ -216,7 +216,7 @@ function onAddFoodBtnClick(e) {
     addFoodForm.querySelector(".fat").value = null;
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/foodlist/addfood");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200
 	    && jsonValidate(xhr.responseText)) {
@@ -260,7 +260,7 @@ function onLoadDosesBtnClick(e) {
     
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/doselist/doses", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     xhr.onreadystatechange = function() {
 	if (xhr.readyState === 4 && xhr.status === 200) {
 	    refreshDosesPane(JSON.parse(xhr.responseText));
@@ -311,7 +311,7 @@ function refreshTotalNutrients() {
 function loadFood() {
     var xhr = new XMLHttpRequest();
     xhr.open("get", "/eatfood/foodlist/foods");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
     xhr.onreadystatechange = function () {
 	if (xhr.readyState === 4 && xhr.status === 200 &&
 	    jsonValidate(xhr.responseText)) {
