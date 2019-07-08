@@ -4,9 +4,14 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.math.BigDecimal" %>
+<%
+  Map<String, BigDecimal> totalNutrients = (Map<String, BigDecimal>)request.getAttribute("totalNutrients");
+  String dateFirst = (String) request.getAttribute("dateFirst");
+  String dateLast = (String) request.getAttribute("dateLast");
+  %>
 <html>
   <head>
-    <title>Food List</title>
+    <title>Dose List</title>
     <link rel="stylesheet" href="/eatfood/resources/eatfood.css" type="text/css">
     <script src="/eatfood/resources/eatfood.js"></script>
   </head>
@@ -15,15 +20,22 @@
     <div id="menu-bar-pane">
       <%@ include file="menuBar.html" %>
     </div>
+    
+    <div id="doses-pane">
+      <div>
+	<input class="dose-date-first" type="date" name="dateFirst" value="<%=dateFirst%>">
+	<input class="dose-date-last" type="date" name="dateLast" value="<%=dateLast%>">
+	<button class="load-doses-btn" onclick="onLoadDosesBtnClick(event);">get</button>
+      </div>
+    </div>
 
-    <div id="foods-pane">
-      <% for (Food food : (List<Food>) request.getAttribute("foodList")) { %>
-      <%@ include file="food.html" %>
-      <% } %>
-    </div>      
+    
+    <div id="add-dose-form-pane" >
+      <%@ include file="addDoseForm.html" %>
+    </div>
 
-    <div id="add-food-form-pane">
-      <%@ include file="addFoodForm.html"  %>
+    <div id="total-nutrients-pane">
+      <%@ include file="totalNutrients.html" %>
     </div>
 
     <div hidden>
