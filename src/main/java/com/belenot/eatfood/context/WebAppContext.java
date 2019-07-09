@@ -1,6 +1,7 @@
 package com.belenot.eatfood.context;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.belenot.eatfood.context.aspect.CritErrorAspect;
@@ -129,11 +130,7 @@ public class WebAppContext implements WebMvcConfigurer {
      * Need because of ResponseBody setting default to ISO-8...-1
      */
     @Override
-    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-	for (HttpMessageConverter converter : converters) {
-	    if (converter instanceof StringHttpMessageConverter) {
-		((AbstractHttpMessageConverter) converter).setDefaultCharset(Charset.forName("UTF-8"));
-	    }
-	}
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+	converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
     }
 }
