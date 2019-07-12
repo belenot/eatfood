@@ -1,5 +1,32 @@
-var foods = new Array();
-var doses = new Array();
+function fill(element) {
+    for (p1 in this) {
+	if (p1 == 'function') continue;
+	this[p1] = element.querySelector(`.${p1}`).value || element.querySelector(`.${p1}`).innerHTML || undefined;
+    }
+}
+
+function Food() {
+    this.id = -1;
+    this.name = '';
+    this.common = undefined;
+    this.calories = undefined;
+    this.protein = undefined;
+    this.carbohydrate = undefined;
+    this.fat = undefined;
+}
+Food.prototype.constructor = Food;
+Object.defineProperty(Food.prototype, 'fill', { value: fill, enumerable: false });
+function Dose() {
+    this.id = undefined;
+    this.gram = undefined;
+    this.date = undefined;
+    this.food = undefined;
+}
+Dose.prototype.constructor = Dose;
+Object.defineProperty(Dose.prototype, 'fill', { value: fille, enumerable: false });
+
+	
+
 var totalNutrientDivs = null;
 window.onload = function () {
     loadFood();
@@ -306,8 +333,6 @@ function refreshTotalNutrients() {
     totalNutrientDivs.fat.innerText = totalFat;
 }
     
-
-
 function loadFood() {
     var xhr = new XMLHttpRequest();
     xhr.open("get", "/eatfood/foodlist/foods");
