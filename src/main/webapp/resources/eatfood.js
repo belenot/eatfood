@@ -1,18 +1,42 @@
 'use strict'
-function fill(element) {
+function from(element) {
     for (var p1 in this) {
 	this[p1] = null;
 	let subelement = element.querySelector(`.${p1}`);
+	if (!subelement)continue;
 	if (subelement.className && subelement.className.split(' ').some(function(x){return x.split('-')[1] === 'object';})) {
 	    let objectClass = subelement.className.split(' ').filter(function(x){return x.split('-')[1]==='object';})[0].split('-')[0];
 	    if (objectClass in validObjects) {
 		let object = new validObjects[objectClass]();
-		object.fill(subelement);
+		object.from(subelement);
 		this[p1] = object || null;
 	    }
 	} else {
 	    this[p1] = subelement.value || subelement.innerText || null;
 	}   
+    }
+    return this;
+}
+function to(element) {
+    for (var p1 in this) {
+	if (this[p1] instanceof Object) {
+	    var subelement = element.querySelector(`.${p1}-object`);
+	    this[p1].to(element);
+	} else {
+	    var subelement = element.querySelector(`.${p1}`);
+	    if (!subelement) continue;
+	    if (subelement.tagName.toLowerCase() === 'input') {
+		subelement.value = this[p1];
+	    } else {
+		subelement.innerText = this[p1];
+	    }
+	}
+    }
+    return this;
+}
+function copy(obj) {
+    for (p1 in this) {
+	this[p1] = obj[p1] || this[p1];
     }
 }
 
@@ -26,7 +50,9 @@ function Food() {
     this.fat = undefined;
 }
 Food.prototype.constructor = Food;
-Object.defineProperty(Food.prototype, 'fill', { value: fill, enumerable: false });
+Object.defineProperty(Food.prototype, 'from', { value: from, enumerable: false });
+Object.defineProperty(Food.prototype, 'to', { value: to, enumerable: false });
+Object.defineProperty(Food.prototype, 'copy', { value: copy, enumerable: false });
 function Dose() {
     this.id = undefined;
     this.gram = undefined;
@@ -34,7 +60,9 @@ function Dose() {
     this.food = undefined;
 }
 Dose.prototype.constructor = Dose;
-Object.defineProperty(Dose.prototype, 'fill', { value: fill, enumerable: false });
+Object.defineProperty(Dose.prototype, 'from', { value: from, enumerable: false });
+Object.defineProperty(Dose.prototype, 'to', { value: to, enumerable: false });
+Object.defineProperty(Dose.prototype, 'copy', { value: copy, enumerable: false });
 var validObjects = {
     food: Food,
     dose: Dose

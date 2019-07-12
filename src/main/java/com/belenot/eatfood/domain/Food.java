@@ -2,8 +2,12 @@ package com.belenot.eatfood.domain;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 public class Food {
     private int id;
+    @JsonIgnore
     private Client client;
     private String name;
     boolean common;

@@ -44,22 +44,22 @@ public class FoodListController {
 	return "foodlist";
     }
 
-    @PostMapping( "/addfood" )
+    @PostMapping( value = "/addfood", produces="application/json; charset=utf-8" )
     @ResponseBody
-    public String addFood(Food food, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public Food addFood(Food food, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	food.setClient(client);
 	food = daoService.addFood(food);
-	return objectWriter.writeValueAsString(new FoodModel(food));
+	return food;
     }
 
 
-    @PostMapping( "/updatefood" )
+    @PostMapping( value = "/updatefood", produces = "application/json; charset=utf-8" )
     @ResponseBody
-    public String updateFood(Food food, HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
+    public Food updateFood(Food food, HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
 	food.setClient(client);
         daoService.updateFood(food);
 	food = daoService.getFoodById(food.getId());
-	return objectWriter.writeValueAsString(new FoodModel(food));
+	return food;
     }
     
     @PostMapping ( "/deletefood" )
@@ -68,9 +68,9 @@ public class FoodListController {
 	return Boolean.toString(daoService.deleteFood(food));
     }
 
-    @GetMapping( "/foods" )
+    @GetMapping( value = "/foods", produces = "application/json; charset=utf-8" )
     @ResponseBody
-    public String foods(@RequestParam( value="offset", required=false) Integer offset, @RequestParam( value="count", required=false ) Integer count, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public List<Food> foods(@RequestParam( value="offset", required=false) Integer offset, @RequestParam( value="count", required=false ) Integer count, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	offset = offset == null ? 0 : offset;
 	count = count == null ? Integer.MAX_VALUE : count;
 	List<Food> foods = daoService.getFoodByClient(client, offset, count, true);
@@ -78,6 +78,7 @@ public class FoodListController {
 	for (Food food : foods) {
 	    foodList.add(new FoodModel(food));
 	}
-	return objectWriter.writeValueAsString(foodList);
+	return foods;
+
     }
 }

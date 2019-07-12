@@ -46,23 +46,23 @@ public class DoseListController {
 	return "doselist";
     }
 
-    @PostMapping( "/adddose" )
+    @PostMapping( value = "/adddose", produces="application/json; charset=utf-8" )
     @ResponseBody
-    public String addDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public Dose addDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	dose.getFood().setClient(client);
 	Food food = daoService.getFoodByName(dose.getFood(), 0, 1, false).get(0);
 	dose.setFood(food);
         dose = daoService.newDose(dose);
-	return objectWriter.writeValueAsString(new DoseModel(dose));
+	return dose;
     }
     
-    @PostMapping( "/updatedose" )
+    @PostMapping( value = "/updatedose", produces="application/json; charset=utf-8" )
     @ResponseBody
-    public String updateDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public Dose updateDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	/*dose.setFood(..);/* can't update food, because its not logical(if food change, than it would be another dose"*/
 	daoService.updateDose(dose);
 	dose = daoService.getDoseById(dose.getId());
-	return objectWriter.writeValueAsString(new DoseModel(dose));
+	return dose;
     }
 
     @PostMapping( "/deletedose" )
@@ -71,14 +71,14 @@ public class DoseListController {
 	return Boolean.toString(daoService.deleteDose(dose));
     }
 
-    @PostMapping( path = "/doses", produces="application/json" )
+    @PostMapping( value = "/doses", produces="application/json" )
     @ResponseBody
-    public String doses(@RequestParam( "dateFirst" ) Date dateFirst, @RequestParam( "dateLast" ) Date dateLast, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public List<Dose> doses(@RequestParam( "dateFirst" ) Date dateFirst, @RequestParam( "dateLast" ) Date dateLast, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, dateFirst, dateLast);
 	List<DoseModel> doseList = new ArrayList<>();
 	for (Dose dose : doses) {
 	    doseList.add(new DoseModel(dose));
 	}
-	return objectWriter.writeValueAsString(doseList);
+	return doses;
     }
 }

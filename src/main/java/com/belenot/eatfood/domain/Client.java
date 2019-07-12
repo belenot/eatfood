@@ -1,8 +1,11 @@
 package com.belenot.eatfood.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Client {
     private int id;
     private String login;
+    @JsonIgnore
     private String password;
     private String name;
     private String surname;

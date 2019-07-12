@@ -31,6 +31,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -132,5 +133,6 @@ public class WebAppContext implements WebMvcConfigurer {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 	converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
+	converters.add(new MappingJackson2HttpMessageConverter());
     }
 }
