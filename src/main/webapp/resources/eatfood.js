@@ -1,7 +1,18 @@
+'use strict'
 function fill(element) {
-    for (p1 in this) {
-	if (p1 == 'function') continue;
-	this[p1] = element.querySelector(`.${p1}`).value || element.querySelector(`.${p1}`).innerHTML || undefined;
+    for (var p1 in this) {
+	this[p1] = null;
+	let subelement = element.querySelector(`.${p1}`);
+	if (subelement.className && subelement.className.split(' ').some(function(x){return x.split('-')[1] === 'object';})) {
+	    let objectClass = subelement.className.split(' ').filter(function(x){return x.split('-')[1]==='object';})[0].split('-')[0];
+	    if (objectClass in validObjects) {
+		let object = new validObjects[objectClass]();
+		object.fill(subelement);
+		this[p1] = object || null;
+	    }
+	} else {
+	    this[p1] = subelement.value || subelement.innerText || null;
+	}   
     }
 }
 
@@ -23,8 +34,11 @@ function Dose() {
     this.food = undefined;
 }
 Dose.prototype.constructor = Dose;
-Object.defineProperty(Dose.prototype, 'fill', { value: fille, enumerable: false });
-
+Object.defineProperty(Dose.prototype, 'fill', { value: fill, enumerable: false });
+var validObjects = {
+    food: Food,
+    dose: Dose
+}
 	
 
 var totalNutrientDivs = null;

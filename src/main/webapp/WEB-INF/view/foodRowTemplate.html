@@ -1,14 +1,14 @@
-<div class="food-row">
+<div class="food-row food-object">
   <div class="food">
-    <label class="food-name"></label>
-    <label class="food-common"></label>
-    <label class="food-calories"></label>
-    <label class="food-protein"></label>
-    <label class="food-carbohydrate"></label>
-    <label class="food-fat"></label>
+    <label class="food-name name"></label>
+    <label class="food-common common"></label>
+    <label class="food-calories calories"></label>
+    <label class="food-protein protein"></label>
+    <label class="food-carbohydrate carbohydrate"></label>
+    <label class="food-fat fat"></label>
   </div>
   <div class="food-control" action="/eatfood/foodlist/deletefood" method="post">
-    <input class="food-id" type="hidden" name="id">
+    <input class="food-id id" type="hidden" name="id">
     <button onclick="onUpdateFoodBtnClick(event);" >update</button>
     <button onclick="onDeleteFoodBtnClick(event);">delete</button>
   </div>

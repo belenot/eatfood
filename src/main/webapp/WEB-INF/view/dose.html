@@ -1,11 +1,11 @@
-<div class="dose-row">
+<div class="dose-row dose-object">
   <div class="dose">
-    <label class="food-name"><%= dose.getFood().getName() %></label>
-    <label class="dose-gram"><%= dose.getGram() %></label>
-    <label class="dose-date"><%= dose.getDate().toString() %></label>
+    <label class="food-name name"><%= dose.getFood().getName() %></label>
+    <label class="dose-gram gram"><%= dose.getGram() %></label>
+    <label class="dose-date date"><%= dose.getDate().toString() %></label>
   </div>
   <div class="dose-control">
-    <input class="dose-id" type="hidden" name="id" value="<%= dose.getId() %>">
+    <input class="dose-id id" type="hidden" name="id" value="<%= dose.getId() %>">
     <button onclick="onUpdateDoseBtnClick(event);" >update</button>
     <button onclick="onDeleteDoseBtnClick(event);">delete</button>
   </div>
