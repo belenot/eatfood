@@ -1,7 +1,6 @@
 package com.belenot.eatfood.web.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.service.DaoService;
-import com.belenot.eatfood.web.model.FoodModel;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -33,8 +29,6 @@ public class FoodListController {
     private DaoService daoService;
     @Autowired
     private MessageSource messageSource;
-    private static ObjectMapper objectMapper = new ObjectMapper();
-    private static ObjectWriter objectWriter = objectMapper.writer();
     
     @GetMapping
     public String foodlist(HttpServletRequest request, @SessionAttribute( "client" ) Client client, Model model) throws Exception {
@@ -74,10 +68,6 @@ public class FoodListController {
 	offset = offset == null ? 0 : offset;
 	count = count == null ? Integer.MAX_VALUE : count;
 	List<Food> foods = daoService.getFoodByClient(client, offset, count, true);
-	List<FoodModel> foodList = new ArrayList<>();
-	for (Food food : foods) {
-	    foodList.add(new FoodModel(food));
-	}
 	return foods;
 
     }

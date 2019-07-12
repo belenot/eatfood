@@ -2,7 +2,6 @@ package com.belenot.eatfood.web.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,9 +12,6 @@ import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Dose;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.service.DaoService;
-import com.belenot.eatfood.web.model.DoseModel;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -35,8 +31,6 @@ public class DoseListController {
     private DaoService daoService;
     @Autowired
     private MessageSource messageSource;
-    private static ObjectMapper objectMapper = new ObjectMapper();
-    private static ObjectWriter objectWriter = objectMapper.writer();
 
     @GetMapping
     public String doseList(ModelMap modelMap) {
@@ -75,10 +69,6 @@ public class DoseListController {
     @ResponseBody
     public List<Dose> doses(@RequestParam( "dateFirst" ) Date dateFirst, @RequestParam( "dateLast" ) Date dateLast, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, dateFirst, dateLast);
-	List<DoseModel> doseList = new ArrayList<>();
-	for (Dose dose : doses) {
-	    doseList.add(new DoseModel(dose));
-	}
 	return doses;
     }
 }
