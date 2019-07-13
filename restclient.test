@@ -1,22 +1,36 @@
 #VARIABLES
 :host = http://localhost:8080/eatfood
-:wideDate = dateFirst=2010-01-01&dateLast=2025-01-01
+:wideDate = dateFirst=2000-01-01&dateLast=2025-01-01
 #
 ##FOODS
+#Add food
+POST :host/foodlist/addfood
+Content-Type: application/json
+
+{
+	"name": "Творожок2",
+	"common": false,
+	"calories": 100.0,
+	"protein": 5.0,
+	"carbohydrate": 1.0,
+	"fat": 1.0
+}
 #Update food
 POST :host/foodlist/updatefood
+Content-Type: application/json
+
 {
-	"id": 53,
-	"name": "Масло сливочное",
-	"common": false,
-	"calories": 750.0,
-	"protein": 0.5,
+	"id": 56,
+	"name": "Творожочек",
+	"common": "false",
+	"calories": 0,
+	"protein": 0,
 	"carbohydrate": 0.8,
-	"fat": 82.5
+	"fat": 80
 }
-	
 
-
+#Delete food
+POST :host/foodlist/deletefood?id=56
 #Get foods list
 GET :host/foodlist/foods?:wideDate
 #
@@ -29,7 +43,7 @@ Content-Type: application/json; charset=utf-8
 	"date": "2019-07-13",
 	"gram": 85,
 	"food": {
-		"name": "Творог"
+		"name": "Творожочек"
 	}
 }	
 #Update dose
@@ -37,14 +51,14 @@ POST :host/doselist/updatedose
 Content-Type: application/json
 
 {
-	"id":83,
-	"date": "2019-07-13",
-	"gram": 84
+	"id":90,
+	"date": "2009-07-13",
+	"gram": 0
 }
 #Get doses list
 POST :host/doselist/doses?:wideDate
 #Delete dose
-POST :host/doselist/deletedose?id=
+POST :host/doselist/deletedose?id=91
 #
 ##AUTHORIZATION
 #Log in
