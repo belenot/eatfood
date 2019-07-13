@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,9 +51,9 @@ public class DoseListController {
 	return dose;
     }
     
-    @PostMapping( value = "/updatedose", produces="application/json; charset=utf-8" )
+    @PostMapping( value = "/updatedose", produces="application/json; charset=utf-8", consumes = "application/json; charset=utf-8" )
     @ResponseBody
-    public Dose updateDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public Dose updateDose(@RequestBody Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	/*dose.setFood(..);/* can't update food, because its not logical(if food change, than it would be another dose"*/
 	daoService.updateDose(dose);
 	dose = daoService.getDoseById(dose.getId());

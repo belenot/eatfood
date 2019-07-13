@@ -133,6 +133,21 @@ function doses(dateFirst, dateLast, elementDataResult) {
     }
     xhr.send(request);
 }
+function updateDose(dose) {
+    var requestBody = JSON.stringify(dose);
+    dose.id = -1;
+    var xhr = new XMLHttpRequest();
+    xhr.open("post", "/eatfood/doselist/updatedose");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function() {
+	if (xhr.readyState === 4 && xhr.status === 200) {
+	    dose.copy(JSON.parse(xhr.responseText));
+	}
+    }
+    xhr.send(requestBody);
+}
+    
+    
 
 //Dom modify functions
 function updateDosesPane(elementDataArray) {
