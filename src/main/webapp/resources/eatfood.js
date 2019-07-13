@@ -148,6 +148,7 @@ function updateDose(dose) {
 }
     
     
+    
 
 //Dom modify functions
 function updateDosesPane(elementDataArray) {

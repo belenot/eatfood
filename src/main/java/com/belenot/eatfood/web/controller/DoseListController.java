@@ -41,9 +41,9 @@ public class DoseListController {
 	return "doselist";
     }
 
-    @PostMapping( value = "/adddose", produces="application/json; charset=utf-8" )
+    @PostMapping( value = "/adddose", produces="application/json; charset=utf-8", consumes = "application/json; charset=utf-8" )
     @ResponseBody
-    public Dose addDose(Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public Dose addDose(@RequestBody Dose dose, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	dose.getFood().setClient(client);
 	Food food = daoService.getFoodByName(dose.getFood(), 0, 1, false).get(0);
 	dose.setFood(food);

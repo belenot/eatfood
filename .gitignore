@@ -4,5 +4,6 @@
 !.gitignore
 !clean.sh
 !link.sh
+!restclient.test
 workbench.xmi
 .#*

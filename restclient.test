@@ -1,0 +1,51 @@
+#VARIABLES
+:host = http://localhost:8080/eatfood
+:wideDate = dateFirst=2010-01-01&dateLast=2025-01-01
+#
+##FOODS
+#Update food
+POST :host/foodlist/updatefood
+{
+	"id": 53,
+	"name": "Масло сливочное",
+	"common": false,
+	"calories": 750.0,
+	"protein": 0.5,
+	"carbohydrate": 0.8,
+	"fat": 82.5
+}
+	
+
+
+#Get foods list
+GET :host/foodlist/foods?:wideDate
+#
+##DOSES
+#Add dose
+POST :host/doselist/adddose
+Content-Type: application/json; charset=utf-8
+
+{
+	"date": "2019-07-13",
+	"gram": 85,
+	"food": {
+		"name": "Творог"
+	}
+}	
+#Update dose
+POST :host/doselist/updatedose
+Content-Type: application/json
+
+{
+	"id":83,
+	"date": "2019-07-13",
+	"gram": 84
+}
+#Get doses list
+POST :host/doselist/doses?dateFirst=2010-01-01&dateLast=2020-01-01
+#
+##AUTHORIZATION
+#Log in
+POST :host/authorization?login=login2&password=password2
+
+
