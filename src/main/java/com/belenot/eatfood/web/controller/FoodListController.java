@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,18 +39,18 @@ public class FoodListController {
 	return "foodlist";
     }
 
-    @PostMapping( value = "/addfood", produces="application/json; charset=utf-8" )
+    @PostMapping( value = "/addfood", produces="application/json; charset=utf-8", consumes = "application/json; charset=utf-8" )
     @ResponseBody
-    public Food addFood(Food food, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public Food addFood(@RequestBody Food food, HttpServletRequest request, HttpServletResponse response, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
 	food.setClient(client);
 	food = daoService.addFood(food);
 	return food;
     }
 
 
-    @PostMapping( value = "/updatefood", produces = "application/json; charset=utf-8" )
+    @PostMapping( value = "/updatefood", produces = "application/json; charset=utf-8", consumes = "application/json; charset=utf-8" )
     @ResponseBody
-    public Food updateFood(Food food, HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
+    public Food updateFood(@RequestBody Food food, HttpServletRequest request, @SessionAttribute( "client" ) Client client, HttpServletResponse response) throws Exception, IOException {
 	food.setClient(client);
         daoService.updateFood(food);
 	food = daoService.getFoodById(food.getId());

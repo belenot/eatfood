@@ -42,7 +42,9 @@ Content-Type: application/json
 	"gram": 84
 }
 #Get doses list
-POST :host/doselist/doses?dateFirst=2010-01-01&dateLast=2020-01-01
+POST :host/doselist/doses?:wideDate
+#Delete dose
+POST :host/doselist/deletedose?id=
 #
 ##AUTHORIZATION
 #Log in
