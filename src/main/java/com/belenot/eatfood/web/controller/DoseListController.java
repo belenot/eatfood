@@ -72,4 +72,11 @@ public class DoseListController {
 	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, dateFirst, dateLast);
 	return doses;
     }
+
+    @PostMapping( value = "/byfood", produces="application/json", consumes = "application/json" )
+    @ResponseBody
+    public List<Dose> doses(@RequestBody Food food, @SessionAttribute( "client" ) Client client) throws Exception {
+	return daoService.getDoseByFood(food, 0, Integer.MAX_VALUE, false);
+    }
+	
 }

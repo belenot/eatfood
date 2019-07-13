@@ -57,6 +57,13 @@ Content-Type: application/json
 }
 #Get doses list
 POST :host/doselist/doses?:wideDate
+#Get doses list by food
+POST :host/doselist/byfood
+Content-Type: application/json
+
+{
+	"id": 52
+}
 #Delete dose
 POST :host/doselist/deletedose?id=91
 #
