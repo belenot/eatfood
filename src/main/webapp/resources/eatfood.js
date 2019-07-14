@@ -44,6 +44,13 @@ function copy(obj) {
 	this[p1] = obj[p1] || this[p1];
     }
 }
+function xhrJSON(method, url, data, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onload = callback || function() { console.log(`${url}: ${xhr.status}`); };
+    xhr.send(JSON.stringify(data));
+}
 
 function ElementData(data, element) {
     Object.defineProperty(this, 'data', {
@@ -118,8 +125,8 @@ function doses(dateFirst, dateLast, elementDataResult) {
     xhr.open("post", "/eatfood/doselist/doses");
     //xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-    xhr.onreadystatechange = function() {
-	if (xhr.readyState === 4 && xhr.status === 200) {
+    xhr.onload = function() {
+	if (xhr.status === 200) {
 	    let doseArray = JSON.parse(xhr.responseText);
 	    for (let i = 0; i < doseArray.length; i++) {
 		let newDose = new Dose();
@@ -139,25 +146,27 @@ function updateDose(dose) {
     var xhr = new XMLHttpRequest();
     xhr.open("post", "/eatfood/doselist/updatedose");
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function() {
-	if (xhr.readyState === 4 && xhr.status === 200) {
+    xhr.onload = function() {
+	if (xhr.status === 200) {
 	    dose.copy(JSON.parse(xhr.responseText));
 	}
     }
     xhr.send(requestBody);
 }
-    
-    
-    
-
 //Dom modify functions
 function updateDosesPane(elementDataArray) {
+    var oldDoses = document.querySelectorAll('#doses-pane .dose-row');
+    for(let i = 0; i < oldDoses.length; i++) {
+	oldDoses[i].parentElement.removeChild(oldDoses[i]);
+    }
     for (let i = 0; i < elementDataArray.length; i++) {
 	let elementData = elementDataArray[i];
 	document.querySelector('#doses-pane').insertAdjacentElement("afterbegin", elementData.element);
     }
 }
-
-		
-		
-		
+//Input event functions
+function onLoadDosesBtnClick(e) {
+    var doseDateFirst = document.querySelector('#doses-pane .dose-date-first').value;
+    var doseDateLast = document.querySelector('#doses-pane .dose-date-last').value;
+    doses(doseDateFirst, doseDateLast);
+}
