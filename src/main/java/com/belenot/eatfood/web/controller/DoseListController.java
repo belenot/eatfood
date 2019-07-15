@@ -3,7 +3,9 @@ package com.belenot.eatfood.web.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
@@ -62,13 +63,17 @@ public class DoseListController {
 
     @PostMapping( "/deletedose" )
     @ResponseBody
-    public String deleteDose(Dose dose, HttpServletResponse response) throws Exception, IOException {
-	return Boolean.toString(daoService.deleteDose(dose));
+    public Map<String, Boolean> deleteDose(@RequestBody Dose dose, HttpServletResponse response) throws Exception, IOException {
+	Map<String, Boolean> result = new HashMap<>();
+	result.put("result", daoService.deleteDose(dose));
+	return result;
     }
 
-    @PostMapping( value = "/doses", produces="application/json" )
+    @PostMapping( value = "/doses", produces="application/json", consumes = "application/json" )
     @ResponseBody
-    public List<Dose> doses(@RequestParam( "dateFirst" ) Date dateFirst, @RequestParam( "dateLast" ) Date dateLast, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+    public List<Dose> doses(@RequestBody Map<String, Date> interval, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	Date dateFirst = interval.get("dateFirst");
+	Date dateLast = interval.get("dateLast");
 	List<Dose> doses = daoService.getDoseByClient(client, 0, Integer.MAX_VALUE, true, dateFirst, dateLast);
 	return doses;
     }

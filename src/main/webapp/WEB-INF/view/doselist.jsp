@@ -1,11 +1,7 @@
 <%@ page import="org.springframework.context.MessageSource" %>
-<%@ page import="com.belenot.eatfood.domain.Dose" %>
-<%@ page import="com.belenot.eatfood.domain.Food" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.math.BigDecimal" %>
 <%
-  Map<String, BigDecimal> totalNutrients = (Map<String, BigDecimal>)request.getAttribute("totalNutrients");
   String dateFirst = (String) request.getAttribute("dateFirst");
   String dateLast = (String) request.getAttribute("dateLast");
   %>
@@ -22,34 +18,25 @@
     </div>
     
     <div id="doses-pane">
-      <div>
+      <button class="add-btn" onclick="onAddDoseBtnClick(event)" name="add">+</button>
+      <div class="date-interval">
 	<input class="dose-date-first" type="date" name="dateFirst" value="<%=dateFirst%>">
 	<input class="dose-date-last" type="date" name="dateLast" value="<%=dateLast%>">
 	<button class="load-doses-btn" onclick="onLoadDosesBtnClick(event);">get</button>
       </div>
     </div>
 
-    
-    <div id="add-dose-form-pane" >
-      <%@ include file="addDoseForm.html" %>
-    </div>
 
     <div id="total-nutrients-pane">
       <%@ include file="totalNutrients.html" %>
     </div>
 
     <div hidden>
-      <template id="dose-row-template">
-	<%@ include file="doseRowTemplate.html" %>
+      <template id="dose-template">
+	<%@ include file="doseTemplate.html" %>
       </template>
-      <template id="update-dose-template">
-	<%@ include file="updateDoseTemplate.html" %>
-      </template>
-      <template id="food-row-template">
-	<%@ include file="foodRowTemplate.html" %>
-      </template>
-      <template id="update-food-template">
-	<%@ include file="updateFoodTemplate.html" %>
+      <template id="food-template">
+	<%@ include file="foodTemplate.html" %>
       </template>
     </div>
     

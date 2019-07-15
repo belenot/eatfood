@@ -1,3 +1,6 @@
+* {
+    font-size: 14pt;
+}
 html {
     width: 60%;
     margin-left: auto;
@@ -21,41 +24,17 @@ body > div {
 }
 
 /* dose-row */
-.dose-row {
+.dose {
     display: flex;
     background-color: hsl(170, 50%, 50%);
 }
-.dose-row * {
+.dose * {
     border: 1px solid black;
     margin: 1px;
+    flex: 1;
 }
-.dose-row > .dose {
-    flex: 7;
-    display: flex;
-    background-color: hsl(200, 50%, 60%);
-}
-.dose-row > .dose .food-name {
+.dose .name {
     flex: 5;
-}
-.dose-row > .dose > .nutrients {
-    flex: 4;
-    display: flex;
-}
-.dose-row > .dose > .nutrients > * {
-    flex: 1;
-}
-.dose-row > .dose > .dose-gram {
-    flex: 1;
-}
-.dose-row > .dose > .dose-date {
-    flex: 1;
-}
-.dose-row > .dose-control {
-    flex: 1;
-    display: flex;
-}
-.dose-row > .dose-control > * {
-    flex: 1;
 }
 
 /* food-row */
@@ -68,4 +47,15 @@ body > div {
     margin: 1px;
     max-width: 20%;
     flex: 1;
+}
+
+/* inputs */
+input[type='text'] {
+    width: 5%;
+}
+input[type='date'] {
+    flex: 2;
+}
+button[onclick] {
+    flex: 0.5;
 }

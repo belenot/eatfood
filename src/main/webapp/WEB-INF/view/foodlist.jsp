@@ -17,7 +17,7 @@
 
     <div hidden>
       <template id="dose-template">
-	<%@ include file="doseRowTemplate.html" %>
+	<%@ include file="doseTemplate.html" %>
       </template>
       <template id="food-template">
 	<%@ include file="foodTemplate.html" %>

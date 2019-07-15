@@ -1,7 +1,10 @@
 package com.belenot.eatfood.context;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import com.belenot.eatfood.context.aspect.CritErrorAspect;
 import com.belenot.eatfood.context.aspect.LoggingAspect;
@@ -15,6 +18,7 @@ import com.belenot.eatfood.service.DaoService;
 import com.belenot.eatfood.service.DaoServiceImpl;
 import com.belenot.eatfood.web.interceptor.EncodingInterceptor;
 import com.belenot.eatfood.web.interceptor.SessionInterceptor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +31,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.format.Formatter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -125,12 +131,26 @@ public class WebAppContext implements WebMvcConfigurer {
 	registry.addInterceptor(new EncodingInterceptor());
 	registry.addInterceptor(new SessionInterceptor());
     }
-    /**
-     * Need because of ResponseBody setting default to ISO-8...-1
-     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 	converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
-	converters.add(new MappingJackson2HttpMessageConverter());
+	ObjectMapper objectMapper = new ObjectMapper();
+	objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+	converters.add(new MappingJackson2HttpMessageConverter(objectMapper));
+    }
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+	registry.addFormatter(new Formatter<Date>() {
+		public Date parse(String str, Locale locale) {
+		    try {
+			return (new SimpleDateFormat("yyyy-MM-dd", locale)).parse(str);
+		    } catch (Exception exc) {
+			return null;
+		    }
+		}
+		public String print(Date date, Locale locale) {
+		    return (new SimpleDateFormat("yyyy-MM-dd", locale)).format(date);
+		}
+	    });
     }
 }

@@ -62,7 +62,13 @@ Content-Type: application/json
 	"gram": 0
 }
 #Get doses list
-POST :host/doselist/doses?:wideDate
+POST :host/doselist/doses
+Content-Type: application/json
+
+{
+	"dateFirst": "2000-01-01",
+	"dateLast": "2025-01-01"
+}
 #Get doses list by food
 POST :host/doselist/byfood
 Content-Type: application/json

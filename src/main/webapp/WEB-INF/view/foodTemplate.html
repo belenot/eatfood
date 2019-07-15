@@ -1,11 +1,11 @@
-<div class="food">
-  <input type='text' disabled name="name"></input>
-  <input type='checkbox' disabled name="common"></input>
-  <input type='text' disabled name="calories"></input>
-  <input type='text' disabled name="protein"></input>
-  <input type='text' disabled name="carbohydrate"></input>
-  <input type='text' disabled name="fat"></input>
-  <input type='hidden' disabled name="id"></input>
+<div class="food" data-object="food">
+  <input type="text" disabled name="name" data-name="food.name"></input>
+  <input type="checkbox" disabled name="common" data-name="food.common"></input>
+  <input type="text" disabled name="calories" data-name="food.calories"></input>
+  <input type="text" disabled name="protein" data-name="food.protein"></input>
+  <input type="text" disabled name="carbohydrate" data-name="food.carbohydrate"></input>
+  <input type="text" disabled name="fat" data-name="food.fat"></input>
+  <input type="hidden" disabled name="id" data-name="food.id"></input>
   <button onclick="onUpdateFoodBtnClick(event);" name="update">update</button>
   <button onclick="onDeleteFoodBtnClick(event);" name="delete">delete</button>
 </div>
