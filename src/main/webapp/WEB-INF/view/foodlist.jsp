@@ -1,9 +1,4 @@
 <%@ page import="org.springframework.context.MessageSource" %>
-<%@ page import="com.belenot.eatfood.domain.Dose" %>
-<%@ page import="com.belenot.eatfood.domain.Food" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.math.BigDecimal" %>
 <html>
   <head>
     <title>Food List</title>
@@ -17,27 +12,15 @@
     </div>
 
     <div id="foods-pane">
-      <% for (Food food : (List<Food>) request.getAttribute("foodList")) { %>
-      <%@ include file="food.html" %>
-      <% } %>
-    </div>      
-
-    <div id="add-food-form-pane">
-      <%@ include file="addFoodForm.html"  %>
+      <button class="add-btn" onclick="onAddFoodBtnClick(event)" name="add">+</button>
     </div>
 
     <div hidden>
-      <template id="dose-row-template">
+      <template id="dose-template">
 	<%@ include file="doseRowTemplate.html" %>
       </template>
-      <template id="update-dose-template">
-	<%@ include file="updateDoseTemplate.html" %>
-      </template>
-      <template id="food-row-template">
-	<%@ include file="foodRowTemplate.html" %>
-      </template>
-      <template id="update-food-template">
-	<%@ include file="updateFoodTemplate.html" %>
+      <template id="food-template">
+	<%@ include file="foodTemplate.html" %>
       </template>
     </div>
     

@@ -32,7 +32,13 @@ Content-Type: application/json
 #Delete food
 POST :host/foodlist/deletefood?id=56
 #Get foods list
-GET :host/foodlist/foods?:wideDate
+POST :host/foodlist/foods
+Content-Type: application/json
+
+{
+	"offset": 2,
+	"count": 100
+}
 #
 ##DOSES
 #Add dose

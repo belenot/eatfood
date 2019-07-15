@@ -1,7 +1,9 @@
 package com.belenot.eatfood.web.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,17 +59,25 @@ public class FoodListController {
 	return food;
     }
     
-    @PostMapping ( "/deletefood" )
+    @PostMapping ( value="/deletefood", consumes="application/json", produces="application/json" )
     @ResponseBody
-    public String deleteFood(Food food, HttpServletResponse response) throws Exception, IOException {
-	return Boolean.toString(daoService.deleteFood(food));
+    public Map<String, Boolean> deleteFood(@RequestBody Food food, HttpServletResponse response) throws Exception, IOException {
+	Map<String, Boolean> result = new HashMap<>();
+	result.put("result", daoService.deleteFood(food));
+	return result;
     }
 
-    @GetMapping( value = "/foods", produces = "application/json; charset=utf-8" )
+    @PostMapping( value = "/foods", produces = "application/json; charset=utf-8", consumes = "application/json" )
     @ResponseBody
-    public List<Food> foods(@RequestParam( value="offset", required=false) Integer offset, @RequestParam( value="count", required=false ) Integer count, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
-	offset = offset == null ? 0 : offset;
-	count = count == null ? Integer.MAX_VALUE : count;
+    public List<Food> foods(@RequestBody Map<String, String> opt, @SessionAttribute( "client" ) Client client) throws Exception, IOException {
+	int offset = 0;
+	int count = Integer.MAX_VALUE;
+	try {
+	    offset = Integer.parseInt(opt.get("offset"));
+	} catch (Exception exc) { };
+	try {
+	    count = Integer.parseInt(opt.get("count"));
+	} catch (Exception exc) { };
 	List<Food> foods = daoService.getFoodByClient(client, offset, count, true);
 	return foods;
 

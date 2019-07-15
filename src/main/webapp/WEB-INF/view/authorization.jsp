@@ -15,8 +15,5 @@
 	<input type="submit" value="authorize">
       </form>
     </div>
-    <div id="footer-pane">
-      <%@ include file="footer-pane.html" %>
-    </div>
   </body>
 </html>

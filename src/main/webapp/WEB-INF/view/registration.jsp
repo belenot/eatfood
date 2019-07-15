@@ -19,8 +19,5 @@
       <input type="email" name="email">
       <input type="submit" value="registrate">
     </form>
-    <div id="footer-pane">
-      <%@ include file="footer-pane.html" %>
-    </div>
   </body>
 </html>

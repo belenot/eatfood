@@ -1,172 +1,168 @@
 'use strict'
-function from(element) {
-    for (var p1 in this) {
-	this[p1] = null;
-	let subelement = element.querySelector(`.${p1}`);
-	if (!subelement)continue;
-	if (subelement.className && subelement.className.split(' ').some(function(x){return x.split('-')[1] === 'object';})) {
-	    let objectClass = subelement.className.split(' ').filter(function(x){return x.split('-')[1]==='object';})[0].split('-')[0];
-	    if (objectClass in validObjects) {
-		let object = new validObjects[objectClass]();
-		object.from(subelement);
-		this[p1] = object || null;
-	    }
-	} else {
-	    this[p1] = subelement.value || subelement.innerText || null;
-	}   
-    }
-    return this;
-}
-function to(element) {
-    for (var p1 in this) {
-	if (this[p1] instanceof Object) {
-	    var subelement = element.querySelector(`.${p1}-object`);
-	    this[p1].to(element);
-	} else {
-	    var subelement = element.querySelector(`.${p1}`);
-	    if (!subelement) continue;
-	    if (subelement.tagName.toLowerCase() === 'input') {
-		subelement.value = this[p1];
+function onUpdateFoodBtnClick(e) {
+    var foodDom = ancestor(e.target, 'food');
+    var updateBtn = foodDom.querySelector("button[name='update']");
+    var deleteBtn = foodDom.querySelector("button[name='delete']");
+    var okBtn = updateBtn.cloneNode(true);
+    okBtn.innerText = 'ok';
+    var cancelBtn = deleteBtn.cloneNode(true);
+    cancelBtn.innerText = 'cancel';
+    foodDom.replaceChild(okBtn, updateBtn);
+    foodDom.replaceChild(cancelBtn, deleteBtn);
+    enableElement(foodDom);
+    okBtn.onclick = function(e) {
+	let data = scanData(foodDom);
+	sendJSON("/eatfood/foodlist/updatefood", data, function(xhr) {
+	    var data = getJSON(xhr);
+	    enableElement(foodDom, false);
+	    foodDom.replaceChild(updateBtn, okBtn);
+	    foodDom.replaceChild(deleteBtn, cancelBtn);
+	    if (data) {
+		printData(foodDom, data);
 	    } else {
-		subelement.innerText = this[p1];
+		alert("Can't update food");
 	    }
-	}
-    }
-    return this;
-}
-function copy(obj) {
-    for (var p1 in this) {
-	if (p1 in validObjects) {
-	    this[p1] = new validObjects[p1]();
-	    this[p1].copy(obj[p1]);
-	    continue
-	}
-	this[p1] = obj[p1] || this[p1];
+	});
+    };
+    cancelBtn.onclick = function(e) {
+	enableElement(foodDom, false);
+	foodDom.replaceChild(updateBtn, okBtn);
+	foodDom.replaceChild(deleteBtn, cancelBtn);
     }
 }
-function xhrJSON(method, url, data, callback) {
+    
+function onAddFoodBtnClick(e) {
+    var btn = e.target;
+    var foodDom = createTemplate('food-template');
+    var updateBtn = foodDom.querySelector("button[name='update']");
+    var deleteBtn = foodDom.querySelector("button[name='delete']");
+    var okBtn = updateBtn.cloneNode(true);
+    okBtn.innerText = 'ok';
+    var cancelBtn = deleteBtn.cloneNode(true);
+    cancelBtn.innerText = 'cancel';
+    foodDom.replaceChild(okBtn, updateBtn);
+    foodDom.replaceChild(cancelBtn, deleteBtn);
+    enableElement(foodDom);
+    okBtn.onclick = function(e) {
+	let data = scanData(foodDom);
+	sendJSON("/eatfood/foodlist/addfood", data, function(xhr) {
+	    var data = getJSON(xhr);
+	    if (data) {
+		printData(foodDom, data);
+		enableElement(foodDom, false);
+		foodDom.replaceChild(updateBtn, okBtn);
+		foodDom.replaceChild(deleteBtn, cancelBtn);
+	    } else {
+		alert("Can't add food");
+		foodDom.parentElement.removeChild(foodDom);
+	    }
+	});
+    }
+    cancelBtn.onclick = function() {
+	foodDom.parentElement.removeChild(foodDom);
+    };
+    foodsPane.querySelector('.add-btn').insertAdjacentElement("afterend", foodDom);
+}
+function onDeleteFoodBtnClick(e) {
+    var foodDom = ancestor(e.target, 'food');
+    var data = scanData(foodDom);
+    sendJSON('/eatfood/foodlist/deletefood/', data, function(xhr) {
+	var data = getJSON(xhr);
+	if (data && data.result === true) {
+	    foodDom.parentElement.removeChild(foodDom);
+	} else {
+	    alert("Can't delete food");
+	}
+    });
+}
+
+////////////utils
+function ancestor(element, className) {
+    var parentElement = element.parentElement;
+    while (parentElement && !parentElement.className.split(' ').some(function(clazz) { return clazz===className; })) {
+	parentElement = parentElement.parentElement;
+    }
+    if (parentElement && parentElement.className.split(' ').some(function(clazz) { return clazz===className; })) {
+	return parentElement;
+    } else {
+	return null;
+    }
+}
+function createTemplate(templateId) {
+    return document.getElementById(templateId).content.firstElementChild.cloneNode(true);
+}
+function enableElement(element, enable) {
+    enable = enable === undefined || enable === null || enable;
+    var inputs = element.querySelectorAll('input');
+    for (var i = 0; i < inputs.length; i++) {
+	inputs[i].disabled = !enable;
+    }
+    return element;
+}
+//Search elements by name, and fetch within scanValue their state(value, checked etc.)
+function scanData(element) {
+    var inputs = element.querySelectorAll('input');
+    var data = {};
+    for (var i = 0; i < inputs.length; i++) {
+	data[inputs[i].name] = scanValue(inputs[i]);
+    }
+    return data;
+}
+//Search elements by name, and insert within printValue data[name]
+function printData(element, data) {
+    for (var p in data) {
+	var input = element.querySelector(`input[name='${p}']`);
+	if (input) printValue(input, data[p]);
+    }
+}
+function scanValue(input) {
+    switch (input.type.toLowerCase()) {
+    case 'text': return input.value;
+    case 'checkbox': return input.checked;
+    default: return input.innerText
+    }
+}
+function printValue(input, value) {
+    switch (input.type.toLowerCase()) {
+    case 'text': input.value = value;
+    case 'checkbox': input.checked = value;
+    default: input.innerText = value;
+    }    
+
+
+
+
+
+
+    
+}
+//gets data object, transforms it into JSON and send to specified url. Onload = callback
+function sendJSON(url, data, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open(method, url);
+    xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onload = callback || function() { console.log(`${url}: ${xhr.status}`); };
+    xhr.onload = function() { callback(xhr); };
     xhr.send(JSON.stringify(data));
 }
-
-function ElementData(data, element) {
-    Object.defineProperty(this, 'data', {
-	configurable: false,
-	get: function() { return data; },
-	set: function(newData) { data = newData; data.to(element); }
-    });
-    Object.defineProperty(this, 'element', {
-	configurable: false,
-	get: function() { return element; },
-	set: function(newElement) { element = newElement; data.from(element); }
-    });
+//gets XMLHttpRequest object: if sattus === 200 returns data object, else null;
+function getJSON(xhr) {
+    if (xhr.status === 200) {
+	return JSON.parse(xhr.responseText);
+    } else {
+	return null;
+    }
 }
-
-Object.defineProperty(ElementData.prototype, 'updateElement', {
-    value: function() { this.data.to(this.element); },
-    enumerable: false
-});
-Object.defineProperty(ElementData.prototype, 'updateData', {
-    value: function() { this.data.from(this.element); },
-    enumerable: false
-});
-
- 
-function Food() {
-    this.id = -1;
-    this.name = '';
-    this.common = undefined;
-    this.calories = undefined;
-    this.protein = undefined;
-    this.carbohydrate = undefined;
-    this.fat = undefined;
-}
-Food.prototype.constructor = Food;
-Object.defineProperty(Food.prototype, 'from', { value: from, enumerable: false });
-Object.defineProperty(Food.prototype, 'to', { value: to, enumerable: false });
-Object.defineProperty(Food.prototype, 'copy', { value: copy, enumerable: false });
-function Dose() {
-    this.id = undefined;
-    this.gram = undefined;
-    this.date = undefined;
-    this.food = undefined;
-}
-Dose.prototype.constructor = Dose;
-Object.defineProperty(Dose.prototype, 'from', { value: from, enumerable: false });
-Object.defineProperty(Dose.prototype, 'to', { value: to, enumerable: false });
-Object.defineProperty(Dose.prototype, 'copy', { value: copy, enumerable: false });
-var validObjects = {
-    food: Food,
-    dose: Dose
-}
-
-
-var totalNutrientDivs = null;
+//stock for testing
+var foodsPane;
 window.onload = function () {
-    loadFood();
-    if (document.title == "Dose List") {
-	initDoseList();
-    }
-    if (document.title == "Food List") {
-	initFoodList();
-    }
-}
-
-//Ajax functions
-function doses(dateFirst, dateLast, elementDataResult) {
-    elementDataResult = elementDataResult instanceof Array ? elementDataResult : [];
-    dateFirst = encodeURIComponent(dateFirst);
-    dateLast = encodeURIComponent(dateLast);
-    var request = `dateFirst=${dateFirst}&dateLast=${dateLast}`;
-    var xhr = new XMLHttpRequest();
-    xhr.open("post", "/eatfood/doselist/doses");
-    //xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-    xhr.onload = function() {
-	if (xhr.status === 200) {
-	    let doseArray = JSON.parse(xhr.responseText);
-	    for (let i = 0; i < doseArray.length; i++) {
-		let newDose = new Dose();
-		newDose.copy(doseArray[i]);
-		let newElement = document.querySelector('#dose-row-template').content.firstElementChild.cloneNode(true);
-		newDose.to(newElement);
-		elementDataResult.push(new ElementData(newDose, newElement));
-	    }
-	    updateDosesPane(elementDataResult);
+    foodsPane = document.getElementById('foods-pane');
+    sendJSON("/eatfood/foodlist/foods", {}, function(xhr) {
+	var datas = getJSON(xhr);
+	for (let i = 0; i < datas.length; i++) {
+	    let data = datas[i];
+	    let foodDom = createTemplate('food-template');
+	    printData(foodDom, data);
+	    foodsPane.insertAdjacentElement("beforeend", foodDom);
 	}
-    }
-    xhr.send(request);
-}
-function updateDose(dose) {
-    var requestBody = JSON.stringify(dose);
-    dose.id = -1;
-    var xhr = new XMLHttpRequest();
-    xhr.open("post", "/eatfood/doselist/updatedose");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onload = function() {
-	if (xhr.status === 200) {
-	    dose.copy(JSON.parse(xhr.responseText));
-	}
-    }
-    xhr.send(requestBody);
-}
-//Dom modify functions
-function updateDosesPane(elementDataArray) {
-    var oldDoses = document.querySelectorAll('#doses-pane .dose-row');
-    for(let i = 0; i < oldDoses.length; i++) {
-	oldDoses[i].parentElement.removeChild(oldDoses[i]);
-    }
-    for (let i = 0; i < elementDataArray.length; i++) {
-	let elementData = elementDataArray[i];
-	document.querySelector('#doses-pane').insertAdjacentElement("afterbegin", elementData.element);
-    }
-}
-//Input event functions
-function onLoadDosesBtnClick(e) {
-    var doseDateFirst = document.querySelector('#doses-pane .dose-date-first').value;
-    var doseDateLast = document.querySelector('#doses-pane .dose-date-last').value;
-    doses(doseDateFirst, doseDateLast);
+    });
 }
