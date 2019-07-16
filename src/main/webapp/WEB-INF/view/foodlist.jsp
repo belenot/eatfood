@@ -12,7 +12,7 @@
     </div>
 
     <div id="foods-pane">
-      <button class="add-btn" onclick="onAddFoodBtnClick(event)" name="add">+</button>
+      <button class="add-btn b-btn" onclick="onAddFoodBtnClick(event)" name="add">+</button>
     </div>
 
     <div hidden>

@@ -5,9 +5,8 @@ function onUpdateFoodBtnClick(e) {
     var updateBtn = foodDom.querySelector("button[name='update']");
     var deleteBtn = foodDom.querySelector("button[name='delete']");
     var okBtn = updateBtn.cloneNode(true);
-    okBtn.innerText = 'ok';
+    okBtn.style.backgroundImage = "url('/eatfood/resources/img/ok-mark.png')";
     var cancelBtn = deleteBtn.cloneNode(true);
-    cancelBtn.innerText = 'cancel';
     foodDom.replaceChild(okBtn, updateBtn);
     foodDom.replaceChild(cancelBtn, deleteBtn);
     enableElement(foodDom);
@@ -37,9 +36,8 @@ function onAddFoodBtnClick(e) {
     var updateBtn = foodDom.querySelector("button[name='update']");
     var deleteBtn = foodDom.querySelector("button[name='delete']");
     var okBtn = updateBtn.cloneNode(true);
-    okBtn.innerText = 'ok';
+    okBtn.style.backgroundImage = "url('/eatfood/resources/img/ok-mark.png')";
     var cancelBtn = deleteBtn.cloneNode(true);
-    cancelBtn.innerText = 'cancel';
     foodDom.replaceChild(okBtn, updateBtn);
     foodDom.replaceChild(cancelBtn, deleteBtn);
     enableElement(foodDom);
@@ -99,9 +97,8 @@ function onUpdateDoseBtnClick(e) {
     var updateBtn = doseDom.querySelector("button[name='update']");
     var deleteBtn = doseDom.querySelector("button[name='delete']");
     var okBtn = updateBtn.cloneNode(true);
-    okBtn.innerText = 'ok';
+    okBtn.style.backgroundImage = "url('/eatfood/resources/img/ok-mark.png')";
     var cancelBtn = deleteBtn.cloneNode(true);
-    cancelBtn.innerText = 'cancel';
     doseDom.replaceChild(okBtn, updateBtn);
     doseDom.replaceChild(cancelBtn, deleteBtn);
     enableElement(doseDom);
@@ -134,9 +131,8 @@ function onAddDoseBtnClick(e) {
     var updateBtn = doseDom.querySelector("button[name='update']");
     var deleteBtn = doseDom.querySelector("button[name='delete']");
     var okBtn = updateBtn.cloneNode(true);
-    okBtn.innerText = 'ok';
+    okBtn.style.backgroundImage = "url('/eatfood/resources/img/ok-mark.png')";
     var cancelBtn = deleteBtn.cloneNode(true);
-    cancelBtn.innerText = 'cancel';
     doseDom.replaceChild(okBtn, updateBtn);
     doseDom.replaceChild(cancelBtn, deleteBtn);
     enableElement(doseDom);

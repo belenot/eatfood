@@ -18,11 +18,11 @@
     </div>
     
     <div id="doses-pane">
-      <button class="add-btn" onclick="onAddDoseBtnClick(event)" name="add">+</button>
+      <button class="add-btn b-btn" onclick="onAddDoseBtnClick(event)" name="add">+</button>
       <div class="date-interval">
 	<input class="dose-date-first" type="date" name="dateFirst" value="<%=dateFirst%>">
 	<input class="dose-date-last" type="date" name="dateLast" value="<%=dateLast%>">
-	<button class="load-doses-btn" onclick="onLoadDosesBtnClick(event);">get</button>
+	<button class="load-doses-btn b-btn" onclick="onLoadDosesBtnClick(event);">get</button>
       </div>
     </div>
 
