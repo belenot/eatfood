@@ -1,30 +1,28 @@
 <%@ page import="org.springframework.context.MessageSource" %>
 <html>
   <head>
-    <title><%= ((MessageSource) request.getAttribute("messageSource")).getMessage("foodlist", null, request.getLocale()) %></title>
-
-    <link rel="stylesheet" type="text/css" href="/eatfood/resources/foodlist/foodlist.css">
-    <script src="/eatfood/resources/foodlist/foodlist.js"></script>
-    <!---->
-    <!--<script src="http://localhost:8080/skewer"></script>-->
-    <!---->
-    
+    <title>Food List</title>
+    <link rel="stylesheet" href="/eatfood/resources/eatfood.css" type="text/css">
+    <script src="/eatfood/resources/eatfood.js"></script>
   </head>
   <body>
-    <div id="content-pane">
-      <%@ include file="header.html" %>
-      <div id="body">
-	<div id="left-pane">
-	  <div class="spinner">
-	    <%@ include file="foodrows.jsp" %>
-	  </div>
-	  <%@ include file="addfood.html" %>
+    
+    <div id="menu-bar-pane">
+      <%@ include file="menuBar.html" %>
+    </div>
 
-	  <div id="right-pane">
-	    <%@ include file="foodstat.html" %>
-	  </div>
-	</div>
-      </div>
-    </div>    
+    <div id="foods-pane">
+      <button class="add-btn b-btn" onclick="onAddFoodBtnClick(event)" name="add">+</button>
+    </div>
+
+    <div hidden>
+      <template id="dose-template">
+	<%@ include file="doseTemplate.html" %>
+      </template>
+      <template id="food-template">
+	<%@ include file="foodTemplate.html" %>
+      </template>
+    </div>
+    
   </body>
 </html>

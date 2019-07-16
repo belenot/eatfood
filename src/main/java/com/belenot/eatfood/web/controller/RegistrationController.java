@@ -5,10 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.belenot.eatfood.domain.Account;
 import com.belenot.eatfood.domain.Client;
-import com.belenot.eatfood.exception.ApplicationException;
 import com.belenot.eatfood.service.DaoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RegistrationController {
 
     @Autowired
-    DaoService<?> daoService;
+    DaoService daoService;
     
     @GetMapping
     public String registration() {
@@ -32,22 +29,8 @@ public class RegistrationController {
     }
 
     @PostMapping
-    @ResponseBody
-    public String registration(HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException, Exception {
-	//Error: no check for unique
-	String login = request.getParameter("login");
-	String password = request.getParameter("password");
-	String name = request.getParameter("name");
-	String surname = request.getParameter("surname");
-	String email = request.getParameter("email");
-	Account account = new Account();
-	account.setLogin(login);
-	account.setPassword(password);
-	Client client = new Client();
-	client.setName(name);
-	client.setSurname(surname);
-	client.setEmail(email);
-        client = daoService.newClient(client, account);
+    public void registration(Client client, HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
+	client = daoService.addClient(client);
 	if (client != null) {
 	    //HttpSession session = request.getSession();
 	    //session.setAttribute("client", client);

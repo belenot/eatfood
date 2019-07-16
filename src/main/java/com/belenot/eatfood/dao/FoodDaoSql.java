@@ -5,150 +5,120 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-public class FoodDaoSql implements FoodDao<FoodCriteriaSql> {
+public class FoodDaoSql implements FoodDao {
     private Connection connection;
-    @Autowired
-    private ClientDaoSql clientDaoSql;
+    private ClientDao clientDao;
+    public void setClientDao(ClientDao clientDao) { this.clientDao = clientDao; }
     public void setConnection(Connection connection) { this.connection = connection; }
-    public void setClientDaoSql(ClientDaoSql clientDaoSql) { this.clientDaoSql = clientDaoSql; }
 
-    @Override
-    public Food newFood(Food food) throws Exception {
-	Food foodResult = null;
-	PreparedStatement ps = connection.prepareStatement("INSERT INTO food (name, calories, protein, carbohydrate, fat, client, ancestor) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    public Food addFood(Food food) throws Exception {
+	PreparedStatement ps = connection.prepareStatement("INSERT INTO food (name, client, common, calories, protein, carbohydrate, fat) VALUES (?, ?, ?, ?, ?, ?, ?)");
 	ps.setString(1, food.getName());
-	ps.setBigDecimal(2, food.getCalories());
-	ps.setBigDecimal(3, food.getProtein());
-	ps.setBigDecimal(4, food.getCarbohydrate());
-	ps.setBigDecimal(5, food.getFat());
-	ps.setInt(6, food.getClient().getId());
-	ps.setInt(7, food.getClient().getId());
+	ps.setInt(2, food.getClient().getId());
+	ps.setBoolean(3, food.isCommon());
+	ps.setBigDecimal(4, food.getCalories());
+	ps.setBigDecimal(5, food.getProtein());
+	ps.setBigDecimal(6, food.getCarbohydrate());
+	ps.setBigDecimal(7, food.getFat());
 	ps.execute();
 	ps = connection.prepareStatement("SELECT * FROM food ORDER BY id DESC LIMIT 1");
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
-	    foodResult = new Food();
-	    foodResult.setName(rs.getString("name"));
-	    foodResult.setCalories(rs.getBigDecimal("calories"));
-	    foodResult.setProtein(rs.getBigDecimal("protein"));
-	    foodResult.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
-	    foodResult.setFat(rs.getBigDecimal("fat"));
-	    foodResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
-	    foodResult.setAncestor(getFoodById(rs.getInt("ancestor")));
+	    Food foodReturn = new Food();
+	    foodReturn.setId(rs.getInt("id"));
+	    foodReturn.setName(rs.getString("name").trim());
+	    foodReturn.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodReturn.setCommon(rs.getBoolean("common"));
+	    foodReturn.setCalories(rs.getBigDecimal("calories"));
+	    foodReturn.setProtein(rs.getBigDecimal("protein"));
+	    foodReturn.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
+	    foodReturn.setFat(rs.getBigDecimal("fat"));
+	    return foodReturn;
 	}
-	return foodResult;
+	return null;	    
     }
-    @Override
-    public Food updateFood(Food food) throws Exception {
-	Food foodResult = null;
-	PreparedStatement ps = connection.prepareStatement("UPDATE food SET name = ?, calories = ?, protein = ?, carbohydrate = ?, fat = ?, client = ?, ancestor = ? WHERE id = ?");
-	ps.setString(1, food.getName());
-	ps.setBigDecimal(2, food.getCalories());
-	ps.setBigDecimal(3, food.getProtein());
-	ps.setBigDecimal(4, food.getCarbohydrate());
-	ps.setBigDecimal(5, food.getFat());
-	ps.setInt(6, food.getClient().getId());
-	ps.setInt(7, food.getAncestor().getId());
-	ps.setInt(8, food.getId());
-	ps.execute();
-	ps = connection.prepareStatement("SELECT * FROM food WHERE id = ?");
-	ps.setInt(1, food.getId());
-	ResultSet rs = ps.executeQuery();
-	if (rs.next()) {
-	    foodResult = new Food();
-	    foodResult.setName(rs.getString("name"));
-	    foodResult.setCalories(rs.getBigDecimal("calories"));
-	    foodResult.setProtein(rs.getBigDecimal("protein"));
-	    foodResult.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
-	    foodResult.setFat(rs.getBigDecimal("fat"));
-	    foodResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
-	    foodResult.setAncestor(getFoodById(rs.getInt("ancestor")));
-	    foodResult.setId(rs.getInt("id"));
-	}
-	return foodResult;
-    }
-    @Override
     public Food getFoodById(int id) throws Exception {
-	Food foodResult = null;
+	Food food = null;
 	PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE id = ?");
 	ps.setInt(1, id);
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
-	    foodResult = new Food();
-	    foodResult.setName(rs.getString("name"));
-	    foodResult.setCalories(rs.getBigDecimal("calories"));
-	    foodResult.setProtein(rs.getBigDecimal("protein"));
-	    foodResult.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
-	    foodResult.setFat(rs.getBigDecimal("fat"));
-	    foodResult.setClient(clientDaoSql.getClientById(rs.getInt("client")));
-	    foodResult.setAncestor(getFoodById(rs.getInt("ancestor")));
-	    foodResult.setId(rs.getInt("id"));
+	    food = new Food();
+	    food.setId(id);
+	    food.setClient(clientDao.getClientById(rs.getInt("client")));
+	    food.setName(rs.getString("name"));
+	    food.setCommon(rs.getBoolean("common"));
+	    food.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
+	    food.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
+	    food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
+	    food.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
 	}
-	return foodResult;
+	return food;	    
     }
-    @Override
-    public Food deleteFood(Food food) throws Exception {
-	Food foodResult = null;
-	PreparedStatement ps = connection.prepareStatement("DELETE FROM food WHERE id = ?");
-	ps.setInt(1, food.getId());
-	ps.execute();
-	foodResult = new Food();
-	foodResult.setName(food.getName());
-	foodResult.setCalories(food.getCalories());
-	foodResult.setProtein(food.getProtein());
-	foodResult.setCarbohydrate(food.getCarbohydrate());
-	foodResult.setFat(food.getFat());
-	foodResult.setClient(food.getClient());
-	foodResult.setAncestor(food.getAncestor());
-	return foodResult;
-    }
-    @Override
-    public List<Food> getFoodByCriteria(FoodCriteriaSql foodCriteriaSql) throws Exception {
-	List<Food> foodListResult = new ArrayList<>();
-	PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE " + foodCriteriaSql.criteria());
+    public List<Food> getFoodByClient(Client client, int start, int count, boolean desc) throws Exception {
+	List<Food> foodList = new ArrayList<>();
+	PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE client = ? ORDER BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ?");
+	ps.setInt(1, client.getId());
+	ps.setInt(2, start);
+	ps.setInt(3, count);
 	ResultSet rs = ps.executeQuery();
 	while (rs.next()) {
 	    Food food = new Food();
 	    food.setId(rs.getInt("id"));
 	    food.setName(rs.getString("name"));
-	    food.setCalories(rs.getBigDecimal("calories"));
-	    food.setProtein(rs.getBigDecimal("protein"));
-	    food.setCarbohydrate(rs.getBigDecimal("carbohydrate"));
-	    food.setFat(rs.getBigDecimal("fat"));
-	    food.setClient(clientDaoSql.getClientById(rs.getInt("client")));
-	    food.setAncestor(getFoodById(rs.getInt("ancestor")));
-	    foodListResult.add(food);
+	    food.setClient(client);
+	    food.setCommon(rs.getBoolean("common"));
+	    food.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
+	    food.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
+	    food.setCarbohydrate(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
+	    food.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
+	    foodList.add(food);
 	}
-	return foodListResult;
+	return foodList;
     }
-    @Override
-    public Map<String, BigDecimal> totalNutrients(Client client) throws Exception {
-	Map<String, BigDecimal> totalNutrientMap = new HashMap<>();
-	PreparedStatement ps = connection.prepareStatement("SELECT sum(calories), sum(protein), sum(carbohydrate), sum(fat) FROM food WHERE client = ?");
-	ps.setInt(1, client.getId());
+    public List<Food> getFoodByName(Food food, int start, int count, boolean desc) throws Exception {
+	List<Food> foodList = new ArrayList<>();
+	PreparedStatement ps = connection.prepareStatement("SELECT * FROM food WHERE name = ? AND client = ? ORDER BY id "+(desc?"DESC":"")+" OFFSET ? LIMIT ? ");
+	ps.setString(1, food.getName());
+	ps.setInt(2, food.getClient().getId());
+	ps.setInt(3, start);
+	ps.setInt(4, count);
 	ResultSet rs = ps.executeQuery();
-	if (rs.next()) {
-	    totalNutrientMap.put("calories", rs.getBigDecimal(1));
-	    totalNutrientMap.put("protein", rs.getBigDecimal(2));
-	    totalNutrientMap.put("carbohydrate", rs.getBigDecimal(3));
-	    totalNutrientMap.put("fat", rs.getBigDecimal(4));
+	while (rs.next()) {
+	    Food foodReturn = new Food();
+	    foodReturn.setId(rs.getInt("id"));
+	    foodReturn.setName(rs.getString("name"));
+	    foodReturn.setClient(clientDao.getClientById(rs.getInt("client")));
+	    foodReturn.setCommon(rs.getBoolean("common"));
+	    foodReturn.setCalories(rs.getBigDecimal("calories").setScale(2, RoundingMode.FLOOR));
+	    foodReturn.setProtein(rs.getBigDecimal("protein").setScale(2, RoundingMode.FLOOR));
+	    foodReturn.setCalories(rs.getBigDecimal("carbohydrate").setScale(2, RoundingMode.FLOOR));
+	    foodReturn.setFat(rs.getBigDecimal("fat").setScale(2, RoundingMode.FLOOR));
+	    foodList.add(foodReturn);
 	}
-	return totalNutrientMap;
+	return foodList;
     }
-
-    @Override
-    public String toString() {
-	String str = String.format("FoodDaoSql: %s", connection != null ? connection.toString() : null);
-	return str;
+    public void updateFood(Food food) throws Exception {
+	PreparedStatement ps = connection.prepareStatement("UPDATE food SET name = ?, common = ?, calories = ?, protein = ?, carbohydrate = ?, fat = ? WHERE id = ?");
+	ps.setString(1, food.getName());
+	ps.setBoolean(2, food.isCommon());
+	ps.setBigDecimal(3, food.getCalories());
+	ps.setBigDecimal(4, food.getProtein());
+	ps.setBigDecimal(5, food.getCarbohydrate());
+	ps.setBigDecimal(6, food.getFat());
+	ps.setInt(7, food.getId());
+        ps.execute();
+    }
+    public boolean deleteFood(Food food) throws Exception {
+	PreparedStatement ps = connection.prepareStatement("DELETE FROM food WHERE id = ?");
+	ps.setInt(1, food.getId());
+	return ps.executeUpdate() == 1;
     }
 	
 }

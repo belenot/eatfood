@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.belenot.eatfood.domain.Account;
+
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.exception.ApplicationException;
 import com.belenot.eatfood.service.DaoService;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AuthorizationController {
 
     @Autowired
-    DaoService<?> daoService;
+    private DaoService daoService;
     
     @GetMapping
     public String authorization() {
@@ -31,14 +31,17 @@ public class AuthorizationController {
     }
 
     @PostMapping
-    @ResponseBody
-    public String authorization(HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException, Exception {
+    public void authorization(HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
 	String login = request.getParameter("login");
 	String password = request.getParameter("password");
-	Account account = new Account();
-	account.setLogin(login);
-	account.setPassword(password);
-	Client client = daoService.getClientByAccount(account);
-	return client.toString();
+	Client client = daoService.getClientByLogin(login, password);
+	if (client != null) {
+	    HttpSession session = request.getSession();
+	    session.setAttribute("client", client);
+	    response.sendRedirect("/eatfood/foodlist");
+	} else {
+	    //Bad
+	    throw new ApplicationException("Such client doesn't exist");
+	}
     }
 }

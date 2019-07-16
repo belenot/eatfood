@@ -7,16 +7,11 @@ import java.sql.ResultSet;
 import com.belenot.eatfood.domain.Account;
 import com.belenot.eatfood.domain.Client;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 public class ClientDaoSql implements ClientDao {
     private Connection connection;
-    @Autowired
-    private AccountDaoSql accountDaoSql;
-    public void setConnection(Connection connection) { this.connection = connection; }
-    public void setAccountDaoSql(AccountDaoSql accountDaoSql) { this.accountDaoSql = accountDaoSql; }
-    @Override
+    public void setConnection(Connection connection) { this. connection = connection; }
+    
     public Client getClientById(int id) throws Exception {
 	Client client = null;
 	PreparedStatement ps = connection.prepareStatement("SELECT * FROM client WHERE id = ?");
@@ -24,88 +19,65 @@ public class ClientDaoSql implements ClientDao {
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    client = new Client();
-	    client.setId(id);
+	    client.setId(rs.getInt("id"));
+	    client.setLogin(rs.getString("login"));
+	    client.setPassword(rs.getString("password"));
 	    client.setName(rs.getString("name"));
-	    client.setEmail(rs.getString("email"));
 	    client.setSurname(rs.getString("surname"));
+	    client.setEmail(rs.getString("email"));
 	}
 	return client;
     }
-    @Override
-    public Client getClientByAccount(Account account) throws Exception {
+    public Client getClientByLogin(String login, String password) throws Exception {
 	Client client = null;
-	PreparedStatement ps = connection.prepareStatement("SELECT * FROM client JOIN account ON client.id = account.client WHERE account.login = ? AND account.password = ?");
-	ps.setString(1, account.getLogin());
-	ps.setString(2, account.getPassword());
+	PreparedStatement ps = connection.prepareStatement("SELECT * FROM client WHERE login = ? AND password = ?");
+	ps.setString(1, login);
+	ps.setString(2, password);
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
 	    client = new Client();
 	    client.setId(rs.getInt("id"));
+	    client.setLogin(rs.getString("login"));
+	    client.setPassword(rs.getString("password"));
 	    client.setName(rs.getString("name"));
 	    client.setSurname(rs.getString("surname"));
 	    client.setEmail(rs.getString("email"));
 	}
 	return client;
     }
-    @Override
-    public Client newClient(Client client, Account account) throws Exception {
-	Client clientResult = null;
-	PreparedStatement ps = connection.prepareStatement("INSERT INTO client (name, surname, email) VALUES (?, ?, ?)");
-	ps.setString(1, client.getName());
-	ps.setString(2, client.getSurname());
-	ps.setString(3, client.getEmail());
+    public Client addClient(Client client) throws Exception {
+	Client clientReturn = null;
+	PreparedStatement ps = connection.prepareStatement("INSERT INTO client (login, password, name, surname, email) VALUES (?, ?, ?, ?, ?)");
+	ps.setString(1, client.getLogin());
+	ps.setString(2, client.getPassword());
+	ps.setString(3, client.getName());
+	ps.setString(4, client.getSurname());
+	ps.setString(5, client.getEmail());
 	ps.execute();
 	ps = connection.prepareStatement("SELECT * FROM client ORDER BY id DESC LIMIT 1");
 	ResultSet rs = ps.executeQuery();
 	if (rs.next()) {
-	    clientResult = new Client();
-	    clientResult.setId(rs.getInt("id"));
-	    clientResult.setName(rs.getString("name"));
-	    clientResult.setSurname(rs.getString("surname"));
-	    clientResult.setEmail(rs.getString("email"));
+	    clientReturn = new Client();
+	    clientReturn.setId(rs.getInt("id"));
+	    clientReturn.setLogin(rs.getString("login"));
+	    clientReturn.setPassword(rs.getString("password"));
+	    clientReturn.setName(rs.getString("name"));
+	    clientReturn.setSurname(rs.getString("surname"));
+	    clientReturn.setEmail(rs.getString("email"));
+	    return clientReturn;
+	} else {
+	    String msg = String.format("Can't fetch added client with login = \"" + client.getLogin() + "\" to ClientDao(last added client's login and parameter login are not equal(%s!=%s))", client.getLogin(), clientReturn);
+	    throw new ApplicationException(msg);
+
 	}
-	account.setClient(clientResult);
-	accountDaoSql.newAccount(account);
-	return clientResult;
-    }
-    @Override
-    public Client updateClient(Client client) throws Exception {
-	Client clientResult = null;
-	PreparedStatement ps = connection.prepareStatement("UPDATE client SET name = ?, surname = ?, email = ? WHERE id = ?");
-	ps.setString(1, client.getName());
-	ps.setString(2, client.getSurname());
-	ps.setString(3, client.getEmail());
-	ps.execute();
-	ps = connection.prepareStatement("SELECT * FROM client WHERE id = ?");
-	ps.setInt(1, client.getId());
-	ResultSet rs = ps.executeQuery();
-	if (rs.next()) {
-	    clientResult = new Client();
-	    clientResult.setId(rs.getInt("id"));
-	    clientResult.setName(rs.getString("name"));
-	    clientResult.setSurname(rs.getString("surname"));
-	    clientResult.setEmail(rs.getString("email"));
-	}
-	return clientResult;
-    }
-    @Override
-    public Client deleteClient(Client client) throws Exception {
-	Client clientResult = null;
-	PreparedStatement ps = connection.prepareStatement("DELETE FROM client WHERE id = ?");
-	ps.setInt(1, client.getId());
-	ps.execute();
-	clientResult = new Client();
-	clientResult.setName(client.getName());
-	clientResult.setSurname(client.getSurname());
-	clientResult.setEmail(client.getEmail());
 	return clientResult;
     }
 
-    @Override
-    public String toString() {
-	String str = String.format("ClientDaoSql{%s}",
-				   connection != null ? connection.toString() : null);
-	return str;
+    public void updateClient(Client client) throws Exception {
+	throw new Exception("Method(ClientDao.updateClient(Client client)) isn't supported yet");
+    }
+    public boolean deleteClient(Client client) throws Exception {
+	throw new Exception("Method(ClientDao.deleteClient(Client client)) isn't supported yet");
     }
 	
 }

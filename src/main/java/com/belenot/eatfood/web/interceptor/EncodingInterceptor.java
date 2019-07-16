@@ -9,8 +9,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class EncodingInterceptor implements HandlerInterceptor {
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 	response.setCharacterEncoding("UTF-8");
+	response.setContentType("text/html; charset=utf-8");
+	request.setCharacterEncoding("UTF-8");
+	return true;
     }
 }
     

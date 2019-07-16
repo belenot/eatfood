@@ -12,7 +12,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     /**
      * Registration and Authorization states serv for non-authorized client.
-     * Else client accessed to FoodList and Logout.
+     * Else client accessed to FoodList, DoseList and Logout.
      *
      */
     @Override
@@ -23,12 +23,12 @@ public class SessionInterceptor implements HandlerInterceptor {
 	try {
 	    accessed = session == null ? false : session.getAttribute("client") != null;
 	} catch (Exception exc) { accessed = false; }
-	if (uri.equals("foodlist") && !accessed) {
+	if ((uri.equals("foodlist") || uri.equals("doselist")) && !accessed) {
 	    response.sendRedirect("/eatfood/registration");
 	    return false;
 	}
 	if ((uri.equals("registration") || uri.equals("authorization")) && accessed) {
-	    response.sendRedirect("/eatfood/foodlist");
+	    response.sendRedirect("/eatfood/doselist");
 	    return false;
 	}
 	if (uri.equals("logout") && !accessed) {
