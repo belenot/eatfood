@@ -29,7 +29,8 @@ public class JdbcConnectionFactory {
 	    }
 	    return connection;
 	} catch (SQLException exc) {
-	    LogManager.getLogger().error("Can't connection to database %s %s %s", address, username, password);
+	    String msg = String.format("Can't connection to database %s %s %s",address, username, password);
+	    LogManager.getLogger().error(msg);
 	    return null;
 	}
     }
