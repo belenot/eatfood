@@ -14,10 +14,29 @@
     <maven.compiler.targetEncoding>UTF-8</maven.compiler.targetEncoding>
     <eatfood.home>/var/lib/tomcat8/webapps/eatfood</eatfood.home>
     <logger.filename>${eatfood.home}/logs/server.log</logger.filename>
+    <tomcat.version>8.0.48</tomcat.version>
   </properties>
 
   
   <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.5.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.5.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.5.0</version>
+      <scope>test</scope>
+    </dependency>
     <!--$M2_REPO/org/springframework/spring-webmvc/5.0.9.RELEASE/spring-webmvc-5.0.9.RELEASE.jar-->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -39,21 +58,18 @@
       <artifactId>spring-aop</artifactId>
       <version>5.0.9.RELEASE</version>
     </dependency>
-
     <!-- ~/.m2/repository/org/aspectj/aspectjtools/1.6.2/aspectjtools-1.6.2.jar -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjtools</artifactId>
       <version>1.6.2</version>
     </dependency>
-
     <!--~/.m2/repository/org/apache/logging/log4j/log4j-api/2.12.0/log4j-api-2.12.0.jar-->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
       <version>2.12.0</version>
     </dependency>
-
     <!--~/.m2/repository/org/apache/logging/log4j/log4j-core/2.12.0/log4j-core-2.12.0.jar-->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -66,7 +82,31 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.9.9.1</version>
     </dependency>
-    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>5.4.3.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <version>${tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-logging-juli</artifactId>
+      <version>${tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.199</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource.jansi</groupId>
+      <artifactId>jansi</artifactId>
+      <version>1.18</version>
+    </dependency> 
   </dependencies>
   <profiles>
     <profile>
@@ -104,7 +144,14 @@
 	  <url>${belenot.url}</url>
 	</configuration>
       </plugin>
-
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.22.2</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+      </plugin>
     </plugins>
     <resources>
       <resource>

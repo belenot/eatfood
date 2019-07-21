@@ -1,27 +1,20 @@
 package com.belenot.eatfood.context;
 
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import com.belenot.eatfood.context.aspect.CritErrorAspect;
 import com.belenot.eatfood.context.aspect.LoggingAspect;
 import com.belenot.eatfood.dao.ClientDao;
-import com.belenot.eatfood.dao.ClientDaoSql;
 import com.belenot.eatfood.dao.DoseDao;
-import com.belenot.eatfood.dao.DoseDaoSql;
 import com.belenot.eatfood.dao.FoodDao;
-import com.belenot.eatfood.dao.FoodDaoSql;
 import com.belenot.eatfood.service.DaoService;
-import com.belenot.eatfood.service.DaoServiceImpl;
-import com.belenot.eatfood.web.interceptor.EncodingInterceptor;
+import com.belenot.eatfood.service.DaoServiceDefault;
 import com.belenot.eatfood.web.interceptor.SessionInterceptor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -31,11 +24,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.format.Formatter;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -68,12 +56,16 @@ public class WebAppContext implements WebMvcConfigurer {
 	return viewResolver;
     }
     @Bean
+    public SessionFactory sessionFactory() {
+	StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+	Metadata metadata = new MetadataSources(registry).buildMetadata();
+	SessionFactory sessionFactory = metadata.buildSessionFactory();
+	return sessionFactory;	
+    }
+    @Bean
     public DaoService daoService() {
-	DaoServiceImpl daoServiceImpl = new DaoServiceImpl();
-	daoServiceImpl.setClientDao(clientDao());
-	daoServiceImpl.setFoodDao(foodDao());
-	daoServiceImpl.setDoseDao(doseDao());
-	return daoServiceImpl;
+
+	return new DaoServiceDefault();
     }
     @Bean
     public JdbcConnectionFactory jdbcConnectionFactory() {
@@ -85,34 +77,23 @@ public class WebAppContext implements WebMvcConfigurer {
     }
     @Bean
     public ClientDao clientDao() {
-	ClientDaoSql clientDao = new ClientDaoSql();
-	clientDao.setConnection(jdbcConnectionFactory().getConnection());
-	return clientDao;
+
+	return daoService();
     }
     @Bean
     public FoodDao foodDao() {
-	FoodDaoSql foodDao = new FoodDaoSql();
-	foodDao.setClientDao(clientDao());
-	foodDao.setConnection(jdbcConnectionFactory().getConnection());
-	return foodDao;
+
+	return daoService();
     }
     @Bean
     public DoseDao doseDao() {
-	DoseDaoSql doseDao = new DoseDaoSql();
-	doseDao.setFoodDao(foodDao());
-	doseDao.setConnection(jdbcConnectionFactory().getConnection());
-	return doseDao;
+
+	return daoService();
     }
     @Bean
     public Logger logger() {
 	Logger logger = LogManager.getLogger();
 	return logger;
-    }
-    @Bean
-    public CritErrorAspect critErrorAspect() {
-	CritErrorAspect critErrorAspect = new CritErrorAspect();
-	critErrorAspect.setCtx(ctx);
-	return new CritErrorAspect();
     }
     @Bean
     public LoggingAspect loggingAspect() {
@@ -128,29 +109,6 @@ public class WebAppContext implements WebMvcConfigurer {
     }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-	registry.addInterceptor(new EncodingInterceptor());
 	registry.addInterceptor(new SessionInterceptor());
-    }
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-	converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
-	ObjectMapper objectMapper = new ObjectMapper();
-	objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
-	converters.add(new MappingJackson2HttpMessageConverter(objectMapper));
-    }
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-	registry.addFormatter(new Formatter<Date>() {
-		public Date parse(String str, Locale locale) {
-		    try {
-			return (new SimpleDateFormat("yyyy-MM-dd", locale)).parse(str);
-		    } catch (Exception exc) {
-			return null;
-		    }
-		}
-		public String print(Date date, Locale locale) {
-		    return (new SimpleDateFormat("yyyy-MM-dd", locale)).format(date);
-		}
-	    });
     }
 }
