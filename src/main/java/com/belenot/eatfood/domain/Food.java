@@ -1,47 +1,92 @@
 package com.belenot.eatfood.domain;
 
-import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Food {
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE )
+    @GeneratedValue
     private int id;
-    @JsonIgnore
-    private Client client;
-    private Food ancestor;
     private String name;
-    boolean common;
-    private BigDecimal calories;
-    private BigDecimal protein;
-    private BigDecimal carbohydrate;
-    private BigDecimal fat;
+    private Nutrients nutrients;
+    @ManyToOne( fetch = FetchType.LAZY )
+    private Food defaultFood;
+    @ManyToOne( fetch = FetchType.LAZY )
+    private Client client;
+    @OneToMany( mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true )
+    private List<Dose> doses;
+
+    public Food addDose(Dose dose) {
+	doses.add(dose);
+	dose.setFood(this);
+	return this;
+    }
+
+    public Food removeDose(Dose dose) {
+	doses.remove(dose);
+	dose.setFood(null);
+	return this;
+    }
     
-    public void setId(int id) { this.id = id; }
-    public void setClient(Client client) { this.client = client; }
-    public void setAncestor(Food ancestor) { this.ancestor = ancestor; }
-    public void setName(String name) { this.name = name; }
-    public void setCommon(boolean common) { this.common = common; }
-    public void setCalories(BigDecimal calories) { this.calories = calories; }
-    public void setProtein(BigDecimal protein) { this.protein = protein; }
-    public void setCarbohydrate(BigDecimal carbohydrate) { this.carbohydrate = carbohydrate; }
-    public void setFat(BigDecimal fat) { this.fat = fat; }
+    public int getId() {
+	return id;
+    }
+    public Food setId(int id) {
+	this.id = id;
+	return this;
+    }
+    public String getName() {
+	return name;
+    }
+    public Food setName(String name) {
+	this.name = name;
+	return this;
+    }
+    public Food getDefaultFood() {
+	return defaultFood;
+    }
+    public Food setDefaultFood(Food defaultFood) {
+	this.defaultFood = defaultFood;
+	return this;
+    }
+    public Nutrients getNutrients() {
+	return nutrients;
+    }
+    public Food setNutrients(Nutrients nutrients) {
+	this.nutrients = nutrients;
+	return this;
+    }
+    public Client getClient() {
+	return client;
+    }
+    public Food setClient(Client client) {
+	this.client = client;
+	return this;
+    }
+    public List<Dose> getDoses() {
+	return doses;
+    }
+    public Food setDoses(List<Dose> doses) {
+	this.doses = doses;
+	return this;
+    }
 
-    public int getId() { return id; }
-    public Client getClient() { return client; }
-    public Food getAncestor() { return ancestor; }
-    public String getName() { return name; }
-    public boolean isCommon() { return common; }
-    public BigDecimal getCalories() { return calories; }
-    public BigDecimal getProtein() { return protein; }
-    public BigDecimal getCarbohydrate() { return carbohydrate; }
-    public BigDecimal getFat() { return fat; }
-
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Food)) return false;
+	return ((Food)obj).getId() == getId();
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash( getClass().getName() );
+    }
 }

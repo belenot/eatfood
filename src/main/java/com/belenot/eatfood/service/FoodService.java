@@ -1,0 +1,47 @@
+package com.belenot.eatfood.service;
+
+import com.belenot.eatfood.domain.Client;
+import com.belenot.eatfood.domain.Food;
+
+import org.hibernate.LockMode;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+@Repository
+public class FoodService {
+    @Autowired
+    private SessionFactory sessionFactory;
+    public FoodService setSessionFactory(SessionFactory sessionFactory) {
+	this.sessionFactory = sessionFactory;
+	return this;
+    }
+    public SessionFactory getSessionFactory() {
+	return sessionFactory;
+    }
+
+    @Transactional
+    public void addFood(Client client, Food food) {
+	Session session = sessionFactory.getCurrentSession();
+	session.lock(client, LockMode.NONE);
+	client.addFood(food);
+	session.save(food);
+    }
+
+    @Transactional
+    public Food getFoodById(int id) {
+	Session session = sessionFactory.getCurrentSession();
+	Food food = session.byId(Food.class).load(id);
+	return food;
+    }
+
+    @Transactional
+    public void deleteFood(Food food) {
+	Session session = sessionFactory.getCurrentSession();
+	session.lock(food, LockMode.NONE);
+	food.getClient().removeFood(food);
+	session.delete(food);       
+    }
+}

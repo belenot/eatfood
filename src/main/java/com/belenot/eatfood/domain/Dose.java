@@ -2,42 +2,69 @@ package com.belenot.eatfood.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 
 @Entity
 public class Dose {
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE )
+    @GeneratedValue
     private int id;
-    private Food food;
-    private Date date;
     private BigDecimal gram;
+    private Date date;
+    @ManyToOne( fetch = FetchType.LAZY )
+    private Food food;
+
     public int getId() {
 	return id;
     }
-    public void setId(int id) {
+
+    public Dose setId(int id) {
 	this.id = id;
+	return this;
     }
-    public Food getFood() {
-	return food;
-    }
-    public void setFood(Food food) {
-	this.food = food;
-    }
-    public Date getDate() {
-	return date;
-    }
-    public void setDate(Date date) {
-	this.date = date;
-    }
+
     public BigDecimal getGram() {
 	return gram;
     }
-    public void setGram(BigDecimal gram) {
+
+    public Dose setGram(BigDecimal gram) {
 	this.gram = gram;
-    }	
+	return this;
+    }
+
+    public Date getDate() {
+	return date;
+    }
+
+    public Dose setDate(Date date) {
+	this.date = date;
+	return this;
+    }
+
+    public Food getFood() {
+	return food;
+    }
+
+    public Dose setFood(Food food) {
+	this.food = food;
+	return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (!(obj instanceof Dose)) return false;
+	Dose dose = (Dose) obj;
+	return dose.getId() == getId();
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash( getClass().getName() );
+    }
 }

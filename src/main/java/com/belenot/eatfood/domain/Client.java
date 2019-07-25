@@ -1,57 +1,84 @@
 package com.belenot.eatfood.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.NaturalId;
 
 @Entity
 public class Client {
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE )
+    @GeneratedValue
     private int id;
+    @NaturalId( mutable = true )
     private String login;
-    @JsonIgnoreProperties( allowSetters = true )
     private String password;
-    private String name;
-    private String surname;
-    private String email;
+    @Embedded
+    private ClientData data = new ClientData();
+    @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true )
+    private List<Food> foods =  new ArrayList<>();
+
+    public Client addFood(Food food) {
+	foods.add(food);
+	food.setClient(this);
+	return this;
+    }
+
+    public Client removeFood(Food food) {
+	foods.remove(food);
+	food.setClient(null);
+	return this;
+    }
+
     public int getId() {
 	return id;
     }
-    public void setId(int id) {
+
+    public Client setId(int id) {
 	this.id = id;
+	return this;
     }
+
     public String getLogin() {
 	return login;
     }
-    public void setLogin(String login) {
+
+    public Client setLogin(String login) {
 	this.login = login;
+	return this;
     }
+
     public String getPassword() {
 	return password;
     }
-    public void setPassword(String password) {
+
+    public Client setPassword(String password) {
 	this.password = password;
+	return this;
     }
-    public String getName() {
-	return name;
+
+    public ClientData getData() {
+	return data;
     }
-    public void setName(String name) {
-	this.name = name;
+
+    public Client setData(ClientData data) {
+	this.data = data;
+	return this;
     }
-    public String getSurname() {
-	return surname;
+
+    public List<Food> getFoods() {
+	return foods;
     }
-    public void setSurname(String surname) {
-	this.surname = surname;
-    }
-    public String getEmail() {
-	return email;
-    }
-    public void setEmail(String email) {
-	this.email = email;
+
+    public Client setFoods(List<Food> foods) {
+	this.foods = foods;
+	return this;
     }
 }

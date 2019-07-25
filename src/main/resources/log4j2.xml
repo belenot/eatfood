@@ -14,11 +14,11 @@
     </Appender>
   </Appenders>
   <Loggers>
-    <Logger name="com.belenot.eatfood" level="all" additivity="false">
+    <Logger name="com.belenot.eatfood" level="${logger.level}" additivity="false">
       <AppenderRef ref="fileLogger"/>
       <AppenderRef ref="STDOUT" />
     </Logger>
-    <Root level="info">
+    <Root level="error">
       <AppenderRef ref="STDOUT"/>
     </Root>
   </Loggers>
