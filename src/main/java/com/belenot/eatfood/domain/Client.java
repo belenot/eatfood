@@ -1,11 +1,19 @@
 package com.belenot.eatfood.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Entity
 public class Client {
+    @Id
+    @GeneratedValue( strategy = GenerationType.SEQUENCE )
     private int id;
     private String login;
-    @JsonIgnore
+    @JsonIgnoreProperties( allowSetters = true )
     private String password;
     private String name;
     private String surname;
@@ -46,6 +54,4 @@ public class Client {
     public void setEmail(String email) {
 	this.email = email;
     }
-
-
 }

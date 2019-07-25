@@ -13,11 +13,10 @@
     <maven.compiler.sourceEncoding>UTF-8</maven.compiler.sourceEncoding>
     <maven.compiler.targetEncoding>UTF-8</maven.compiler.targetEncoding>
     <eatfood.home>/var/lib/tomcat8/webapps/eatfood</eatfood.home>
-    <logger.filename>${eatfood.home}/logs/server.log</logger.filename>
+    <logger.filename>${eatfood.home}/${logger.filename.relative}</logger.filename>
     <tomcat.version>8.0.48</tomcat.version>
+    <localServer.name>${inherit.localServer.name}</localServer.name>
   </properties>
-
-  
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -37,46 +36,53 @@
       <version>5.5.0</version>
       <scope>test</scope>
     </dependency>
-    <!--$M2_REPO/org/springframework/spring-webmvc/5.0.9.RELEASE/spring-webmvc-5.0.9.RELEASE.jar-->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>5.0.9.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>5.0.9.RELEASE</version>
     </dependency>
-    <!--$M2_REPO/javax/servlet/servlet-api/3.0-alpha-1/servlet-api-3.0-alpha-1.jar-->
-    <!--$CATALINA_LIB/servlet-api.jar/-->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>3.0-alpha-1</version>
-      <scope>system</scope>
-      <systemPath>${CATALINA_LIB}/servlet-api.jar</systemPath>
-    </dependency>
-    <!--~/.m2/repository/org/springframework/spring-aop/5.0.9.RELEASE/spring-aop-5.0.9.RELEASE.jar-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
       <version>5.0.9.RELEASE</version>
     </dependency>
-    <!-- ~/.m2/repository/org/aspectj/aspectjtools/1.6.2/aspectjtools-1.6.2.jar -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+      <version>5.0.9.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>5.0.9.RELEASE</version>
+    </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjtools</artifactId>
       <version>1.6.2</version>
     </dependency>
-    <!--~/.m2/repository/org/apache/logging/log4j/log4j-api/2.12.0/log4j-api-2.12.0.jar-->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
       <version>2.12.0</version>
     </dependency>
-    <!--~/.m2/repository/org/apache/logging/log4j/log4j-core/2.12.0/log4j-core-2.12.0.jar-->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <version>2.12.0</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
@@ -88,16 +94,6 @@
       <version>5.4.3.Final</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-core</artifactId>
-      <version>${tomcat.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <version>${tomcat.version}</version>
-    </dependency>
-    <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>1.4.199</version>
@@ -106,7 +102,7 @@
       <groupId>org.fusesource.jansi</groupId>
       <artifactId>jansi</artifactId>
       <version>1.18</version>
-    </dependency> 
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
@@ -115,26 +111,44 @@
 	<activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-	<belenot.server>TomcatServer</belenot.server>
-	<belenot.url>http://localhost:8080/manager/text</belenot.url>
-	<server.jdbc.connection>jdbc:postgresql://localhost:8832/eatfood</server.jdbc.connection>
-	<server.jdbc.manualRegistre>false</server.jdbc.manualRegistre>
+	<belenot.server>${localServer.name}</belenot.server>
+	<belenot.url>${localServer.url}</belenot.url>
+	<server.jdbc.connection>${localServer.jdbc.connection}</server.jdbc.connection>
+	<server.jdbc.manualRegistre>${localServer.jdbc.manualRegistre}</server.jdbc.manualRegistre>
       </properties>
     </profile>
     <profile>
       <id>dedicated</id>
       <properties>
-	<belenot.server>TomcatDedic</belenot.server>
-	<belenot.url>http://91.240.84.78:8080/manager/text</belenot.url>
-	<server.jdbc.connection>jdbc:postgresql://127.0.0.1:8832/eatfood</server.jdbc.connection>
-	<server.jdbc.manualRegistre>true</server.jdbc.manualRegistre>
+	<belenot.server>${dedicatedServer.name}</belenot.server>
+	<belenot.url>${dedicatedServer.url}</belenot.url>
+	<server.jdbc.connection>${dedicatedServer.jdbc.connection}</server.jdbc.connection>
+	<server.jdbc.manualRegistre>${dedicatedServer.jdbc.manualRegistre}</server.jdbc.manualRegistre>
       </properties>
     </profile>
   </profiles>
   <build>
     <finalName>eatfood</finalName>
+    <filters>
+      <filter>eatfood.properties</filter>
+    </filters>
     <plugins>
-      <!--$M2_REPO/org/apache/tomcat/maven/tomcat7-maven-plugin/2.2/tomcat7-maven-plugin-2.2.jar-->
+      <plugin>
+	<artifactId>maven-antrun-plugin</artifactId>
+	<executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <echo>${belenot.server}</echo>
+              </tasks>
+            </configuration>
+          </execution>
+	</executions>
+      </plugin>
       <plugin>
 	<groupId>org.apache.tomcat.maven</groupId>
 	<artifactId>tomcat7-maven-plugin</artifactId>

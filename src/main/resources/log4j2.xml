@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn" name="eatfood" packages="">
+<Configuration status="warn" name="eatfood" packages="" strict="true"
+	       xmlns="http://logging.apache.org/log4j/2.0/config"
+	       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	       xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config
+				   https://raw.githubusercontent.com/apache/logging-log4j2/master/log4j-core/src/main/resources/Log4j-config.xsd">
   <Appenders>
-    <File name="fileLogger"
-	  filename="${logger.filename}"
-	  ignoreExceptions="false">
-      <PatternLayout>
-	<Pattern>%highlight{%d %p [%t][%c] %m%n}</Pattern>
-      </PatternLayout>
-    </File>
-    <File name="fileLoggerConcise"
-	  filename="${logger.filename}.concise">
-      <PatternLayout>
-	<Pattern>%highlight{%d %p [%c] %m%n%ex{0}}</Pattern>
-      </PatternLayout>
-    </File>
+    
+    <Appender type="File" name="fileLogger" fileName="${logger.filename}">
+      <Layout type="PatternLayout" pattern="[%highlight{%p}] (%d{HH:mm:ss}) %style{%c{1}}{bold,blue}: %m{ansi}{ValueStyle=cyan}%n"/>	
+    </Appender>
+    <Appender type="Console" name="STDOUT" >
+      <Layout type="PatternLayout" pattern="[%highlight{%p}] (%d{HH:mm:ss}) %style{%c{1}}{bold,blue}: %m{ansi}{ValueStyle=cyan}%n"/>
+    </Appender>
   </Appenders>
   <Loggers>
-    <Logger name="com.belenot.eatfood" level="all">
+    <Logger name="com.belenot.eatfood" level="all" additivity="false">
       <AppenderRef ref="fileLogger"/>
-      <AppenderRef ref="fileLoggerConcise"/>
+      <AppenderRef ref="STDOUT" />
     </Logger>
+    <Root level="info">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
   </Loggers>
 </Configuration>
-  

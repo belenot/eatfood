@@ -3,7 +3,15 @@ package com.belenot.eatfood.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Dose {
+    @Id
+    @GeneratedValue( strategy = GenerationType.SEQUENCE )
     private int id;
     private Food food;
     private Date date;
@@ -31,16 +39,5 @@ public class Dose {
     }
     public void setGram(BigDecimal gram) {
 	this.gram = gram;
-    }
-
-    @Override
-    public String toString() {
-	String id = Integer.toString(getId());
-	String food = getFood() != null ? Integer.toString(getFood().getId()) : "null";
-	String date = getDate().toString();
-	String gram = getGram().toString();
-	String str = String.format("Dose:\n\tid=%s\n\tfood=%s\n\tdate=%s\n\tgram=%s", id, food, date, gram);
-	return str;
-    }
-	
+    }	
 }
