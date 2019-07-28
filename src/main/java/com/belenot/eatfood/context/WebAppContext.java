@@ -38,7 +38,7 @@ public class WebAppContext implements WebMvcConfigurer {
     }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-	registry.addInterceptor(new SessionInterceptor());
+	registry.addInterceptor(new SessionInterceptor(env));
     }
     @Bean
     public PlatformTransactionManager transactionManager() {

@@ -3,6 +3,7 @@ package com.belenot.eatfood.test.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,17 @@ public class FoodServiceTest {
 	    assertNotNull(food);
 	}
     }
+
+    @Test
+    @Order( 3 )
+    public void getFoodByClientTest() {
+	Client client = clientService.getClientById(originClient.getId());
+	List<Food> foods = assertDoesNotThrow( () -> foodService.getFoodByClient(client));
+	for (Integer id : ids) {
+	    assertTrue( foods.stream().anyMatch(f -> f.getId() == id));
+	}
+    }
+	
 
     @Test
     @Order( 100 )

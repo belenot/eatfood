@@ -1,5 +1,8 @@
 package com.belenot.eatfood.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
 
@@ -35,6 +38,15 @@ public class FoodService {
 	Session session = sessionFactory.getCurrentSession();
 	Food food = session.byId(Food.class).load(id);
 	return food;
+    }
+
+    @Transactional
+    public List<Food> getFoodByClient(Client client) {
+	List<Food> foods = new ArrayList<>();
+	Session session = sessionFactory.getCurrentSession();
+	session.lock(client, LockMode.NONE);
+	foods.addAll(client.getFoods());
+	return foods;
     }
 
     @Transactional
