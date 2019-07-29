@@ -1,86 +1,72 @@
 #VARIABLES
-:host = http://localhost:8080/eatfood
+:host = http://localhost:8082/eatfood
 :wideDate = dateFirst=2000-01-01&dateLast=2025-01-01
 #
 ##FOODS
 #Add food
-POST :host/foodlist/addfood
+POST :host/food/add
 Content-Type: application/json
 
 {
-	"name": "Творожок2",
-	"common": false,
-	"calories": 100.0,
-	"protein": 5.0,
-	"carbohydrate": 1.0,
-	"fat": 1.0
+    "name": "Сникерс",
+    "common": false,
+    "nutrients": {
+        "calories": 100.0,
+        "protein": 5.0,
+        "carbohydrate": 1.0,
+        "fat": 1.0
+    }
 }
-#Update food
-POST :host/foodlist/updatefood
-Content-Type: application/json
-
-{
-	"id": 56,
-	"name": "Творожочек",
-	"common": "false",
-	"calories": 0,
-	"protein": 0,
-	"carbohydrate": 0.8,
-	"fat": 80
-}
-
+#Get food by id
+GET :host/food/5
+#Get food by client
+GET :host/food
 #Delete food
-POST :host/foodlist/deletefood?id=56
-#Get foods list
-POST :host/foodlist/foods
-Content-Type: application/json
-
-{
-	"offset": 2,
-	"count": 100
-}
+GET :host/food/delete/2
 #
 ##DOSES
 #Add dose
-POST :host/doselist/adddose
-Content-Type: application/json; charset=utf-8
-
-{
-	"date": "2019-07-13",
-	"gram": 85,
-	"food": {
-		"name": "Творожочек"
-	}
-}	
-#Update dose
-POST :host/doselist/updatedose
+POST :host/dose/add
 Content-Type: application/json
 
 {
-	"id":90,
-	"date": "2009-07-13",
-	"gram": 0
+    "gram": 1.44,
+    "date": "2010-07-20",
+    "food": {
+        "id": 2
+    }
 }
-#Get doses list
-POST :host/doselist/doses
+#Get dose by id
+GET :host/dose/3
+#Get dose by food
+POST :host/dose/byfood
 Content-Type: application/json
-
 {
-	"dateFirst": "2000-01-01",
-	"dateLast": "2025-01-01"
+    "id":2
 }
-#Get doses list by food
-POST :host/doselist/byfood
-Content-Type: application/json
-
-{
-	"id": 52
-}
+#Get dose by client
+GET :host/dose
+#Get dose by date interval
+GET :host/dose?dateFirst=2019-01-01&dateLast=2019-12-12
 #Delete dose
-POST :host/doselist/deletedose?id=91
-#
+GET :host/dose/delete/3
+
 ##AUTHORIZATION
 #Log in
-POST :host/authorization?login=login2&password=password2
+POST :host/client/login?login=login1&password=password1
+#Register
+POST :host/client/register
+Content-Type: application/json
 
-
+{
+    "login": "login1",
+    "password": "password1",
+    "clientData": {
+        "name": "name1",
+	"surname": "surname1",
+	"email": "email1"
+    }
+}
+#Log out
+POST :host/client/logout
+		    

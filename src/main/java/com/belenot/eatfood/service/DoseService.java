@@ -31,7 +31,7 @@ public class DoseService {
     @Transactional
     public void addDose(Food food, Dose dose) {
 	Session session = sessionFactory.getCurrentSession();
-	session.lock(food, LockMode.NONE);
+	food = session.byId(Food.class).load(food.getId());
 	food.addDose(dose);
 	session.save(dose);
     }
@@ -46,7 +46,7 @@ public class DoseService {
     @Transactional
     public List<Dose> getDoseByFood(Food food) {
 	Session session = sessionFactory.getCurrentSession();
-	session.lock(food, LockMode.NONE);
+	food = session.byId(Food.class).load(food.getId());
 	List<Dose> doses = new ArrayList<>();
 	doses.addAll(food.getDoses());
 	return doses;
@@ -55,7 +55,7 @@ public class DoseService {
     @Transactional
     public List<Dose> getDoseByClient(Client client) {
 	Session session = sessionFactory.getCurrentSession();
-	session.lock(client, LockMode.NONE);
+        client = session.byId(Client.class).load(client.getId());
 	List<Dose> doses = new ArrayList<>();
 	doses.addAll(session.createQuery("select d from Dose d " + 
 					 "inner join Food f on d.food = f.id " +
@@ -67,7 +67,7 @@ public class DoseService {
     @Transactional
     public void deleteDose(Dose dose) {
 	Session session = sessionFactory.getCurrentSession();
-	session.lock(dose, LockMode.NONE);
+        dose = session.byId(Dose.class).load(dose.getId());
 	dose.getFood().removeDose(dose);
 	session.delete(dose);
     }

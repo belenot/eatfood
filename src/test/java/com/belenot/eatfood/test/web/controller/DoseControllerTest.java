@@ -1,23 +1,26 @@
 package com.belenot.eatfood.test.web.controller;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Dose;
 import com.belenot.eatfood.domain.Food;
-import com.belenot.eatfood.service.DoseService;
 import com.belenot.eatfood.test.extension.RandomDomainResolver;
 import com.belenot.eatfood.test.extension.RandomDomainResolver.RandomDomain;
 import com.belenot.eatfood.test.mock.service.MockDoseService;
 import com.belenot.eatfood.web.controller.DoseController;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.RepeatedTest;
@@ -83,11 +86,28 @@ public class DoseControllerTest {
     }
 
     @Test
+    @Order( 4 )
+    public void getDoseByDateTest() {
+	List<Dose> doses = doseController.getDose(originClient);
+	Dose dose = doses.get(0);
+	Date date = dose.getDate();
+	Date dateFirst = new Date(date.getTime() - 10000);
+	Date dateLast = new Date(date.getTime() + 10000);
+	doses = assertDoesNotThrow( () -> doseController.getDose(dateFirst, dateLast, originClient));
+	assertNotNull(doses);
+	assertTrue(doses.size() > 0);
+	assertTrue(doses.stream().anyMatch(d -> d.getId() == dose.getId()));
+	doses = assertDoesNotThrow( () -> doseController.getDose(dateLast, dateLast, originClient));
+	assertNotNull(doses);
+	assertFalse(doses.stream().anyMatch(d -> d.getId() == dose.getId()));
+    }
+    
+    @Test
     @Order( 100 )
     public void deleteDoseTest() {
 	for (int id : ids) {
 	    Dose dose = doseController.getDose(id);
-	    assertTrue(doseController.deleteDose(dose));
+	    assertTrue(doseController.deleteDose(dose.getId()));
 	    assertNull(doseController.getDose(id));
 	}
     }

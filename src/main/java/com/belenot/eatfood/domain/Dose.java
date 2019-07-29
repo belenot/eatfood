@@ -18,7 +18,7 @@ public class Dose {
     private int id;
     private BigDecimal gram;
     private Date date;
-    @ManyToOne( fetch = FetchType.LAZY )
+    @ManyToOne( fetch = FetchType.EAGER )
     private Food food;
 
     public int getId() {

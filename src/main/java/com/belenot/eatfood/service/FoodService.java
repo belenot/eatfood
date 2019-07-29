@@ -28,7 +28,7 @@ public class FoodService {
     @Transactional
     public void addFood(Client client, Food food) {
 	Session session = sessionFactory.getCurrentSession();
-	session.lock(client, LockMode.NONE);
+	client = session.byId(Client.class).load(client.getId());
 	client.addFood(food);
 	session.save(food);
     }
@@ -44,7 +44,7 @@ public class FoodService {
     public List<Food> getFoodByClient(Client client) {
 	List<Food> foods = new ArrayList<>();
 	Session session = sessionFactory.getCurrentSession();
-	session.lock(client, LockMode.NONE);
+	client = session.byId(Client.class).load(client.getId());
 	foods.addAll(client.getFoods());
 	return foods;
     }
@@ -52,7 +52,7 @@ public class FoodService {
     @Transactional
     public void deleteFood(Food food) {
 	Session session = sessionFactory.getCurrentSession();
-	session.lock(food, LockMode.NONE);
+        food = session.byId(Food.class).load(food.getId());
 	food.getClient().removeFood(food);
 	session.delete(food);       
     }

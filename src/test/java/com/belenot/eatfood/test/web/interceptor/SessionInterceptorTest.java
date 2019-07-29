@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 
@@ -27,6 +29,7 @@ import org.springframework.mock.env.MockEnvironment;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.web.method.HandlerMethod;
 
 @TestInstance( Lifecycle.PER_CLASS )
 @ExtendWith( { EatfoodServiceResolver.class, RandomDomainResolver.class  } )
@@ -48,8 +51,9 @@ public class SessionInterceptorTest {
 	Class<AuthorozationController> klass = AuthorozationController.class;
 	MockHttpServletRequest request = new MockHttpServletRequest();
 	MockHttpServletResponse response = new MockHttpServletResponse();
-	
-	Method handlerMethod = klass.getMethod("logIn", String.class, String.class, HttpServletRequest.class);
+        Method methodLogIn = klass.getMethod("logIn", String.class, String.class, HttpServletRequest.class);
+	HandlerMethod handlerMethod = mock(HandlerMethod.class);
+	when(handlerMethod.getMethod()).then( p -> methodLogIn);
 	assertTrue(sessionInterceptor.preHandle(request, response, handlerMethod));
 	assertNull(response.getRedirectedUrl());
 	
@@ -62,7 +66,8 @@ public class SessionInterceptorTest {
         request = new MockHttpServletRequest();
 	response = new MockHttpServletResponse();
 	request.setSession(session);
-	handlerMethod = klass.getMethod("logOut", Client.class, HttpSession.class);
+        Method methodLogOut = klass.getMethod("logOut", Client.class, HttpSession.class);
+	when(handlerMethod.getMethod()).then( p -> methodLogOut);
 	assertTrue(sessionInterceptor.preHandle(request, response, handlerMethod));
 	session.removeAttribute("client");
 	assertFalse(sessionInterceptor.preHandle(request, response, handlerMethod));
@@ -74,8 +79,9 @@ public class SessionInterceptorTest {
 	MockHttpServletRequest request = new MockHttpServletRequest();
 	MockHttpServletResponse response = new MockHttpServletResponse();
 	MockHttpSession session = new MockHttpSession();
-
-	Method anyHandlerMethod = klass.getMethod("getFood", int.class);
+	HandlerMethod anyHandlerMethod = mock(HandlerMethod.class);
+	Method method = klass.getMethod("getFood", int.class);
+	when(anyHandlerMethod.getMethod()).then( p -> method);
 	assertFalse(sessionInterceptor.preHandle(request, response, anyHandlerMethod));
 	assertNotNull(response.getRedirectedUrl());
 

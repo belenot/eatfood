@@ -10,6 +10,7 @@ import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.service.FoodService;
 import com.belenot.eatfood.web.interceptor.SessionInterceptor.Authorized;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,21 +26,22 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 @Authorized
 public class FoodController {
 
+    @Autowired
     private FoodService foodService;
     public void setFoodService(FoodService foodService) {
 	this.foodService = foodService;
     }
     
-    @GetMapping( path = "/${id}",
+    @GetMapping( path = "/{id}",
 		     produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public Food getFood(@PathVariable int id) {
 	return foodService.getFoodById(id);
     }
 
-    @PostMapping( produces = MediaType.APPLICATION_JSON_UTF8_VALUE )
+    @GetMapping( produces = MediaType.APPLICATION_JSON_UTF8_VALUE )
     @ResponseBody
-    public List<Food> getFood(@SessionAttribute Client client) {
+    public List<Food> getFood(@SessionAttribute( "client" ) Client client) {
 	List<Food> foods = new ArrayList<>(foodService.getFoodByClient(client));
 	return foods;
     }
@@ -48,13 +50,13 @@ public class FoodController {
 		  consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
 		  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public Food addFood(@RequestBody Food food, @SessionAttribute Client client) {
+    public Food addFood(@RequestBody Food food, @SessionAttribute( "client" ) Client client) {
 	foodService.addFood(client, food);
         food = foodService.getFoodById(food.getId());
 	return food;
     }
 
-    @PostMapping( path = "/delete/${id}",
+    @GetMapping( path = "/delete/{id}",
 		  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public boolean deleteFood(@PathVariable int id) {

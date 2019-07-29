@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Food {
     @Id
@@ -18,11 +20,13 @@ public class Food {
     private int id;
     private String name;
     private Nutrients nutrients;
-    @ManyToOne( fetch = FetchType.LAZY )
+    @ManyToOne
     private Food defaultFood;
     @ManyToOne( fetch = FetchType.LAZY )
+    @JsonIgnore
     private Client client;
     @OneToMany( mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true )
+    @JsonIgnore
     private List<Dose> doses;
 
     public Food addDose(Dose dose) {

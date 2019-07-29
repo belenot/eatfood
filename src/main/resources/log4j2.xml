@@ -18,7 +18,7 @@
       <AppenderRef ref="fileLogger"/>
       <AppenderRef ref="STDOUT" />
     </Logger>
-    <Root level="error">
+    <Root level="info">
       <AppenderRef ref="STDOUT"/>
     </Root>
   </Loggers>

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -22,6 +23,7 @@ import com.belenot.eatfood.service.AuthorizationService;
 import com.belenot.eatfood.service.ClientService;
 import com.belenot.eatfood.test.extension.RandomDomainResolver;
 import com.belenot.eatfood.test.extension.RandomDomainResolver.RandomDomain;
+import com.belenot.eatfood.test.mock.service.MockAuthorizationService;
 import com.belenot.eatfood.web.controller.AuthorozationController;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -50,16 +52,22 @@ public class AuthorozationControllerTest {
         originClient = client;
 	originClient.setId(1);
         authorozationController = new AuthorozationController();
-	AuthorizationService authorizationService = mock(AuthorizationService.class);
-	when(authorizationService.authorizeClient(anyString(), anyString()))
-	     .then( s -> s.getArgument(0, String.class).equals(client.getLogin())
-		    && s.getArgument(1, String.class).equals(client.getPassword()) ? client : null);
-	when(authorizationService.isValidClient(any(Client.class))).then( p -> p.getArgument(0, Client.class).getId() == client.getId());
-	authorozationController.setAuthorizationService(authorizationService);
+	authorozationController.setAuthorizationService(new MockAuthorizationService());
     }
 
     @Test
     @Order( 1 )
+    public void registerTest(@RandomDomain Client client) {
+	originClient = client;
+	HttpServletRequest request = new MockHttpServletRequest();
+	boolean result = assertDoesNotThrow( () -> authorozationController.register(client, request));
+	assertTrue(result);
+        Exception exc = assertThrows(Exception.class,  () -> authorozationController.register(client, request));
+	assertNotNull(exc);
+    }
+    
+    @Test
+    @Order( 2 )
     public void logInTest() {
 	HttpServletRequest request = new MockHttpServletRequest();
         boolean result = assertDoesNotThrow( () -> authorozationController.logIn(originClient.getLogin(), originClient.getPassword(), request));
@@ -73,7 +81,7 @@ public class AuthorozationControllerTest {
     }
 
     @Test
-    @Order( 2 )
+    @Order( 3 )
     public void logOutTest(@RandomDomain Client otherClient) {
 	Client client = (Client) httpSession.getAttribute("client");
         boolean result = assertDoesNotThrow( () -> authorozationController.logOut(client, httpSession));

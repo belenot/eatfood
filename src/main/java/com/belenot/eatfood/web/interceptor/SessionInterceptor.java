@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.core.env.Environment;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class SessionInterceptor implements HandlerInterceptor {
@@ -37,8 +38,8 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
 	boolean authorized = request.getSession(false) == null ? false : request.getSession(false).getAttribute("client") != null;
-	if (handler instanceof Method) {
-	    Method handlerMethod = (Method) handler;
+	if (handler instanceof HandlerMethod) {
+	    Method handlerMethod = ((HandlerMethod) handler).getMethod();
 	    Authorized annotation = getAuthorizedAnnotation(handlerMethod);
 	    if (annotation != null && authorized) {
 		return true;
