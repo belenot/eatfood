@@ -5,14 +5,14 @@ function onUpdateFoodBtnClick(e) {
     var updateBtn = foodDom.querySelector("button[name='update']");
     var deleteBtn = foodDom.querySelector("button[name='delete']");
     var okBtn = updateBtn.cloneNode(true);
-    okBtn.style.backgroundImage = "url('/eatfood/resources/img/ok-mark.png')";
+    okBtn.style.backgroundImage = "url('/eatfood/img/ok-mark.png')";
     var cancelBtn = deleteBtn.cloneNode(true);
     foodDom.replaceChild(okBtn, updateBtn);
     foodDom.replaceChild(cancelBtn, deleteBtn);
     enableElement(foodDom);
     okBtn.onclick = function(e) {
 	let data = scanData(foodDom);
-	sendJSON("/eatfood/foodlist/updatefood", data, function(xhr) {
+	sendJSON("/eatfood/food/", data, function(xhr) {
 	    var data = getJSON(xhr);
 	    enableElement(foodDom, false);
 	    foodDom.replaceChild(updateBtn, okBtn);
@@ -36,14 +36,14 @@ function onAddFoodBtnClick(e) {
     var updateBtn = foodDom.querySelector("button[name='update']");
     var deleteBtn = foodDom.querySelector("button[name='delete']");
     var okBtn = updateBtn.cloneNode(true);
-    okBtn.style.backgroundImage = "url('/eatfood/resources/img/ok-mark.png')";
+    okBtn.style.backgroundImage = "url('/eatfood/img/ok-mark.png')";
     var cancelBtn = deleteBtn.cloneNode(true);
     foodDom.replaceChild(okBtn, updateBtn);
     foodDom.replaceChild(cancelBtn, deleteBtn);
     enableElement(foodDom);
     okBtn.onclick = function(e) {
 	let data = scanData(foodDom);
-	sendJSON("/eatfood/foodlist/addfood", data, function(xhr) {
+	sendJSON("/eatfood/food/add", data, function(xhr) {
 	    var data = getJSON(xhr);
 	    if (data) {
 		printData(foodDom, data);
@@ -64,14 +64,14 @@ function onAddFoodBtnClick(e) {
 function onDeleteFoodBtnClick(e) {
     var foodDom = ancestor(e.target, 'food');
     var data = scanData(foodDom);
-    sendJSON('/eatfood/foodlist/deletefood/', data, function(xhr) {
+    sendJSON('/eatfood/food/delete', data, function(xhr) {
 	var data = getJSON(xhr);
 	if (data && data.result === true) {
 	    foodDom.parentElement.removeChild(foodDom);
 	} else {
 	    alert("Can't delete food");
 	}
-    });
+    }, "get");
 }
 
 function onLoadDosesBtnClick(e) {
@@ -97,7 +97,7 @@ function onUpdateDoseBtnClick(e) {
     var updateBtn = doseDom.querySelector("button[name='update']");
     var deleteBtn = doseDom.querySelector("button[name='delete']");
     var okBtn = updateBtn.cloneNode(true);
-    okBtn.style.backgroundImage = "url('/eatfood/resources/img/ok-mark.png')";
+    okBtn.style.backgroundImage = "url('/eatfood/img/ok-mark.png')";
     var cancelBtn = deleteBtn.cloneNode(true);
     doseDom.replaceChild(okBtn, updateBtn);
     doseDom.replaceChild(cancelBtn, deleteBtn);
@@ -131,7 +131,7 @@ function onAddDoseBtnClick(e) {
     var updateBtn = doseDom.querySelector("button[name='update']");
     var deleteBtn = doseDom.querySelector("button[name='delete']");
     var okBtn = updateBtn.cloneNode(true);
-    okBtn.style.backgroundImage = "url('/eatfood/resources/img/ok-mark.png')";
+    okBtn.style.backgroundImage = "url('/eatfood/img/ok-mark.png')";
     var cancelBtn = deleteBtn.cloneNode(true);
     doseDom.replaceChild(okBtn, updateBtn);
     doseDom.replaceChild(cancelBtn, deleteBtn);
@@ -328,9 +328,10 @@ function printValue(input, value) {
     }
 }
 //gets data object, transforms it into JSON and send to specified url. Onload = callback
-function sendJSON(url, data, callback) {
+function sendJSON(url, data, callback, method) {
+    method = method || "post";
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
+    xhr.open(method, url);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = function() { callback(xhr); };
     xhr.send(JSON.stringify(data));
@@ -348,9 +349,9 @@ var foodsPane;
 var dosesPane;
 var foods = [];
 window.onload = function () {
-    if (location.pathname === '/eatfood/foodlist') {
+    if (location.pathname === '/eatfood/foodlist.html') {
 	foodsPane = document.getElementById('foods-pane');
-	sendJSON("/eatfood/foodlist/foods", {}, function(xhr) {
+	sendJSON("/eatfood/food", {}, function(xhr) {
 	var datas = getJSON(xhr);
 	for (let i = 0; i < datas.length; i++) {
 	    let data = datas[i];
@@ -358,12 +359,12 @@ window.onload = function () {
 	    printData(foodDom, data);
 	    foodsPane.insertAdjacentElement("beforeend", foodDom);
 	}
-	});
+	}, "get");
     }
-    if (location.pathname === '/eatfood/doselist') {
+    if (location.pathname === '/eatfood/doselist.html') {
 	dosesPane = document.querySelector('#doses-pane');
 	onLoadDosesBtnClick();
-	sendJSON("/eatfood/foodlist/foods", {} , function(xhr) {
+	sendJSON("/eatfood/food", {} , function(xhr) {
 	    foods = getJSON(xhr) || null;
 	});
     }

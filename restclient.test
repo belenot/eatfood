@@ -69,4 +69,15 @@ Content-Type: application/json
 }
 #Log out
 POST :host/client/logout
-		    
+
+##STATIC CONTENT
+#index
+GET :host
+#html
+GET :host/index.html
+#css
+GET :host/eatfood.css
+#js
+GET :host/eatfood.js
+#misc
+GET :host/img/close.png

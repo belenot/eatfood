@@ -44,8 +44,16 @@ public class WebAppContext implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	registry.addResourceHandler("/resources/**").addResourceLocations(env.getProperty("server.resources.path", "/resources/"));
+	registry.addResourceHandler("/").addResourceLocations(env.getProperty("server.index.path", "/html/index.html"));
+	registry.addResourceHandler("/**/*.{[a-z]+}").addResourceLocations(env.getProperty("server.misc.path", "/resources/misc/"));
+	registry.addResourceHandler("/**/*.html").addResourceLocations(env.getProperty("server.html.path", "/resources/html/"));
+	registry.addResourceHandler("/**/*.css").addResourceLocations(env.getProperty("server.css.path", "/resources/css/"));
+	registry.addResourceHandler("/**/*.js").addResourceLocations(env.getProperty("server.js.path", "/resources/js/"));
+
     }
+
+    
+    
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 	registry.addInterceptor(new SessionInterceptor(env));

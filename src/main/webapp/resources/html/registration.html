@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Registration</title>
+    <script src="/eatfood/registration.js"></script>
+  </head>
+  <body>
+    <!--<%@ include file="menuBar.html" %>-->
+    <div id="menu-bar-pane">
+      <!--<%@ include file="menuBar.html" %>-->
+      <div class="menu-bar">
+	<div>
+	  <button onclick="window.location.href='/eatfood/registration.html';" class="b-btn">Registration</button>
+	</div>
+	<div>
+	  <button onclick="window.location.href='/eatfood/authorization.html';" class="b-btn">Authorization</button>
+	</div>
+	<div>
+	  <button onclick="window.location.href='/eatfood/foodlist.html';" class="b-btn">Food List</button>
+	</div>
+	<div>
+	  <button onclick="window.location.href='/eatfood/doselist.html';" class="b-btn">Dose List</button>
+	</div>
+	<div>
+	  <button onclick="window.location.href='/eatfood/logout';" class="b-btn">Logout</button>
+	</div>
+      </div>
+
+    <h1>Registration</h1>
+    <div>
+      <label for="login">Login</label>
+      <label for="password">Password</label>
+      <label for="name">Name</label>
+      <label for="surname">Surname</label>
+      <label for="email">Email</label>
+      <input type="text" name="login">
+      <input type="password" name="password">
+      <input type="text" name="name">
+      <input type="text" name="surname">
+      <input type="email" name="email">
+      <button onclick="register(event); ">registrate</button>
+    </div>
+  </body>
+</html>

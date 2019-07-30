@@ -73,10 +73,10 @@ input[type='date'] {
     flex: 2;
 }
 button[name='delete'] {
-    background: url("/eatfood/resources/img/close.png");
+    background: url("/eatfood/img/close.png");
 }
 button[name='update'] {
-    background: url("/eatfood/resources/img/pencil.png");
+    background: url("/eatfood/img/pencil.png");
 }
 button[onclick] {
     flex: 0.1;

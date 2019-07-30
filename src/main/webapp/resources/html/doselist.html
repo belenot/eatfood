@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>Dose List</title>
+    <link rel="stylesheet" href="/eatfood/eatfood.css" type="text/css">
+    <script src="/eatfood/eatfood.js"></script>
+  </head>
+  <body>
+    
+    <!--<%@ include file="menuBar.html" %>-->
+    <div id="menu-bar-pane">
+      <!--<%@ include file="menuBar.html" %>-->
+      <div class="menu-bar">
+	<div>
+	  <button onclick="window.location.href='/eatfood/registration.html';" class="b-btn">Registration</button>
+	</div>
+	<div>
+	  <button onclick="window.location.href='/eatfood/authorization.html';" class="b-btn">Authorization</button>
+	</div>
+	<div>
+	  <button onclick="window.location.href='/eatfood/foodlist.html';" class="b-btn">Food List</button>
+	</div>
+	<div>
+	  <button onclick="window.location.href='/eatfood/doselist.html';" class="b-btn">Dose List</button>
+	</div>
+	<div>
+	  <button onclick="window.location.href='/eatfood/logout';" class="b-btn">Logout</button>
+	</div>
+      </div>
+    
+    <div id="doses-pane">
+      <button class="add-btn b-btn" onclick="onAddDoseBtnClick(event)" name="add">+</button>
+      <div class="date-interval">
+	<input class="dose-date-first" type="date" name="dateFirst" value="<%=dateFirst%>">
+	<input class="dose-date-last" type="date" name="dateLast" value="<%=dateLast%>">
+	<button class="load-doses-btn b-btn" onclick="onLoadDosesBtnClick(event);">get</button>
+      </div>
+    </div>
+
+
+    <div id="total-nutrients-pane">
+      <!--<%@ include file="totalNutrients.html" %>-->
+      <div class="total-nutrients">
+	<label class="total">Total</label>
+	<div class="nutrients">
+	  <label class="total-calories">Calories:</label>
+	  <label class="calories"></label>
+	  <label class="total-protein">Protein:</label>
+	  <label class="protein"></label>
+	  <label class="total-carbohydrate">Carbohydrate:</label>
+	  <label class="carbohydrate"></label>
+	  <label class="total-fat">Fat:</label>
+	  <label class="fat"></label>
+	</div>
+      </div>
+
+    </div>
+
+    <div hidden>
+      <template id="dose-template">
+	<!--<%@ include file="doseTemplate.html" %>-->
+	<div class="dose" data-object="dose" onmouseenter="spanName(event);">
+	  <input class="name" data-name="dose.food.name" disabled type="text" name="name" >
+	  <input class="gram" data-name="dose.gram" disabled type="text" name="gram">
+	  <input class="date" data-name="dose.date" disabled type="date" name="date">
+	  <input class="id" data-name="dose.id" disabled type="hidden" name="id">
+	  <button class="b-btn" onclick="onUpdateDoseBtnClick(event);" name="update"></button>
+	  <button class="b-btn" onclick="onDeleteDoseBtnClick(event);" name="delete"></button>
+	</div>
+
+      </template>
+      <template id="food-template">
+	<!--<%@ include file="foodTemplate.html" %>-->
+	<div class="food" data-object="food">
+	  <input type="text" disabled name="name" data-name="food.name"></input>
+	  <input type="checkbox" disabled name="common" data-name="food.common"></input>
+	  <input type="text" disabled name="calories" data-name="food.calories"></input>
+	  <input type="text" disabled name="protein" data-name="food.protein"></input>
+	  <input type="text" disabled name="carbohydrate" data-name="food.carbohydrate"></input>
+	  <input type="text" disabled name="fat" data-name="food.fat"></input>
+	  <input type="hidden" disabled name="id" data-name="food.id"></input>
+	  <button class="b-btn" onclick="onUpdateFoodBtnClick(event);" name="update"></button>
+	  <button class="b-btn" onclick="onDeleteFoodBtnClick(event);" name="delete"></button>
+	</div>
+
+      </template>
+    </div>
+    
+  </body>
+</html>
