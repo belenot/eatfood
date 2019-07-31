@@ -21,6 +21,20 @@ Content-Type: application/json
 GET :host/food/5
 #Get food by client
 GET :host/food
+#Update food
+POST :host/food/update
+Content-Type: application/json
+
+{
+    "id": 2,
+    "name": "Сникерс",
+    "nutrients": {
+        "calories": 110.12412,
+        "protein": 5.64,
+        "carbohydrate": 11.0,
+        "fat": 1.1
+    }
+}
 #Delete food
 GET :host/food/delete/2
 #
@@ -48,6 +62,19 @@ Content-Type: application/json
 GET :host/dose
 #Get dose by date interval
 GET :host/dose?dateFirst=2019-01-01&dateLast=2019-12-12
+#Update dose
+POST :host/dose/update
+Content-Type: application/json
+
+{
+    "id": 3,
+    "gram": 1.23,
+    "date": "2019-07-20",
+    "food": {
+        "id": 2
+    }
+}
+
 #Delete dose
 GET :host/dose/delete/3
 

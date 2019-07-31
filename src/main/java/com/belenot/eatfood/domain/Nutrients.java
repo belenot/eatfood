@@ -7,6 +7,10 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class Nutrients {
+
+    public static final RoundingMode ROUNDING_MODE = RoundingMode.CEILING;
+    public static final int SCALE = 2;
+    
     private BigDecimal calories;
     private BigDecimal protein;
     private BigDecimal carbohydrate;
@@ -21,28 +25,28 @@ public class Nutrients {
     }
     
     public BigDecimal getCalories() {
-	return calories;
+	return calories.setScale(SCALE, ROUNDING_MODE);
     }
     public Nutrients setCalories(BigDecimal calories) {
 	this.calories = calories;
 	return this;
     }
     public BigDecimal getProtein() {
-	return protein;
+	return protein.setScale(SCALE, ROUNDING_MODE);
     }
     public Nutrients setProtein(BigDecimal protein) {
 	this.protein = protein;
 	return this;
     }
     public BigDecimal getCarbohydrate() {
-	return carbohydrate;
+	return carbohydrate.setScale(SCALE, ROUNDING_MODE);
     }
     public Nutrients setCarbohydrate(BigDecimal carbohydrate) {
 	this.carbohydrate = carbohydrate;
 	return this;
     }
     public BigDecimal getFat() {
-	return fat;
+	return fat.setScale(SCALE, ROUNDING_MODE);
     }
     public Nutrients setFat(BigDecimal fat) {
 	this.fat = fat;

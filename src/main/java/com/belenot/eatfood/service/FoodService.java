@@ -50,6 +50,13 @@ public class FoodService {
     }
 
     @Transactional
+    public void updateFood(Food food) {
+	Session session = sessionFactory.getCurrentSession();
+	session.update(food);
+	session.lock(food, LockMode.PESSIMISTIC_WRITE);
+    }
+
+    @Transactional
     public void deleteFood(Food food) {
 	Session session = sessionFactory.getCurrentSession();
         food = session.byId(Food.class).load(food.getId());

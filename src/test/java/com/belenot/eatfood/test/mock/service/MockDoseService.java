@@ -44,6 +44,13 @@ public class MockDoseService extends DoseService {
 	return result;
     }
 
+    //Only for field GRAM
+    @Override
+    public void updateDose(Dose dose) {
+	Dose updatedDose = doses.keySet().stream().filter( d -> d.getId() == dose.getId()).findFirst().orElse(null);
+	updatedDose.setGram(dose.getGram());
+    }
+
     @Override
     public void deleteDose(Dose dose) {
 	doses.remove(dose);

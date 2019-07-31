@@ -2,6 +2,7 @@ package com.belenot.eatfood.test.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -85,6 +86,20 @@ public class ClientServiceTest {
 	assertEquals(client.getData().getSurname(), originClient.getData().getSurname());
 	assertEquals(client.getData().getEmail(), originClient.getData().getEmail());
     }
+
+    @Test
+    @Order( 5 )
+    public void updateClientTest() {
+	Client client = clientService.getClientById(originClient.getId());
+	client.setLogin("anotherLogin");
+	assertDoesNotThrow( () -> clientService.updateClient(client));
+	Client assertedClient = clientService.getClientById(originClient.getId());
+	assertEquals(assertedClient.getId(), client.getId());
+	assertEquals(assertedClient.getLogin(), "anotherLogin");
+	assertNotEquals(assertedClient.getLogin(), originClient.getLogin());
+    }
+	
+	
     
     @Test
     @Order( 100 )

@@ -22,7 +22,7 @@ public class Client {
     private String password;
     @Embedded
     private ClientData data = new ClientData();
-    @OneToMany( mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany( mappedBy = "client", cascade = { CascadeType.REMOVE }, orphanRemoval = true )
     private List<Food> foods =  new ArrayList<>();
 
     public Client addFood(Food food) {

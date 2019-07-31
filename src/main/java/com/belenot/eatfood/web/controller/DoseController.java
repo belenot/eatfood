@@ -67,6 +67,13 @@ public class DoseController {
     public List<Dose> getDose(@RequestParam Date dateFirst, @RequestParam Date dateLast, @SessionAttribute Client client) {
 	return getDose(client).stream().filter( d -> (d.getDate().compareTo(dateFirst) + d.getDate().compareTo(dateLast) == 0)).collect(Collectors.toList());
     }
+
+    @PostMapping( path = "/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public Dose updateDose(@RequestBody Dose dose) {
+	doseService.updateDose(dose);
+	return doseService.getDoseById(dose.getId());
+    }
     
 	
     @GetMapping( path = "/delete/{id}" )

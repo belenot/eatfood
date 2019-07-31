@@ -1,6 +1,7 @@
 package com.belenot.eatfood.domain;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,6 +14,10 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Dose {
+
+    public static final RoundingMode ROUNDING_MODE = RoundingMode.CEILING;
+    public static final int SCALE = 2;
+    
     @Id
     @GeneratedValue
     private int id;
@@ -31,7 +36,7 @@ public class Dose {
     }
 
     public BigDecimal getGram() {
-	return gram;
+	return gram.setScale(SCALE, ROUNDING_MODE);
     }
 
     public Dose setGram(BigDecimal gram) {

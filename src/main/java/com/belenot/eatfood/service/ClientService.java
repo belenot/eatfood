@@ -2,6 +2,7 @@ package com.belenot.eatfood.service;
 
 import com.belenot.eatfood.domain.Client;
 
+import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,13 @@ public class ClientService {
 	Session session = sessionFactory.getCurrentSession();
 	Client client = session.bySimpleNaturalId(Client.class).load(login);
 	return client;       
+    }
+
+    @Transactional
+    public void updateClient(Client client) {
+	Session session = sessionFactory.getCurrentSession();
+	session.update(client);
+	session.lock(client, LockMode.PESSIMISTIC_WRITE);
     }
 
     @Transactional

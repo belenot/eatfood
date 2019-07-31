@@ -65,6 +65,13 @@ public class DoseService {
     }
 
     @Transactional
+    public void updateDose(Dose dose) {
+	Session session = sessionFactory.getCurrentSession();
+	session.update(dose);
+	session.lock(dose, LockMode.PESSIMISTIC_WRITE);
+    }
+
+    @Transactional
     public void deleteDose(Dose dose) {
 	Session session = sessionFactory.getCurrentSession();
         dose = session.byId(Dose.class).load(dose.getId());

@@ -1,13 +1,15 @@
 package com.belenot.eatfood.test.web.controller;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +22,6 @@ import com.belenot.eatfood.test.mock.service.MockDoseService;
 import com.belenot.eatfood.web.controller.DoseController;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.RepeatedTest;
@@ -100,6 +101,18 @@ public class DoseControllerTest {
 	doses = assertDoesNotThrow( () -> doseController.getDose(dateLast, dateLast, originClient));
 	assertNotNull(doses);
 	assertFalse(doses.stream().anyMatch(d -> d.getId() == dose.getId()));
+    }
+
+    @Test
+    @Order( 5 )
+    public void updateDoseTest() {
+	Dose dose = doseController.getDose(ids.get(0));
+        BigDecimal originGram = dose.getGram();
+	dose.setGram(originGram.add(BigDecimal.valueOf(2)));
+        Dose assertedDose = assertDoesNotThrow( () -> doseController.updateDose(dose));
+	assertEquals(assertedDose.getId(), dose.getId());
+	assertEquals(assertedDose.getGram(), originGram.add(BigDecimal.valueOf(2)));
+	assertNotEquals(assertedDose.getGram(), originGram);
     }
     
     @Test

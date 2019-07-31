@@ -56,6 +56,13 @@ public class FoodController {
 	return food;
     }
 
+    @PostMapping( path = "/update", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public Food updateFood(@RequestBody Food food) {
+	foodService.updateFood(food);
+	return foodService.getFoodById(food.getId());
+    }
+
     @GetMapping( path = "/delete/{id}",
 		  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody

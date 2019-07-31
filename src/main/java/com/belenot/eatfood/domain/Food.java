@@ -25,7 +25,7 @@ public class Food {
     @ManyToOne( fetch = FetchType.LAZY )
     @JsonIgnore
     private Client client;
-    @OneToMany( mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany( mappedBy = "food", cascade = CascadeType.REMOVE, orphanRemoval = true )
     @JsonIgnore
     private List<Dose> doses;
 

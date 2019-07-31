@@ -2,10 +2,13 @@ package com.belenot.eatfood.test.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +105,21 @@ public class DoseServiceTest {
 	    assertEquals(client.getId(), food.getClient().getId());
 	}
     }
+
+    @Test
+    @Order( 4 )
+    public void updateDoseTest() {
+	Dose dose = doseService.getDoseById(ids.get(0));
+	BigDecimal originGram = dose.getGram();
+	dose.setGram(originGram.add(BigDecimal.valueOf(2)));
+	assertDoesNotThrow( () -> doseService.updateDose(dose));
+	Dose assertedDose = doseService.getDoseById(ids.get(0));
+	assertEquals(assertedDose.getId(), dose.getId());
+	assertEquals(assertedDose.getGram(), originGram.add(BigDecimal.valueOf(2)));
+	assertNotEquals(assertedDose.getGram(), originGram);
+    }
+	
+	
 
     @Test
     @Order( 100 )

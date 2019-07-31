@@ -1,6 +1,8 @@
 package com.belenot.eatfood.test.web.controller;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,6 +53,7 @@ public class FoodControllerTest {
     @Order( 1 )
     public void addFoodTest(@RandomDomain Food food) {
         Food addedFood = assertDoesNotThrow( () -> foodController.addFood(food, originClient));
+	ids.add(addedFood.getId());
 	assertNotNull(addedFood);
 	assertTrue(addedFood.getId() > 0);
     }
@@ -71,6 +74,18 @@ public class FoodControllerTest {
 	for (int id : ids) {
 	    assertTrue(foods.stream().anyMatch( f -> f.getId() == id));
 	}
+    }
+
+    @Test
+    @Order( 4 )
+    public void updateFoodTest() {
+	Food food = foodController.getFood(ids.get(0));
+	String originName = food.getName();
+	food.setName("anotherName");
+        Food assertedFood = assertDoesNotThrow( () -> foodController.updateFood(food));
+	assertEquals(assertedFood.getId(), food.getId());
+	assertEquals(assertedFood.getName(), "anotherName");
+	assertNotEquals(assertedFood.getName(), originName);
     }
 
     @Test

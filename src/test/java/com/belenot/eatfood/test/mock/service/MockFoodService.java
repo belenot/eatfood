@@ -34,6 +34,14 @@ public class MockFoodService extends FoodService {
 	}
 	return result;
     }
+
+    //Only for field NAME
+    @Override
+    public void updateFood(Food food) {
+	Food updatedFood = foods.keySet().stream().filter( f -> f.getId() == food.getId()).findFirst().orElse(null);
+	updatedFood.setName(food.getName());
+    }
+    
     @Override
     public void deleteFood(Food food) {
         foods.remove(food);
