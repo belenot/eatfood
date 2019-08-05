@@ -26,8 +26,8 @@ POST :host/food/update
 Content-Type: application/json
 
 {
-    "id": 2,
-    "name": "Сникерс",
+    "id": 3,
+    "name": "Сникерс1",
     "nutrients": {
         "calories": 110.12412,
         "protein": 5.64,
@@ -80,7 +80,7 @@ GET :host/dose/delete/3
 
 ##AUTHORIZATION
 #Log in
-POST :host/client/login?login=login1&password=password1
+POST :host/client/login?login=1&password=1
 #Register
 POST :host/client/register
 Content-Type: application/json

@@ -49,7 +49,7 @@ public class WebAppContext implements WebMvcConfigurer {
 	registry.addResourceHandler("/**/*.html").addResourceLocations(env.getProperty("server.html.path", "/resources/html/"));
 	registry.addResourceHandler("/**/*.css").addResourceLocations(env.getProperty("server.css.path", "/resources/css/"));
 	registry.addResourceHandler("/**/*.js").addResourceLocations(env.getProperty("server.js.path", "/resources/js/"));
-
+	registry.addResourceHandler("/**/*.map").addResourceLocations(env.getProperty("server.js.path", "/resources/js/"));
     }
 
     

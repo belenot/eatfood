@@ -2,43 +2,53 @@
 <html>
   <head>
     <title>Registration</title>
-    <script src="/eatfood/registration.js"></script>
+    <link type="text/css" rel="stylesheet" href="/eatfood/registration.css">
   </head>
   <body>
-    <!--<%@ include file="menuBar.html" %>-->
-    <div id="menu-bar-pane">
-      <!--<%@ include file="menuBar.html" %>-->
-      <div class="menu-bar">
-	<div>
-	  <button onclick="window.location.href='/eatfood/registration.html';" class="b-btn">Registration</button>
-	</div>
-	<div>
-	  <button onclick="window.location.href='/eatfood/authorization.html';" class="b-btn">Authorization</button>
-	</div>
-	<div>
-	  <button onclick="window.location.href='/eatfood/foodlist.html';" class="b-btn">Food List</button>
-	</div>
-	<div>
-	  <button onclick="window.location.href='/eatfood/doselist.html';" class="b-btn">Dose List</button>
-	</div>
-	<div>
-	  <button onclick="window.location.href='/eatfood/logout';" class="b-btn">Logout</button>
-	</div>
-      </div>
 
     <h1>Registration</h1>
-    <div>
-      <label for="login">Login</label>
-      <label for="password">Password</label>
-      <label for="name">Name</label>
-      <label for="surname">Surname</label>
-      <label for="email">Email</label>
+    <form id="reg-form" onsubmit="registrate(event);">
+      <label for="login">&#9999;Login</label>
       <input type="text" name="login">
+      <label for="password">&#9999;Password</label>
       <input type="password" name="password">
+      <label for="name">&#9999;Name</label>
       <input type="text" name="name">
+      <label for="surname">&#9999;Surname</label>
       <input type="text" name="surname">
+      <label for="email">&#9999;Email</label>
       <input type="email" name="email">
-      <button onclick="register(event); ">registrate</button>
+      <input class="b-btn" type="submit" value="registrate">
+    </form>
+    <div>
+      <button onclick="window.location.href='/eatfood/authorization.html';" class="b-btn">Authorization</button>
     </div>
+    <script>
+    function registrate(e) {
+	e.preventDefault();
+	var form = document.querySelector('#reg-form')
+	var body = {login: document.querySelector("input[name='login']").value,
+		    password: document.querySelector("input[name='password']").value,
+		    name:document.querySelector("input[name='name']").value,
+		    surname:document.querySelector("input[name='surname']").value,
+		    email:document.querySelector("input[name='email']").value
+		   }
+	var xhr = new XMLHttpRequest()
+	xhr.open("post", "/eatfood/client/register")
+	xhr.setRequestHeader("Content-Type", "application/json")
+	xhr.onload = () => {
+	    if (xhr.status === 200 && xhr.responseText === 'true') {
+		window.location.href = '/eatfood/index.html'
+	    } else {
+		let btnSubmit = document.querySelector("input[type='submit']");
+		let oldColor = btnSubmit.style.backgroundColor;
+		btnSubmit.style.backgroundColor = "hsl(0, 90%, 60%)";
+		setTimeout( () => btnSubmit.style.backgroundColor = oldColor, 1000);
+	    }
+	}
+	xhr.send(JSON.stringify(body));
+    
+    }
+    </script>
   </body>
 </html>
