@@ -58,8 +58,9 @@ public class FoodController {
 
     @PostMapping( path = "/update", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public Food updateFood(@RequestBody Food food) {
-	foodService.updateFood(food);
+    public Food updateFood(@SessionAttribute("client") Client client, @RequestBody Food food) {
+	
+	foodService.updateFood(food.setClient(client));
 	return foodService.getFoodById(food.getId());
     }
 

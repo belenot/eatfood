@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
@@ -82,7 +81,8 @@ public class FoodControllerTest {
 	Food food = foodController.getFood(ids.get(0));
 	String originName = food.getName();
 	food.setName("anotherName");
-        Food assertedFood = assertDoesNotThrow( () -> foodController.updateFood(food));
+	/** No matter which client is */
+        Food assertedFood = assertDoesNotThrow( () -> foodController.updateFood(null, food));
 	assertEquals(assertedFood.getId(), food.getId());
 	assertEquals(assertedFood.getName(), "anotherName");
 	assertNotEquals(assertedFood.getName(), originName);
