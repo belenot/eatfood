@@ -15,9 +15,9 @@
     <eatfood.home>/var/lib/tomcat8/webapps/eatfood</eatfood.home>
     <logger.filename>${eatfood.home}/${logger.filename.relative}</logger.filename>
     <tomcat.version>8.0.48</tomcat.version>
-    <localServer.name>${inherit.localServer.name}</localServer.name>
     <mainClass>com.belenot.eatfood.boot.TomcatBoot</mainClass>
   </properties>
+  
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -129,19 +129,18 @@
 	<activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-	<belenot.server>${localServer.name}</belenot.server>
-	<belenot.url>${localServer.url}</belenot.url>
-	<server.jdbc.connection>${localServer.jdbc.connection}</server.jdbc.connection>
-	<server.jdbc.manualRegistre>${localServer.jdbc.manualRegistre}</server.jdbc.manualRegistre>
+	<belenot.server></belenot.server>
+	<belenot.url></belenot.url>
+	<server.jdbc.connection></server.jdbc.connection>
+	<server.jdbc.manualRegistre></server.jdbc.manualRegistre>
       </properties>
     </profile>
     <profile>
       <id>dedicated</id>
       <properties>
-	<belenot.server>${dedicatedServer.name}</belenot.server>
-	<belenot.url>${dedicatedServer.url}</belenot.url>
-	<server.jdbc.connection>${dedicatedServer.jdbc.connection}</server.jdbc.connection>
-	<server.jdbc.manualRegistre>${dedicatedServer.jdbc.manualRegistre}</server.jdbc.manualRegistre>
+	<belenot.server>TomcatDedic</belenot.server>
+	<belenot.url>http://91.240.84.78:8080/manager/text</belenot.url>
+	<server.jdbc.connection>jdbc:postgresql://localhost:8832/eatfood2?currentSchema=v0_2</server.jdbc.connection>
       </properties>
     </profile>
   </profiles>
