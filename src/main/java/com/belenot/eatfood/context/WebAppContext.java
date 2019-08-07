@@ -4,9 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.belenot.eatfood.web.interceptor.SessionInterceptor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.eclipse.core.internal.jobs.ObjectMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

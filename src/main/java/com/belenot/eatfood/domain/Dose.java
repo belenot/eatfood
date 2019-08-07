@@ -8,22 +8,31 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.ForeignKey;
 
 
 @Entity
+
 public class Dose {
 
     public static final RoundingMode ROUNDING_MODE = RoundingMode.CEILING;
     public static final int SCALE = 2;
     
     @Id
-    @GeneratedValue
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "dose-id-seq-generator" )
+    @SequenceGenerator( name = "dose-id-seq-generator", sequenceName = "dose_id_seq", allocationSize = 1 )
     private int id;
     private BigDecimal gram;
     private Date date;
-    @ManyToOne( fetch = FetchType.EAGER )
+    @ManyToOne( fetch = FetchType.EAGER)
+    @JoinColumn( name = "food" )
     private Food food;
 
     public int getId() {
