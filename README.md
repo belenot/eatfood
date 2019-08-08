@@ -15,6 +15,6 @@ Basic service classes are covered by tests under **Junit Jupiter Framework**.
 Front-end part has been wrotten within **ReactJS** library. 
 There is **no** *JSP* or *Thymeleaf* at all. Instead all rendering responsibilitie sis laied on *ReactJS*.
 Hence communication between server-side and client-side based upon REST with JSON as base message data format.
-![entity chart](https://github.com/belenot/eatfood/misc/fa_diagram "Entities")
+![entity chart](https://github.com/belenot/eatfood/blob/master/misc/fa_diagram "Entities")
 
 Front-end part is located in own [repository](https://github.com/belenot/eatfood-frontend). In that repository is README.md which holds screenshots
