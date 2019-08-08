@@ -5,6 +5,8 @@
 !clean.sh
 !link.sh
 !restclient.test
+!README.md
+!/misc
 workbench.xmi
 .#*
 /**/img/
