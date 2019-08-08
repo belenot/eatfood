@@ -14,7 +14,7 @@
     <maven.compiler.targetEncoding>UTF-8</maven.compiler.targetEncoding>
     <eatfood.home>/var/lib/tomcat8/webapps/eatfood</eatfood.home>
     <logger.filename>${eatfood.home}/${logger.filename.relative}</logger.filename>
-    <tomcat.version>8.0.48</tomcat.version>
+    <tomcat.version>8.5.40</tomcat.version>
     <mainClass>com.belenot.eatfood.boot.TomcatBoot</mainClass>
   </properties>
   
@@ -129,10 +129,11 @@
 	<activeByDefault>true</activeByDefault>
       </activation>
       <properties>
+	<!--<eatfood.home>/var/lib/tomcat8/webapps/eatfood</eatfood.home>-->
+	<logger.filename>./server.log</logger.filename>
 	<belenot.server></belenot.server>
 	<belenot.url></belenot.url>
-	<server.jdbc.connection></server.jdbc.connection>
-	<server.jdbc.manualRegistre></server.jdbc.manualRegistre>
+	<server.jdbc.connection>jdbc:postgresql://localhost:8832/eatfood2?currentSchema=v0_2</server.jdbc.connection>
       </properties>
     </profile>
     <profile>
