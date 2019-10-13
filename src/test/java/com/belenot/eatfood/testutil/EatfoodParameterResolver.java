@@ -1,7 +1,13 @@
 package com.belenot.eatfood.testutil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.belenot.eatfood.domain.Client;
-import com.belenot.eatfood.repository.RandomClientFactory;
+import com.belenot.eatfood.domain.Food;
+import com.belenot.eatfood.repository.factory.RandomClientFactory;
+import com.belenot.eatfood.repository.factory.RandomDomainFactory;
+import com.belenot.eatfood.repository.factory.RandomFoodFactory;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -12,17 +18,19 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 
 public class EatfoodParameterResolver implements ParameterResolver {
 
-    private RandomClientFactory clientFactory;
+    private Map<Class<?>, RandomDomainFactory<?>> factories = new HashMap<>();
 
     public EatfoodParameterResolver() {
-        clientFactory = new RandomClientFactory();
+        factories.put(Client.class, new RandomClientFactory());
+        factories.put(Food.class, new RandomFoodFactory());
     }
 
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
             throws ParameterResolutionException {
-        if (parameterContext.getParameter().getType().equals(Client.class)) {
-            return clientFactory.createRandomClient();
+        RandomDomainFactory<?> factory = factories.get(parameterContext.getParameter().getType());
+        if (factory != null) {
+            return factory.generate();
         }
         return null;
     }
@@ -30,7 +38,7 @@ public class EatfoodParameterResolver implements ParameterResolver {
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext)
             throws ParameterResolutionException {
-        if (parameterContext.getParameter().getType().equals(Client.class)) {
+        if (factories.keySet().contains(parameterContext.getParameter().getType())) {
             return true;
         }
         return false;

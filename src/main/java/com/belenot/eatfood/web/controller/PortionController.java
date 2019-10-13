@@ -1,6 +1,8 @@
 package com.belenot.eatfood.web.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.belenot.eatfood.domain.Client;
@@ -8,12 +10,14 @@ import com.belenot.eatfood.domain.Portion;
 import com.belenot.eatfood.service.PortionService;
 import com.belenot.eatfood.user.ClientDetails;
 import com.belenot.eatfood.web.form.CreatePortionForm;
+import com.belenot.eatfood.web.form.QueryPortionsForm;
 import com.belenot.eatfood.web.form.UpdatePortionForm;
 import com.belenot.eatfood.web.model.PortionModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,5 +61,14 @@ public class PortionController {
     public List<PortionModel> getPortions() {
         Client client = ((ClientDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClient();
         return portionService.byClient(client).stream().map(PortionModel::of).collect(Collectors.toList());
+    }
+
+    // Not tested
+    @GetMapping("/getby")
+    public List<PortionModel> getPortionsByDateInterval(@ModelAttribute QueryPortionsForm form) {
+        Client client = ((ClientDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClient();
+        Optional<LocalDateTime> start = Optional.of(form.getStart());
+        Optional<LocalDateTime> end = Optional.of(form.getEnd());
+        return portionService.byDateInterval(client, start, end).stream().map(PortionModel::of).collect(Collectors.toList());
     }
 }

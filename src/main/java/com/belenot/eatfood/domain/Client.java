@@ -60,6 +60,14 @@ public class Client {
         this.foods.add(food);
         food.setClient(this);
     }
+
+    public List<Food> getFoods() {
+        return foods;
+    }
+
+    public void setFoods(List<Food> foods) {
+        this.foods = foods;
+    }
     
 
 }

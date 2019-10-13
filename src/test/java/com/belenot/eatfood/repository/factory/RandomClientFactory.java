@@ -1,18 +1,13 @@
-package com.belenot.eatfood.repository;
-
-import java.util.Random;
-
+package com.belenot.eatfood.repository.factory;
 
 import com.belenot.eatfood.domain.Client;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
-public class RandomClientFactory {
+public class RandomClientFactory implements RandomDomainFactory<Client> {
 
-    private final int MAX_RANDOM = 10;
-
-    public Client createRandomClient() {
+    public Client generate() {
         Client client = new Client();
         client.setLogin(RandomStringUtils.random(RandomUtils.nextInt(4, 10), true, false));
         client.setName(RandomStringUtils.random(RandomUtils.nextInt(4, 10), true, false));

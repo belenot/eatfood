@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/client/signup", "/client/signin").anonymous()
-                .antMatchers("/eatfood", "/favicon.ico", "/js/**", "/css/**", "/img/**").permitAll()
+                .antMatchers("/eatfood", "/favicon.ico", "/static/**").permitAll()
                 .anyRequest().authenticated().and().formLogin().loginPage("/signin").successForwardUrl("/eatfood").and()
                 .logout().logoutSuccessUrl("/eatfood").and()
                 .csrf().disable();

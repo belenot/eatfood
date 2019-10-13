@@ -1,6 +1,9 @@
 package com.belenot.eatfood.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
@@ -61,5 +64,13 @@ public class PortionService {
 
     public Portion byId(Long id) {
         return portionRepository.findById(id).get();
+    }
+
+    public List<Portion> byDateInterval(Client client, Optional<LocalDateTime> start, Optional<LocalDateTime> end) {
+        if (start.isEmpty() && end.isEmpty()) return portionRepository.findByFoodClient(client);
+        if (start.isEmpty() && end.isPresent()) return portionRepository.findBeforeDate(client, end.get());
+        if (start.isPresent() && end.isEmpty()) return portionRepository.findAfterDate(client, start.get());
+        if (start.isPresent() && end.isPresent()) return portionRepository.findByDateInterval(client, start.get(), end.get());
+        return new ArrayList<Portion>();
     }
 }
