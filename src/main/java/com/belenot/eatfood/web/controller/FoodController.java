@@ -1,80 +1,59 @@
 package com.belenot.eatfood.web.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.service.FoodService;
-import com.belenot.eatfood.web.interceptor.SessionInterceptor.Authorized;
+import com.belenot.eatfood.user.ClientDetails;
+import com.belenot.eatfood.web.form.CreateFoodForm;
+import com.belenot.eatfood.web.form.UpdateFoodForm;
+import com.belenot.eatfood.web.model.FoodModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping( "/food" )
-@Authorized
+@RestController
+@RequestMapping("/food")
 public class FoodController {
 
-    @Autowired
+    @Autowired 
     private FoodService foodService;
-    public void setFoodService(FoodService foodService) {
-	this.foodService = foodService;
-    }
-    
-    @GetMapping( path = "/{id}",
-		     produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public Food getFood(@PathVariable int id) {
-	return foodService.getFoodById(id);
+
+    @PostMapping("/create")
+    public FoodModel createFood(@RequestBody CreateFoodForm form) {
+        Food food = form.createDomain();
+        Client client = ((ClientDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClient();
+        food = foodService.createFood(client, food);
+        return FoodModel.of(food);
     }
 
-    @GetMapping( produces = MediaType.APPLICATION_JSON_UTF8_VALUE )
-    @ResponseBody
-    public List<Food> getFood(@SessionAttribute( "client" ) Client client) {
-	List<Food> foods = new ArrayList<>(foodService.getFoodByClient(client));
-	return foods;
+    @PostMapping("/{id}/delete")
+    public boolean deleteFood(@PathVariable("id") Long foodId) {
+        Food food = foodService.byId(foodId);
+        foodService.deleteFood(food);
+        return true;
     }
 
-    @PostMapping( path = "/add",
-		  consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-		  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public Food addFood(@RequestBody Food food, @SessionAttribute( "client" ) Client client) {
-	foodService.addFood(client, food);
-        food = foodService.getFoodById(food.getId());
-	return food;
+    @PostMapping("/{id}/update")
+    public FoodModel updateFood(@PathVariable("id") Long foodId, @RequestBody UpdateFoodForm form) {
+        Food food = foodService.byId(foodId);
+        food = form.updateDomain(food);
+        food = foodService.updateFood(food);
+        return FoodModel.of(food);
     }
 
-    @PostMapping( path = "/update", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public Food updateFood(@SessionAttribute("client") Client client, @RequestBody Food food) {
-	
-	foodService.updateFood(food.setClient(client));
-	return foodService.getFoodById(food.getId());
+    @GetMapping("/get")
+    public List<FoodModel> getFoods() {
+        Client client = ((ClientDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClient();
+        return foodService.byClient(client).stream().map(f->FoodModel.of(f)).collect(Collectors.toList());
     }
 
-    @GetMapping( path = "/delete/{id}",
-		  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public boolean deleteFood(@PathVariable int id) {
-	Food food = foodService.getFoodById(id);
-	foodService.deleteFood(food);
-	food = foodService.getFoodById(id);
-	return food == null;
-    }
-    
 }
-
-
-

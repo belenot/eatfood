@@ -1,19 +1,10 @@
-package com.belenot.eatfood.domain;
+package com.belenot.eatfood.web.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import com.belenot.eatfood.domain.Food;
 
-@Entity
-public class Food {
-    @Id
-    @GeneratedValue
+public class FoodModel {
     private Long id;
     private String name;
     private BigDecimal kcal;
@@ -21,11 +12,20 @@ public class Food {
     private BigDecimal carb;
     private BigDecimal fat;
 
-    @ManyToOne
-    private Client client;
+    public FoodModel() {}
+    
+    private FoodModel(Food food) {
+        this.id = food.getId();
+        this.name = food.getName();
+        this.kcal = food.getKcal();
+        this.prot = food.getProt();
+        this.carb = food.getCarb();
+        this.fat = food.getFat();
+    }
 
-    @OneToMany(mappedBy = "food", orphanRemoval = true)
-    private List<Portion> portions = new ArrayList<>();
+    public static FoodModel of(Food food) {
+        return new FoodModel(food);
+    }
 
     public Long getId() {
         return id;
@@ -74,19 +74,4 @@ public class Food {
     public void setFat(BigDecimal fat) {
         this.fat = fat;
     }
-
-    public void addPortion(Portion portion) {
-        this.portions.add(portion);
-        portion.setFood(this);
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-    
-
 }

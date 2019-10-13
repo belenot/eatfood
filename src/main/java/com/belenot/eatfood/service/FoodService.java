@@ -1,66 +1,44 @@
 package com.belenot.eatfood.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
+import com.belenot.eatfood.repository.FoodRepository;
 
-import org.hibernate.LockMode;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Service
 public class FoodService {
+    
     @Autowired
-    private SessionFactory sessionFactory;
-    public FoodService setSessionFactory(SessionFactory sessionFactory) {
-	this.sessionFactory = sessionFactory;
-	return this;
-    }
-    public SessionFactory getSessionFactory() {
-	return sessionFactory;
-    }
+    private FoodRepository foodRepository;
 
     @Transactional
-    public void addFood(Client client, Food food) {
-	Session session = sessionFactory.getCurrentSession();
-	client = session.byId(Client.class).load(client.getId());
-	client.addFood(food);
-	session.save(food);
+    public Food createFood(Client client, Food food) {
+        foodRepository.save(food);
+        client.addFood(food);
+        foodRepository.save(food);
+        return food;
     }
 
-    @Transactional
-    public Food getFoodById(int id) {
-	Session session = sessionFactory.getCurrentSession();
-	Food food = session.byId(Food.class).load(id);
-	return food;
+    public Food updateFood(Food food) {
+        return foodRepository.save(food);
     }
 
-    @Transactional
-    public List<Food> getFoodByClient(Client client) {
-	List<Food> foods = new ArrayList<>();
-	Session session = sessionFactory.getCurrentSession();
-	client = session.byId(Client.class).load(client.getId());
-	foods.addAll(client.getFoods());
-	return foods;
+    public boolean deleteFood(Food food) {
+        foodRepository.delete(food);
+        return true;
     }
 
-    @Transactional
-    public void updateFood(Food food) {
-	Session session = sessionFactory.getCurrentSession();
-	session.update(food);
-	session.lock(food, LockMode.PESSIMISTIC_WRITE);
+    public List<Food> byClient(Client client) {
+        return foodRepository.findByClient(client);
     }
 
-    @Transactional
-    public void deleteFood(Food food) {
-	Session session = sessionFactory.getCurrentSession();
-        food = session.byId(Food.class).load(food.getId());
-	food.getClient().removeFood(food);
-	session.delete(food);       
+    public Food byId(Long id) {
+        return foodRepository.findById(id).get();
     }
 }
+

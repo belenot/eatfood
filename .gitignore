@@ -1,14 +1,34 @@
 /*
-!src
-!pom.xml
-!.gitignore
-!clean.sh
-!link.sh
-!restclient.test
-!README.md
-!/misc
-workbench.xmi
-.#*
+!/src
+!/README.md
 /**/img/
 /**/js/bundle.js
 /**/js/bundle.map
+
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/

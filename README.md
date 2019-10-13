@@ -1,6 +1,7 @@
 # Eatfood
 ## Calculates daily ration
 Project for consolidating skills, but despite that non-production aim, is viable
+(Currently under rework)
 ### Goals
 ##### Project itself:
 * Make calculation of basic nutrients easier
