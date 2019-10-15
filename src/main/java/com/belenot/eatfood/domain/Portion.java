@@ -1,8 +1,8 @@
 package com.belenot.eatfood.domain;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +15,7 @@ public class Portion {
     @GeneratedValue
     private Long id;
     private BigDecimal gram;
-    private LocalDateTime time;
+    private LocalDate date;
 
     @ManyToOne
     private Food food;
@@ -35,21 +35,21 @@ public class Portion {
     public void setGram(BigDecimal gram) {
         this.gram = gram;
     }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
-
+    
     public Food getFood() {
         return food;
     }
 
     public void setFood(Food food) {
         this.food = food;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
 }

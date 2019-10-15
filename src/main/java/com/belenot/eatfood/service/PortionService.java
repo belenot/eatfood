@@ -1,6 +1,6 @@
 package com.belenot.eatfood.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +10,13 @@ import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.domain.Portion;
 import com.belenot.eatfood.repository.FoodRepository;
 import com.belenot.eatfood.repository.PortionRepository;
+import com.belenot.eatfood.repository.specification.PortionFilterSpecification;
+import com.belenot.eatfood.service.support.PortionFilter;
+import com.belenot.eatfood.web.model.PortionModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,11 +71,8 @@ public class PortionService {
         return portionRepository.findById(id).get();
     }
 
-    public List<Portion> byDateInterval(Client client, Optional<LocalDateTime> start, Optional<LocalDateTime> end) {
-        if (start.isEmpty() && end.isEmpty()) return portionRepository.findByFoodClient(client);
-        if (start.isEmpty() && end.isPresent()) return portionRepository.findBeforeDate(client, end.get());
-        if (start.isPresent() && end.isEmpty()) return portionRepository.findAfterDate(client, start.get());
-        if (start.isPresent() && end.isPresent()) return portionRepository.findByDateInterval(client, start.get(), end.get());
-        return new ArrayList<Portion>();
+    public List<Portion> byFilter(Client client, PortionFilter filter, Pageable page) {
+        filter.setClient(client);
+        return portionRepository.findAll(new PortionFilterSpecification(filter), page).getContent();
     }
 }

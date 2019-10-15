@@ -1,20 +1,22 @@
 package com.belenot.eatfood.web.controller;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Portion;
+import com.belenot.eatfood.repository.support.OffsetPageable;
 import com.belenot.eatfood.service.PortionService;
 import com.belenot.eatfood.user.ClientDetails;
 import com.belenot.eatfood.web.form.CreatePortionForm;
-import com.belenot.eatfood.web.form.QueryPortionsForm;
+import com.belenot.eatfood.web.form.PortionFilterForm;
 import com.belenot.eatfood.web.form.UpdatePortionForm;
 import com.belenot.eatfood.web.model.PortionModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,7 +50,7 @@ public class PortionController {
     public PortionModel updatePortion(@PathVariable("portionId") Long portionId, @RequestBody UpdatePortionForm form) {
         Portion portion = portionService.byId(portionId);
         portion = form.updateDomain(portion);
-        portion = portionService.updatePortion(portion, form.getClientId());
+        portion = portionService.updatePortion(portion, form.getFoodId());
         return PortionModel.of(portion);
     }
 
@@ -63,12 +65,21 @@ public class PortionController {
         return portionService.byClient(client).stream().map(PortionModel::of).collect(Collectors.toList());
     }
 
-    // Not tested
-    @GetMapping("/getby")
-    public List<PortionModel> getPortionsByDateInterval(@ModelAttribute QueryPortionsForm form) {
+    @GetMapping("/get/{id}")
+    public PortionModel getPortion(@PathVariable("id") Portion portion) {
         Client client = ((ClientDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClient();
-        Optional<LocalDateTime> start = Optional.of(form.getStart());
-        Optional<LocalDateTime> end = Optional.of(form.getEnd());
-        return portionService.byDateInterval(client, start, end).stream().map(PortionModel::of).collect(Collectors.toList());
+        if (portion.getFood().getClient().getId().equals(client.getId())) {
+            return PortionModel.of(portion);
+        } else {
+            throw new IllegalArgumentException("no such portion");
+        }
+        
+    }
+
+    // Not tested
+    @GetMapping("/get/filter")
+    public List<PortionModel> getPortionsByDateInterval(@ModelAttribute PortionFilterForm form, @ModelAttribute OffsetPageable page) {
+        Client client = ((ClientDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClient();
+        return portionService.byFilter(client, form.createFilter(), page).stream().map(PortionModel::of).collect(Collectors.toList());
     }
 }

@@ -56,4 +56,15 @@ public class FoodController {
         return foodService.byClient(client).stream().map(f->FoodModel.of(f)).collect(Collectors.toList());
     }
 
+    @GetMapping("/get/{id}")
+    public FoodModel getFood(@PathVariable("id") Food food) {
+        Client client = ((ClientDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClient();
+        if (food.getClient().getId().equals(client.getId())) {
+            return FoodModel.of(food);
+        } else {
+            throw new IllegalArgumentException("no such food");
+        }
+
+    }
+
 }

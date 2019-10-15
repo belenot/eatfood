@@ -1,21 +1,20 @@
 package com.belenot.eatfood.web.form;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-import com.belenot.eatfood.domain.Food;
 import com.belenot.eatfood.domain.Portion;
 
 public class CreatePortionForm {
     private BigDecimal gram;
-    private LocalDateTime time;
+    private LocalDate date;
 
     private Long foodId;
 
     public Portion createDomain() {
         Portion portion = new Portion();
         portion.setGram(gram);
-        portion.setTime(time);
+        portion.setDate(date);
         return portion;
     }
 
@@ -27,20 +26,20 @@ public class CreatePortionForm {
         this.gram = gram;
     }
 
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
-
     public Long getFoodId() {
         return foodId;
     }
 
     public void setFoodId(Long foodId) {
         this.foodId = foodId;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     

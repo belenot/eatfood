@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
+import com.belenot.eatfood.repository.ClientRepository;
 import com.belenot.eatfood.repository.FoodRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class FoodService {
     
     @Autowired
     private FoodRepository foodRepository;
+    @Autowired
+    private ClientRepository clientRepository;
 
     public void setFoodRepository(FoodRepository foodRepository) {
         this.foodRepository = foodRepository;
@@ -23,6 +26,7 @@ public class FoodService {
     @Transactional
     public Food createFood(Client client, Food food) {
         foodRepository.save(food);
+        client = clientRepository.findById(client.getId()).get();
         client.addFood(food);
         foodRepository.save(food);
         return food;

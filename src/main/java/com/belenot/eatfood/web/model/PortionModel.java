@@ -2,6 +2,7 @@ package com.belenot.eatfood.web.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.belenot.eatfood.domain.Portion;
@@ -9,9 +10,8 @@ import com.belenot.eatfood.domain.Portion;
 public class PortionModel {
     private Long id;
     private BigDecimal gram;
-    private LocalDateTime time;
+    private LocalDate date;
     private Long foodId;
-    private String foodName;
     
     public PortionModel() {}
 
@@ -19,7 +19,7 @@ public class PortionModel {
         this.id = portion.getId();
         this.gram = portion.getGram().setScale(2, RoundingMode.CEILING);
         this.foodId = portion.getFood().getId();
-        this.time = portion.getTime();
+        this.date = portion.getDate();
     }
 
     public static PortionModel of(Portion portion) {
@@ -42,13 +42,6 @@ public class PortionModel {
         this.gram = gram;
     }
 
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
 
     public Long getFoodId() {
         return foodId;
@@ -58,11 +51,11 @@ public class PortionModel {
         this.foodId = foodId;
     }
 
-    public String getFoodName() {
-        return foodName;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setFoodName(String foodName) {
-        this.foodName = foodName;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
