@@ -23,6 +23,10 @@ public class FoodService {
         this.foodRepository = foodRepository;
     }
 
+    public void setClientRepository(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+
     @Transactional
     public Food createFood(Client client, Food food) {
         foodRepository.save(food);

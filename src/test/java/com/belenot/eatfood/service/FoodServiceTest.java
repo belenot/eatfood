@@ -3,12 +3,14 @@ package com.belenot.eatfood.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
+import com.belenot.eatfood.repository.ClientRepository;
+import com.belenot.eatfood.repository.ClientRepositoryMock;
 import com.belenot.eatfood.repository.FoodRepositoryMock;
 import com.belenot.eatfood.testutil.EatfoodParameterResolver;
 
@@ -26,19 +28,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(EatfoodParameterResolver.class)
 public class FoodServiceTest {
     private FoodService foodService;
+    private ClientRepository clientRepository;
     private Map<String, Object> registry = new HashMap<>();
 
     @BeforeAll
     public void init() {
         foodService = new FoodService();
         foodService.setFoodRepository(new FoodRepositoryMock());
+        clientRepository = new ClientRepositoryMock();
+        foodService.setClientRepository(clientRepository);
     }
 
     @Order(1)
     @Test
     public void createFoodTest(Client client, Food food) {
-        client.setId(1L);
-        
+        clientRepository.save(client);
+        // when(clientRepository.findById(anyLong())).thenReturn(Optional.of(client));
         Food food1 = assertDoesNotThrow(()->foodService.createFood(client, food));
 
         assertNotNull(food1);

@@ -10,6 +10,12 @@ public class PortionFilter {
     private Interval<BigDecimal> gram;
     private Client client;
 
+    
+    public static Builder builder() { 
+        PortionFilter filter = new PortionFilter();
+        return filter.new Builder(); 
+    }
+    
     public Interval<LocalDate> getDate() {
         return date;
     }
@@ -17,15 +23,15 @@ public class PortionFilter {
     public void setDate(Interval<LocalDate> date) {
         this.date = date;
     }
-
+    
     public Interval<BigDecimal> getGram() {
         return gram;
     }
-
+    
     public void setGram(Interval<BigDecimal> gram) {
         this.gram = gram;
     }
-
+    
     public boolean isDatePresented() {
         return date != null && (isDateStartPresented() || isDateEndPresented());
     }
@@ -37,7 +43,7 @@ public class PortionFilter {
     public boolean isDateStartPresented() {
         return date != null && date.getStart() != null;
     }
-
+    
     public boolean isDateEndPresented() {
         return date != null && date.getEnd() != null;
     }
@@ -49,11 +55,11 @@ public class PortionFilter {
     public boolean isGramEndPresented() {
         return gram != null && gram.getEnd() != null;
     }
-
+    
     public boolean isAllPresented() {
         return isDateStartPresented() && isDateEndPresented() && isGramStartPresented() && isGramEndPresented();
     }
-
+    
     public Client getClient() {
         return client;
     }
@@ -61,5 +67,27 @@ public class PortionFilter {
     public void setClient(Client client) {
         this.client = client;
     }
+    
+    public class Builder {
+        private Builder() {};
+        public Builder date(LocalDate start, LocalDate end) {
+            PortionFilter.this.setDate(new Interval<>(start, end));
+            return this;
+        }
+        public Builder gram(BigDecimal start, BigDecimal end) {
+            PortionFilter.this.setGram(new Interval<>(start, end));
+            return this;
+        }
+        public Builder gram(double start, double end) {
+            return gram(BigDecimal.valueOf(start), BigDecimal.valueOf(end));
+        }
+        public Builder client(Client client) {
+            PortionFilter.this.setClient(client);
+            return this;
+        }
+        public PortionFilter build() {
+            return PortionFilter.this;
+        }
 
+    }
 }
