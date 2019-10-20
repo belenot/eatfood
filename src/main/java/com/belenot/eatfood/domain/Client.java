@@ -17,6 +17,7 @@ public class Client {
     private Long id;
     @NaturalId
     private String login;
+    
     private String name;
     private String password;
 

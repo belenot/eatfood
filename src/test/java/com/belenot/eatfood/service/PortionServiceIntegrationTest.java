@@ -3,7 +3,6 @@ package com.belenot.eatfood.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,18 +14,21 @@ import com.belenot.eatfood.repository.PortionRepository;
 import com.belenot.eatfood.repository.support.OffsetPageable;
 import com.belenot.eatfood.service.support.PortionFilter;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+// @ExtendWith(SpringExtension.class)
+// @ContextConfiguration(classes = EatfoodApplication.class)
+// @WebAppConfiguration
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Sql("write-portions.sql")
 @TestInstance(Lifecycle.PER_CLASS)
