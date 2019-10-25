@@ -29,7 +29,7 @@ public class OffsetPageable implements Pageable {
     }
 
     @Override
-    @Deprecated(since = "Not implemented")
+    @Deprecated
     public Pageable first() {
         // TODO Auto-generated method stub
         return null;
@@ -56,19 +56,19 @@ public class OffsetPageable implements Pageable {
     }
 
     @Override
-    @Deprecated(since = "Not implemented")
+    @Deprecated
     public boolean hasPrevious() {
         return false;
     }
 
     @Override
-    @Deprecated(since = "Not implemented")
+    @Deprecated
     public Pageable next() {
         return null;
     }
 
     @Override
-    @Deprecated(since = "Not implemented")
+    @Deprecated
     public Pageable previousOrFirst() {        
         return null;
     }

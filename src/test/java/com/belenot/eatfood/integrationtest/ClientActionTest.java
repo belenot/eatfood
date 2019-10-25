@@ -6,17 +6,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.belenot.eatfood.web.form.CreateFoodForm;
+import com.belenot.eatfood.web.form.CreatePortionForm;
 import com.belenot.eatfood.web.form.SignUpForm;
+import com.belenot.eatfood.web.form.UpdatePortionForm;
 import com.belenot.eatfood.web.model.ClientModel;
 import com.belenot.eatfood.web.model.FoodModel;
+import com.belenot.eatfood.web.model.PortionModel;
 
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,13 +31,12 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 // @ContextConfiguration(classes = {EatfoodApplication.class})
@@ -39,17 +45,18 @@ import org.springframework.web.context.WebApplicationContext;
 // BETER DO THAT KIND OF TESTING IN POSTMAN
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(OrderAnnotation.class)
-public class ClientActionTest1 {
+@TestInstance(Lifecycle.PER_CLASS)
+public class ClientActionTest {
     @Autowired
     private WebApplicationContext wac;
     
-    private MockMvc mvc;
+    private List<String> cookies = new ArrayList<>();
+    private Long foodId = 0L;
+    private Long portionId = 0L;
     @Autowired
     private TestRestTemplate restTemplate;
     @BeforeAll
-    public void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(wac).apply(SecurityMockMvcConfigurers.springSecurity()).build();
-    }
+ 
     @Test
     @Commit
     @Order(1)
@@ -69,7 +76,8 @@ public class ClientActionTest1 {
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
         HttpEntity<SignUpForm> request = new HttpEntity<>(form, headers);
         ResponseEntity<ClientModel> response = restTemplate.postForEntity("/client/signup", request, ClientModel.class);
-        // String clientModelString = restTemplate.postForObject("http://localhost:8082/client/signup", request, String.class);
+        cookies = new ArrayList<>(response.getHeaders().get("Set-Cookie"));
+        
         assertNotNull(response);
         assertNotNull(response.getBody());
         assertEquals("login1", response.getBody().getLogin());
@@ -80,7 +88,10 @@ public class ClientActionTest1 {
     @Test
     @Order(3)
     public void clientShouldRequestMe() {
-        ResponseEntity<ClientModel> response = restTemplate.getForEntity("/client/me", ClientModel.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Cookie", cookies);
+        RequestEntity<String> request = new RequestEntity<String>(headers, HttpMethod.GET, URI.create("/client/me"));
+        ResponseEntity<ClientModel> response = restTemplate.exchange(request, ClientModel.class);
         assertNotNull(response);
         assertNotNull(response.getBody());
         assertEquals("login1", response.getBody().getLogin());
@@ -97,17 +108,67 @@ public class ClientActionTest1 {
         form.setProt(new BigDecimal(1));
         form.setCarb(new BigDecimal(1));
         form.setFat(new BigDecimal(1));
-        RequestEntity<CreateFoodForm> request = RequestEntity.post(new URI("/food/create")).body(form);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Cookie", cookies);
+        RequestEntity<CreateFoodForm> request = new RequestEntity<>(form, headers, HttpMethod.POST, URI.create("/food/create"));
         ResponseEntity<FoodModel> response = restTemplate.postForEntity("/food/create", request, FoodModel.class);
 
         assertNotNull(response);
         assertNotNull(response.getBody());
         assertTrue(response.getBody().getId() > 0);
+        foodId = response.getBody().getId();
         assertEquals("food1", response.getBody().getName());
         assertEquals(new BigDecimal(1), response.getBody().getKcal());
         assertEquals(new BigDecimal(1), response.getBody().getProt());
         assertEquals(new BigDecimal(1), response.getBody().getCarb());
         assertEquals(new BigDecimal(1), response.getBody().getFat());
+    }
+
+    @Test
+    @Order(5)
+    public void clientShouldCreatePortion() throws Exception {
+        CreatePortionForm form = new CreatePortionForm();
+        LocalDate date = LocalDate.now();
+        form.setDate(date);
+        form.setFoodId(foodId);
+        form.setGram(BigDecimal.valueOf(100));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Cookie", cookies);
+        RequestEntity<CreatePortionForm> request = new RequestEntity<>(form, headers, HttpMethod.POST, URI.create("/portion/create"));
+        ResponseEntity<PortionModel> response = restTemplate.exchange(request, PortionModel.class);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertNotNull(response.getBody().getId());
+        portionId = response.getBody().getId();
+        assertTrue(response.getBody().getId() > 0);
+        assertEquals( foodId, response.getBody().getFoodId());
+        assertEquals(date, response.getBody().getDate());
+        assertEquals(BigDecimal.valueOf(100).setScale(2), response.getBody().getGram());
+    }
+
+    @Test
+    @Order(6)
+    public void clientShouldUpdatePortion() throws Exception {
+        UpdatePortionForm form = new UpdatePortionForm();
+        LocalDate newDate = LocalDate.now().plusDays(15);
+        form.setDate(newDate);
+        form.setGram(BigDecimal.valueOf(150));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Cookie", cookies);
+        RequestEntity<UpdatePortionForm> request = new RequestEntity<>(form, headers, HttpMethod.POST, URI.create("/portion/"+portionId+"/update"));
+        ResponseEntity<PortionModel> response = restTemplate.exchange(request, PortionModel.class);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody().getId());
+        assertTrue(response.getBody().getId() > 0);
+        assertTrue(response.getBody().getFoodId() > 0);
+        assertEquals(newDate, response.getBody().getDate());
+        assertEquals(BigDecimal.valueOf(150).setScale(2), response.getBody().getGram());
+
     }
 
 }

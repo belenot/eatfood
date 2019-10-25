@@ -50,7 +50,8 @@ public class PortionController {
     public PortionModel updatePortion(@PathVariable("portionId") Long portionId, @RequestBody UpdatePortionForm form) {
         Portion portion = portionService.byId(portionId);
         portion = form.updateDomain(portion);
-        portion = portionService.updatePortion(portion, form.getFoodId());
+        Long foodId = form.getFoodId()!=null?form.getFoodId():portion.getFood().getId();
+        portion = portionService.updatePortion(portion, foodId);
         return PortionModel.of(portion);
     }
 

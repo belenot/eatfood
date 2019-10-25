@@ -1,6 +1,8 @@
 package com.belenot.eatfood.user;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.belenot.eatfood.domain.Client;
@@ -23,7 +25,9 @@ public class ClientDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
+        return authorities;
     }
 
     @Override
