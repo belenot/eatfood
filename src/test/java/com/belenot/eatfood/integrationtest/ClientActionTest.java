@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.belenot.eatfood.web.form.CreateFoodForm;
 import com.belenot.eatfood.web.form.CreatePortionForm;
+import com.belenot.eatfood.web.form.PortionFilterForm;
 import com.belenot.eatfood.web.form.SignUpForm;
 import com.belenot.eatfood.web.form.UpdatePortionForm;
 import com.belenot.eatfood.web.model.ClientModel;
@@ -53,6 +54,7 @@ public class ClientActionTest {
     private List<String> cookies = new ArrayList<>();
     private Long foodId = 0L;
     private Long portionId = 0L;
+    private Long newPortionId = 0L;
     @Autowired
     private TestRestTemplate restTemplate;
     @BeforeAll
@@ -168,7 +170,72 @@ public class ClientActionTest {
         assertTrue(response.getBody().getFoodId() > 0);
         assertEquals(newDate, response.getBody().getDate());
         assertEquals(BigDecimal.valueOf(150).setScale(2), response.getBody().getGram());
-
     }
+
+    @Test
+    @Order(7)
+    public void clientShouldRemovePortion() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Cookie", cookies);
+        RequestEntity<String> request = new RequestEntity<>(headers, HttpMethod.POST, URI.create("/portion/"+portionId+"/delete"));
+        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+
+        assertNotNull(response);
+        assertEquals("true", response.getBody());
+    }
+
+    @Test
+    @Order(8)
+    public void clientShouldCreateNewPortion() throws Exception {
+        CreatePortionForm form = new CreatePortionForm();
+        LocalDate date = LocalDate.now();
+        form.setDate(date);
+        form.setFoodId(foodId);
+        form.setGram(BigDecimal.valueOf(250));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Cookie", cookies);
+        RequestEntity<CreatePortionForm> request = new RequestEntity<>(form, headers, HttpMethod.POST, URI.create("/portion/create"));
+        ResponseEntity<PortionModel> response = restTemplate.exchange(request, PortionModel.class);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertNotNull(response.getBody().getId());
+        newPortionId = response.getBody().getId();
+        assertTrue(newPortionId > portionId);
+        assertEquals( foodId, response.getBody().getFoodId());
+        assertEquals(date, response.getBody().getDate());
+        assertEquals(BigDecimal.valueOf(250).setScale(2), response.getBody().getGram());
+    }
+
+    @Test
+    @Order(9)
+    public void clientShouldFetchPortionByFilter() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("Cookie", cookies);
+        String afterDate="2010-10-10";
+        String beforeDate="2020-10-10";
+        String gteGram="50";
+        String lteGram="300";
+        String offset="0";
+        String page="1";
+        String size="10";
+        String url = String.format("/portion/get/filter?afterDate=%s&beforeDate=%s&gteGram=%s&lteGram=%s&page=%s&size=%s&offset=%s",
+        afterDate, beforeDate, gteGram, lteGram, page, size, offset
+        );
+
+        RequestEntity<String> request = new RequestEntity<>(headers, HttpMethod.GET, URI.create(url));
+        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().length() > 0);
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        // think about how check filtered result
+    }
+
+    // @Test
+    // @Order(10)
+    // public void clientShouldDelete
 
 }

@@ -1,4 +1,4 @@
-package com.belenot.eatfood.repository.factory;
+package com.belenot.eatfood.testutil.factory;
 
 public interface RandomDomainFactory<T> {
     T generate();

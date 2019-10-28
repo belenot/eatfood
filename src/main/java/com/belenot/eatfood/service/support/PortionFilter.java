@@ -2,6 +2,7 @@ package com.belenot.eatfood.service.support;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.belenot.eatfood.domain.Client;
 
@@ -9,6 +10,7 @@ public class PortionFilter {
     private Interval<LocalDate> date;
     private Interval<BigDecimal> gram;
     private Client client;
+    private List<Long> foodIdList;
 
     
     public static Builder builder() { 
@@ -66,6 +68,14 @@ public class PortionFilter {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public List<Long> getFoodIdList() {
+        return foodIdList;
+    }
+
+    public void setFoodIdList(List<Long> foodIdList) {
+        this.foodIdList = foodIdList;
     }
     
     public class Builder {

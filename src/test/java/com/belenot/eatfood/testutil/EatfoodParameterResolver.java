@@ -5,9 +5,9 @@ import java.util.Map;
 
 import com.belenot.eatfood.domain.Client;
 import com.belenot.eatfood.domain.Food;
-import com.belenot.eatfood.repository.factory.RandomClientFactory;
-import com.belenot.eatfood.repository.factory.RandomDomainFactory;
-import com.belenot.eatfood.repository.factory.RandomFoodFactory;
+import com.belenot.eatfood.testutil.factory.RandomClientFactory;
+import com.belenot.eatfood.testutil.factory.RandomDomainFactory;
+import com.belenot.eatfood.testutil.factory.RandomFoodFactory;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;

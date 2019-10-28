@@ -1,4 +1,4 @@
-package com.belenot.eatfood.repository.factory;
+package com.belenot.eatfood.testutil.factory;
 
 import java.math.BigDecimal;
 

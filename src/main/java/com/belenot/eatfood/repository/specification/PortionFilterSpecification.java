@@ -12,7 +12,9 @@ import com.belenot.eatfood.domain.Food_;
 import com.belenot.eatfood.domain.Portion;
 import com.belenot.eatfood.domain.Portion_;
 import com.belenot.eatfood.service.support.PortionFilter;
+import com.belenot.eatfood.service.support.PortionFilter.Builder;
 
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import org.springframework.data.jpa.domain.Specification;
 
 public class PortionFilterSpecification implements Specification<Portion> {
@@ -44,6 +46,18 @@ public class PortionFilterSpecification implements Specification<Portion> {
                 predicate = builder.and(predicate, builder.lessThan(root.get(Portion_.gram), filter.getGram().getEnd()));
             }
         }
+        if (filter.getFoodIdList() != null) {
+            Predicate foodIdMatches = null;
+            for (Long foodId : filter.getFoodIdList()) {
+                if (foodIdMatches==null) {
+                    foodIdMatches = builder.equal(root.get(Portion_.food), foodId);
+                    continue;
+                }
+                foodIdMatches = builder.or(foodIdMatches, builder.equal(root.get(Portion_.food), foodId));
+            }
+            predicate = builder.and(predicate, foodIdMatches);
+        }
+        
         return predicate;
     }
     

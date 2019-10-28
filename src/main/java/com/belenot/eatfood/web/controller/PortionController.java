@@ -1,8 +1,6 @@
 package com.belenot.eatfood.web.controller;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.belenot.eatfood.domain.Client;
@@ -16,7 +14,6 @@ import com.belenot.eatfood.web.form.UpdatePortionForm;
 import com.belenot.eatfood.web.model.PortionModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
