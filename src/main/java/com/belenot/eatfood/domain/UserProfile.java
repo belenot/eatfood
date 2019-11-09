@@ -3,7 +3,6 @@ package com.belenot.eatfood.domain;
 import java.util.List;
 
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 //@Embeddable Should I use this, if I marked field with @Embedded?
 public class UserProfile {

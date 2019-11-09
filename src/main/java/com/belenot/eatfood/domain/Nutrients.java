@@ -10,9 +10,6 @@ public class Nutrients {
     private BigDecimal protein;
     private BigDecimal fat;
 
-    // What should I do with this, what kinds of nutrients there will be?
-    private Map<String, BigDecimal> other;
-
     public BigDecimal getCalories() {
         return calories;
     }
@@ -43,14 +40,6 @@ public class Nutrients {
 
     public void setFat(BigDecimal fat) {
         this.fat = fat;
-    }
-
-    public Map<String, BigDecimal> getOther() {
-        return other;
-    }
-
-    public void setOther(Map<String, BigDecimal> other) {
-        this.other = other;
     }
 
 }

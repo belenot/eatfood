@@ -4,6 +4,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Food {
@@ -12,7 +13,9 @@ public class Food {
     private Long id;
 
     private String name;
+    @ManyToOne
     private User author;
+    @ManyToOne
     private Food parent;
     @Embedded
     private Nutrients nutrients;

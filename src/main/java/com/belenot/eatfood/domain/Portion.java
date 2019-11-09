@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Portion {
@@ -14,6 +15,7 @@ public class Portion {
     private Long id;
     private BigDecimal gram;
     private LocalDate date;
+    @ManyToOne
     private Food food;
 
     public BigDecimal getGram() {
