@@ -18,16 +18,25 @@ public class FoodService {
         return food;
     }
 
-    public Food updateFood(Food food) {
-        food = foodRepository.save(food);
+    public Food updateFood(Long id, Food food) {
+        Food old = foodRepository.findById(id).get();
+        old.setName(food.getName());
+        old.setNutrients(food.getNutrients());
+        old.setParent(food.getParent());
+        food = foodRepository.save(old);
         return food;
     }
 
-    public void deleteFood(Food food) {
-        foodRepository.delete(food);
+    public void deleteFood(Long id) {
+        foodRepository.deleteById(id);
     }
 
     public List<Food> getAllFoods() {
         return foodRepository.findAll();
+    }
+
+    public Food getById(Long id) {
+        if (id == null) return null;
+        return foodRepository.findById(id).orElse(null);
     }
 }
