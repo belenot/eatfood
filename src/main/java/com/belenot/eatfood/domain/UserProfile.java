@@ -1,5 +1,6 @@
 package com.belenot.eatfood.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ManyToMany;
@@ -9,8 +10,8 @@ public class UserProfile {
 
     public enum Visibility { ALL, FRIENDS, NONE }
     @ManyToMany//Uni- or bidirectional?(Forwhile unidirectional)
-    private List<User> friends;
-    private Visibility visibility;
+    private List<User> friends = new ArrayList<>();
+    private Visibility visibility = Visibility.NONE;
 
     public List<User> getFriends() {
         return friends;

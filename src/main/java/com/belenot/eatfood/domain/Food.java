@@ -51,4 +51,12 @@ public class Food {
     public void setNutrients(Nutrients nutrients) {
         this.nutrients = nutrients;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
